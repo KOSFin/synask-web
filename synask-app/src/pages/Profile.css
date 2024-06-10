@@ -1,0 +1,269 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.profile-block {
+    width: 60%;
+    height: 75%;
+    background-color: #1c1f26;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid violet;
+}
+
+.profile-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #1c1f26;
+    z-index: 10;
+}
+
+.profile-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.profile-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 20px;
+    z-index: 1;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar input[type="file"] {
+    display: none;
+}
+
+.profile-avatar label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.profile-info {
+    flex: 1;
+    z-index: 1;
+}
+
+.profile-names {
+    margin: 0;
+    font-size: 35px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+}
+
+.profile-tags {
+    display: flex;
+    margin-top: 10px;
+}
+
+.tag {
+    padding: 5px 10px;
+    margin-right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.add-tag {
+    padding: 5px 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #1c1f26;
+}
+
+.action-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #ff9800;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.addfriend {
+    background-color: #1c1f26;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 15px 25px;
+    border-bottom: 1px solid #444;
+}
+
+.addfriend-item {
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.3s;
+    margin-top: 20px;
+}
+
+.action-button:hover {
+    background-color: #f57c00;
+}
+
+.profile-menu {
+    display: flex;
+    align-items: center;
+    padding: 10px 30%;
+    background-color: #2c2f36;
+    border-bottom: 1px solid #444;
+}
+
+.menu-item {
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    transition:all 0.3s linear 0s;
+}
+
+.menu-item:hover {
+    color: #ff9800;
+}
+
+
+
+.profile-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #1c1f26;
+    color: #fff;
+}
+
+.content-section {
+    margin-bottom: 20px;
+}
+
+.content-section h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #fff;
+    }
+
+.content-section p {
+    margin: 0;
+    font-size: 16px;
+    color: #ccc;
+}
+
+.content-section ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.content-section li {
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #ccc;
+}
+.menu-collapsed {
+    opacity: 0.5; /* Полупрозрачность */
+    margin-top: -50px; /* Сдвиг вверх, чтобы частично перекрывать аватар */
+}
+
+
+
+.add-friend-btn {
+    padding: 15px 25px;
+    margin-right: 10px;
+    background-color: rgb(114 14 114);
+    color: #fff;
+    border-radius: 10%;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.more-options-btn {
+    position: relative;
+    background-color: rgb(114 14 114);
+    border-radius: 10%;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.more-options-menu {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.849);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    display: none;
+    font-size: 15px;
+    left: -25px;
+}
+
+.more-options-menu a {
+    display: block;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.more-options-menu a:hover {
+    background-color: #444;
+}
+
+.more-options-btn:hover .more-options-menu {
+    display: block;
+}
+
+.frend-add {
+    display: flex;
+    flex-direction: reverse;
+    margin-top: 10px;
+}
