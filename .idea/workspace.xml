@@ -5,7 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77045cf7-03dd-4860-a1d4-54063610b5a3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/asset-manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logo192.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logo512.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/registration.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/main.2397e522.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/main.2397e522.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/main.4fecc12a.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/main.4fecc12a.js.LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/main.4fecc12a.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/453.450907a0.chunk.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/453.450907a0.chunk.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/952.2180979f.chunk.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/952.2180979f.chunk.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
