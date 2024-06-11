@@ -5,46 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77045cf7-03dd-4860-a1d4-54063610b5a3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/synask-app.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/public/logo192.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/logo192.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/public/logo512.png" beforeDir="false" afterPath="$PROJECT_DIR$/public/logo512.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/public/registration.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/registration.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/public/robots.txt" beforeDir="false" afterPath="$PROJECT_DIR$/public/robots.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/App.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/components/ProtectedRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProtectedRoute.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/components/Sidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/components/Sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sidebar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/logo.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Groups.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Groups.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Loader.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Loader.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Loader.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Loader.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Login.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Login.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Messenger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Messenger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Profile.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Profile.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Registration.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Registration.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/Registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Registration.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/pages/select_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/select_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/reportWebVitals.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/reportWebVitals.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synask-app/src/setupTests.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/setupTests.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +28,7 @@
     </excluded-from-favorite>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="gh-pages" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -81,18 +42,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "gh-pages",
-    "last_opened_file_path": "C:/Users/player/Documents/GitHub/synask-app"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;gh-pages&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/player/Documents/GitHub/synask-app&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "directory"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\player\Documents\GitHub\synask-app" />
