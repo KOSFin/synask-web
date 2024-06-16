@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+
     <title>Вход | sYnask</title>
     <style>
         body {
@@ -531,7 +532,7 @@
         <div class="right-side">
             <div id="account-info" style="display: none;" class="account-info">
                 <img src="https://imgur.com/uXlFWBh.png" alt="Avatar" id="account-avatar" class="account-avatar">
-                <div class="account-details" onclick="window.location.href='/loading'">
+                <div class="account-details" onclick="window.location.href='/'">
                     <p id="name" class="account-name">Имя Фамилия</p>
                     <p id="username" class="account-username">@usernsme</p>
                     <p class="account-tooltip">Вы уже вошли в этот аккаунт</p>
@@ -692,19 +693,27 @@
         const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
         // Инициализация капчи с анимацией загрузки
-        function renderCaptcha() {
+        async function renderCaptcha() {
             showLoader();
-            widgetId = turnstile.render('#turnstile-container', {
-                sitekey: '0x4AAAAAAAb6BKl1y6rR8dGk',
-                callback: function(token) {
-                    captchaToken = token;
-                    hideLoader();
-                },
-                'error-callback': function() {
-                    showPopupWithImageAndText('Ошибка загрузки капчи. Пожалуйста, перезагрузите страницу и попробуйте снова.', 'https://imgur.com/aHcCPrp.jpg', 5000);
-                    hideLoader();
-                }
-            });
+            try {
+                widgetId = await new Promise((resolve, reject) => {
+                    turnstile.render('#turnstile-container', {
+                        sitekey: '0x4AAAAAAAb6BKl1y6rR8dGk',
+                        callback: function(token) {
+                            captchaToken = token;
+                            resolve(widgetId);
+                        },
+                        'error-callback': function() {
+                            showPopupWithImageAndText('Ошибка загрузки капчи. Пожалуйста, перезагрузите страницу и попробуйте снова.', 'https://imgur.com/aHcCPrp.jpg', 5000);
+                            reject(new Error('Ошибка загрузки капчи'));
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error(error);
+            } finally {
+                hideLoader();
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -820,7 +829,7 @@
                         console.log('Пользователь успешно вошел в систему:', email);
 
                         // Перенаправляем пользователя на нужную страницу
-                        window.location.href = '/loading';
+                        window.location.href = '/';
                     }
                 });
 
@@ -922,7 +931,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const newUser = urlParams.get('newUser');
-        const email  = urlParams.get('email');
+        const emailInUrl  = urlParams.get('email');
 
         hideLoader();
 
@@ -930,9 +939,9 @@
             console.log('Аккаунт успешно зарегистрирован.');
             // Показать уведомление о успешной регистрации
             showPopupWithImageAndText('Новый Пользователь успешно создан! Теперь вы можете войти в свой новый аккаунт.', 'https://imgur.com/aHcCPrp.jpg', 5000);
-        } else if (email) {
+        } else if (emailInUrl) {
             const emailInput = document.getElementById('emailInput');
-            emailInput.value = email;
+            emailInput.value = emailInUrl;
         }
     </script>
 </body>
