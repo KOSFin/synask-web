@@ -7,7 +7,6 @@
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
-    <script src="https://unpkg.com/@marsidev/react-turnstile"></script>
 
     <title>Вход | sYnask</title>
     <style>
@@ -559,7 +558,7 @@
                     <span class="eye-icon" id="eyeIcon" onclick="togglePasswordVisibility()">&#128065;</span>
                 </div>
                 <a href="https://synask.syprod.ru/reset-password.html" class="forgot-password">Забыли пароль?</a>
-                <div id="turnstileContainer"></div>
+                <div id="turnstile-container" class="cf-turnstile" data-sitekey="0x4AAAAAAAb6BKl1y6rR8dGk"></div>
                 <button type="button" id="loginButton" onclick="entrance()">Войти</button>
                 <button type="button" id="resendEmailButton" onclick="resendConfirmationEmail()" style="display: none;">Письмо не пришло или срок действия истёк?</button>
             </form>
@@ -691,19 +690,15 @@
         const { createClient } = supabase;
         const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
-        // Функция для получения токена Turnstile
-        async function getCaptchaToken() {
+        function getCaptchaToken() {
             return new Promise((resolve, reject) => {
-                // Ваша логика получения токена Turnstile
-                const turnstile = new Turnstile({
-                    siteKey: '0x4AAAAAAAb6BKl1y6rR8dGk',
-                    onSuccess: (token) => {
-                        resolve(token);
-                    },
+                const turnstileCallback = (token) => {
+                    resolve(token);
+                };
+                turnstile.render('#turnstile-container', {
+                    sitekey: '0x4AAAAAAAb6BKl1y6rR8dGk',
+                    callback: turnstileCallback
                 });
-
-                // Монтируем компонент в нужный контейнер
-                turnstile.mount('#turnstileContainer');
             });
         }
 
