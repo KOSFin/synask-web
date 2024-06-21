@@ -558,7 +558,7 @@
                     <span class="eye-icon" id="eyeIcon" onclick="togglePasswordVisibility()">&#128065;</span>
                 </div>
                 <a href="https://synask.syprod.ru/reset-password.html" class="forgot-password">Забыли пароль?</a>
-                <div id="turnstile-container"></div>
+                <div id="turnstileContainer"></div>
                 <button type="button" id="loginButton" onclick="entrance()">Войти</button>
                 <button type="button" id="resendEmailButton" onclick="resendConfirmationEmail()" style="display: none;">Письмо не пришло или срок действия истёк?</button>
             </form>
@@ -686,39 +686,25 @@
 
         let app = '';
         let db = '';
-        var captchaToken = '';
-        let widgetId;
 
         const { createClient } = supabase;
         const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
-        // Инициализация капчи с анимацией загрузки
-        async function renderCaptcha() {
-            showLoader();
-            try {
-                widgetId = await new Promise((resolve, reject) => {
-                    turnstile.render('#turnstile-container', {
-                        sitekey: '0x4AAAAAAAb6BKl1y6rR8dGk',
-                        callback: function(token) {
-                            captchaToken = token;
-                            resolve(widgetId);
-                        },
-                        'error-callback': function() {
-                            showPopupWithImageAndText('Ошибка загрузки капчи. Пожалуйста, перезагрузите страницу и попробуйте снова.', 'https://imgur.com/aHcCPrp.jpg', 5000);
-                            reject(new Error('Ошибка загрузки капчи'));
-                        }
-                    });
+        // Функция для получения токена Turnstile
+        async function getCaptchaToken() {
+            return new Promise((resolve, reject) => {
+                // Ваша логика получения токена Turnstile
+                const turnstile = new Turnstile({
+                    siteKey: '0x4AAAAAAAb6BKl1y6rR8dGk',
+                    onSuccess: (token) => {
+                        resolve(token);
+                    },
                 });
-            } catch (error) {
-                console.error(error);
-            } finally {
-                hideLoader();
-            }
-        }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            renderCaptcha();
-        });
+                // Монтируем компонент в нужный контейнер
+                turnstile.mount('#turnstileContainer');
+            });
+        }
 
         async function initializeUser() {
             try {
@@ -767,13 +753,8 @@
 
         async function resendConfirmationEmail() {
 
-            if (turnstile.isExpired(widgetId) || !captchaToken) {
-                showPopupWithImageAndText('Мы конечно вам доверяем, но всё же необходимо пройти проверку, чтобы мы удостоверились, что вы не робот!', 'https://imgur.com/aHcCPrp.jpg', 5000);
-                await renderCaptcha(); // Обновление капчи
-                return;
-            }
-
             showLoader();
+            const captchaToken = await getCaptchaToken();
 
             document.getElementById('resendEmailButton').disabled = true;
             try {
@@ -782,9 +763,7 @@
                 const { data, error } = await supabaseClient.auth.resend({
                     type: 'signup',
                     email: emailInput,
-                    options: {
-                        captchaToken: captchaToken
-                    }
+                    options: { captchaToken },
                 });
 
                 hideLoader();
@@ -809,14 +788,8 @@
             const passwordInput = document.getElementById('passwordInput').value;
             console.log(emailInput, passwordInput);
             try {
-                // Проверка наличия капчи
-                if (turnstile.isExpired(widgetId) || !captchaToken) {
-                    showPopupWithImageAndText('Мы конечно вам доверяем, но всё же необходимо пройти проверку, чтобы мы удостоверились, что вы не робот!', 'https://imgur.com/aHcCPrp.jpg', 5000);
-                    await renderCaptcha(); // Обновление капчи
-                    return;
-                }
-
                 showLoader();
+                const captchaToken = await getCaptchaToken();
 
                 document.getElementById('emailInput').disabled = true;
                 document.getElementById('passwordInput').disabled = true;
@@ -829,16 +802,14 @@
                         console.log('Пользователь успешно вошел в систему:', email);
 
                         // Перенаправляем пользователя на нужную страницу
-                        window.location.href = '/check';
+                        window.location.href = '/';
                     }
                 });
 
                 const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: emailInput,
                     password: passwordInput,
-                    options: {
-                        captchaToken: captchaToken,
-                    },
+                    options: { captchaToken },
                 })
 
                 hideLoader();
