@@ -860,7 +860,6 @@
                 console.log('Произошла ошибка на клиентской стороне при попытке входа в аккаунт: ', error);
                 closeModal();
             } finally {
-                await renderCaptcha();
                 document.getElementById('loginButton').disabled = false;
                 document.getElementById('emailInput').disabled = false;
                 document.getElementById('passwordInput').disabled = false;
