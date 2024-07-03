@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# Официальный репозиторий социальной сети sYnask
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Version](https://badge.fury.io/gh/telegramdesktop%2Ftdesktop.svg)](https://github.com/KOSFin/synask-web/releases)
 
-## Available Scripts
+## Описание проекта
 
-In the project directory, you can run:
+Добро пожаловать в официальный репозиторий веб-версии социальной сети sYnask от компании syprod. Этот репозиторий содержит исходный код веб-версии проекта sYnask. Код защищен базовой лицензией о защите прав, что означает отсутствие открытой лицензии. Код принадлежит исключительно компании syprod и социальной сети sYnask, и его нельзя модифицировать, изменять или использовать. Эти меры приняты для предотвращения кражи личных данных пользователей.
 
-### `npm start`
+Проект написан на [React.js](https://reactjs.org/), что обеспечивает высокую производительность и гибкость при разработке.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Скриншоты
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![Официальный сайт](./screenshots/official_site.png)
+*Официальный сайт*
 
-### `npm test`
+![Страница входа](./screenshots/login_page.png)
+*Страница входа*
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Страница профиля](./screenshots/profile_page.png)
+*Страница профиля*
 
-### `npm run build`
+## Доступные ветки репозитория
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `main` - Основная ветка с последними стабильными релизами.
+- `dev` - Ветка с официальным исходным кодом веб-версии проекта.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Доменная информация
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Домен социальной сети: [me.synask.ru](https://me.synask.ru)
+- Домен описания продукта: [synask.syprod.ru](https://synask.syprod.ru)
+- Домен с официальным сайтом, новостями и т.д.: [synask.ru](https://synask.ru)
 
-### `npm run eject`
+## Поддержка и обратная связь
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Телеграм-канал: [t.me/synask](https://t.me/synask)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Дополнительная информация
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Открытые репозитории могут быть доступны для десктоп и андроид версий приложения (возможно в будущем). Веб-версия работает на ПК и других устройствах, однако пока что нет оптимизации для телефонов.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## О компании
 
-## Learn More
+sYnask — дочерний сервис компании syprod, который предоставляет универсальный аккаунт syn для всех своих сервисов. Став частью экосистемы syprod, sYnask стремится к безопасности и удобству пользователей, предоставляя им качественные услуги в области социальной сети.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Для получения дополнительной информации посетите наш [официальный сайт](https://synask.ru).
