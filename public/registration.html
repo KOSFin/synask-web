@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/favicon-graffiti.ico" type="image/x-icon">
-    <link rel="stylesheet" href="cursor.css">
-    <script src="cursor.js"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
@@ -497,6 +494,54 @@
             appearance: none;
         }
 
+        /* Loader Styles */
+        .loader-background {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9;
+        }
+
+        .loader {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+        }
+
+        .loader .spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #ff7f00;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            background-color: #000;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #fff;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -528,6 +573,13 @@
     <div id="profileModal" class="modal">
         <div class="modal-content"></div>
     </div>
+
+    <div id="loader-background" class="loader-background"></div>
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+        <p>Загрузка...</p>
+    </div>
+
     <footer class="footer">
         <nav class="menu">
             <a style="color: violet;" href="https://syprod.ru/">sYprod company</a>
@@ -541,20 +593,9 @@
     </footer>
 
     <script>
-        console.log(`
-            ░██████╗██╗░░░██╗███╗░░██╗░█████╗░░██████╗██╗░░██╗
-            ██╔════╝╚██╗░██╔╝████╗░██║██╔══██╗██╔════╝██║░██╔╝
-            ╚█████╗░░╚████╔╝░██╔██╗██║███████║╚█████╗░█████═╝░
-            ░╚═══██╗░░╚██╔╝░░██║╚████║██╔══██║░╚═══██╗██╔═██╗░
-            ██████╔╝░░░██║░░░██║░╚███║██║░░██║██████╔╝██║░╚██╗
-            ╚═════╝░░░░╚═╝░░░╚═╝░░╚══╝╚═╝░░╚═╝╚═════╝░╚═╝░░╚═╝
-        `);
-        console.log(`
-            =̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶
-        `);
-        console.log('\n\n')
-    </script>
-    <script>
+        // ФУНКЦИИ: ВИЗУАЛЬНАЯ СОСТАВЛЯЮЩАЯ
+
+        // ПОКАЗЫВАЕТ УВЕДОМЛЕНИЕ С ТЕКСТОМ И КАРТИНКОЙ
         let currentPopup = null;
 
         function showPopupWithImageAndText(message, imagePath, displayTime) {
@@ -595,28 +636,55 @@
 
             currentPopup = popupContainer; // Сохраняем ссылку на текущее уведомление
         }
-    </script>
-    <script>
+
+        // ФУНКЦИИ ВИЗУАЛЬНОЙ АНИМАЦИИ ЗАГРУЗКИ
+
+        function showLoader() {
+            document.getElementById('loader-background').style.display = 'block';
+            document.getElementById('loader').style.display = 'block';
+        }
+
+        function hideLoader() {
+            document.getElementById('loader-background').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        // Функции автозаполнения поля почты из URL
+
         window.addEventListener('DOMContentLoaded', function() {
-            var urlParams = new URLSearchParams(window.location.search); // Получаем параметры из URL
-            var email = urlParams.get('email'); // Получаем значение параметра email
+            var urlParams = new URLSearchParams(window.location.search);
+            var email = urlParams.get('email');
 
             if (email) {
-              document.getElementById('email').value = email; // Устанавливаем значение email в поле ввода
+              document.getElementById('email').value = email;
             }
         });
 
-        function renderCaptcha() {
-            widgetId = turnstile.render('#turnstile-container', {
-                sitekey: '0x4AAAAAAAb6BKl1y6rR8dGk',
-                callback: function(token) {
-                    captchaToken = token;
-                },
-                'expired-callback': function() {
-                    showPopupWithImageAndText('Срок действия капчи истек. Пожалуйста, пройдите проверку заново.', 'https://imgur.com/aHcCPrp.jpg', 5000);
-                    renderCaptcha();
-                }
-            });
+        // ФУНКЦИИ: Важнейшее
+
+        // Инициализация капчи с анимацией загрузки
+
+        async function renderCaptcha() {
+            showLoader();
+            try {
+                widgetId = await new Promise((resolve, reject) => {
+                    turnstile.render('#turnstile-container', {
+                        sitekey: '0x4AAAAAAAb6BKl1y6rR8dGk',
+                        callback: function(token) {
+                            captchaToken = token;
+                            resolve(widgetId);
+                        },
+                        'error-callback': function() {
+                            showPopupWithImageAndText('Ошибка загрузки капчи. Пожалуйста, перезагрузите страницу и попробуйте снова.', 'https://imgur.com/aHcCPrp.jpg', 5000);
+                            reject(new Error('Ошибка загрузки капчи'));
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error(error);
+            } finally {
+                hideLoader();
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -624,6 +692,7 @@
         });
 
         // Функция для форматирования номера телефона при вводе
+
         function formatPhoneNumber() {
             var phoneNumber = document.getElementById('phone-num').value;
             phoneNumber = phoneNumber.replace(/[^\d]/g, ''); // Удаление всех символов, кроме цифр
@@ -646,8 +715,10 @@
 
         document.getElementById('phone-num').addEventListener('input', formatPhoneNumber);
 
-    </script>
-    <script>
+        // Переменные
+
+        const urlParams = new URLSearchParams(window.location.search);
+
         var phone;
         var email;
         var password;
@@ -662,8 +733,6 @@
         var saveButton;
         let typingTimer;
 
-
-
         document.addEventListener('DOMContentLoaded', function() {
             phoneInput = document.getElementById('phone-num');
             emailInput = document.getElementById('email');
@@ -674,16 +743,20 @@
 
         });
 
+        // Инициализация Supa
+
         const { createClient } = supabase;
         const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
         // Функция для обновления подсказок
+
         function updateHint(hint, color) {
             var hints = document.getElementById("passwordHints");
             hints.innerHTML += `<span style="color: ${color}">&bull; ${hint}</span><br>`;
         }
 
         // Функция для проверки безопасности пароля и обновления шкалы
+
         function checkPasswordStrength() {
             var password = document.getElementById("password").value;
             var progressBar = document.getElementById("passwordStrength");
@@ -701,7 +774,6 @@
             // Перезаполняем подсказки при каждом вводе
             hintsContainer.innerHTML = "<strong style='color: #FFFFFF;'>Что нужно добавить в пароль:</strong><br>";
 
-            // Здесь вы можете использовать свои критерии для определения сложности пароля
             var strength = conditions.length;
 
             conditions.forEach(function (condition) {
@@ -721,7 +793,7 @@
 
         }
 
-        // Добавление обработчика события на ввод пароля
+        // Обработчик события на ввод пароля
         document.getElementById("password").addEventListener("input", checkPasswordStrength);
 
         function togglePasswordVisibility() {
@@ -794,6 +866,7 @@
         }
 
         function replaceFormFields() {
+            showLoader();
             // Изменение заголовка формы
             document.querySelector('.form-title').textContent = 'Давайте знакомиться!';
             document.querySelector('.form-subtitle').textContent = 'Добро пожаловать в сообщество!';
@@ -842,12 +915,16 @@
 
             renderCaptcha();
 
+            hideLoader();
+
             // Функция для отображения помощи по нику
+
             window.showNicknameHelp = function() {
                 alert('Ник - это ваш уникальный идентификатор в системе. Он будет использоваться для входа в систему, а также будет отображаться другим пользователям.');
             };
 
-            // Добавляем слушатель событий на форму
+            // Слушатель событий на форму
+
             form.addEventListener('input', function(event) {
                 if (event.target.id === 'nickname') { // Проверяем, изменилось ли поле с id "nickname"
                     clearTimeout(typingTimer); // Сбрасываем предыдущий таймер
@@ -889,9 +966,7 @@
                 return;
             }
 
-
-
-            showPopupWithImageAndText('Подождите, пожалуйста...', 'https://static.tildacdn.com/tild3366-3063-4335-b661-313236316331/spinner.gif', 10000);
+            showLoader();
             registrationButton.disabled = true;
 
             try {
@@ -904,6 +979,8 @@
                 });
 
                 const data = await response.json();
+
+                hideLoader();
 
                 if (response.ok) {
                     handleServerResponse(data);
@@ -934,6 +1011,7 @@
         });
 
         // Сохранить профиль
+
         async function saveProfile() {
             const firstName = document.getElementById('firstName').value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '');
             const lastName = document.getElementById('lastName').value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '');
@@ -949,7 +1027,7 @@
             }
 
             // Показываем уведомление о загрузке и блокируем кнопку сохранения
-            showPopupWithImageAndText('Подождите, пожалуйста...', 'https://static.tildacdn.com/tild3366-3063-4335-b661-313236316331/spinner.gif', 10000);
+            showLoader();
             registerButton.disabled = true;
 
             const isAvailable = await checkUsernameAvailability(nickname); // Проверяем уникальность ника
@@ -961,12 +1039,20 @@
             }
 
             try {
-                // Регистрируем пользователя через Supabase
+                const redirectParam = urlParams.get('redirect');
+
+                // Формируем URL для редиректа
+                let emailRedirectTo = 'https://me.synask.ru/redirect';
+                if (redirectParam) {
+                    emailRedirectTo += `?url=${encodeURIComponent(redirectParam)}`;
+                }
+
                 const { data, error } = await supabaseClient.auth.signUp({
                     email: email,
                     password: password,
                     options: {
                         captchaToken: captchaToken,
+                        emailRedirectTo: emailRedirectTo,
                         data: {
                             phone: phone,
                             firstName: firstName,
@@ -980,6 +1066,8 @@
 
                 console.log(data);
                 console.log(data.user.id);
+
+                hideLoader();
 
                 if (error) {
                     console.error('Ошибка при регистрации:', error.message);
@@ -1018,18 +1106,21 @@
         }
 
         // Открыть модальное окно
+
         function openModal() {
             const modal = document.getElementById('profileModal');
             modal.style.display = 'block';
         }
 
         // Закрыть модальное окно
+
         function closeModal() {
             const modal = document.getElementById('profileModal');
             modal.style.display = 'none';
         }
 
         // Функция для проверки всех полей и активации кнопки регистрации
+
         async function checkFormValidity() {
             phone = document.getElementById('phone-num').value.replace(/\s/g, '');
             const email = document.getElementById('email').value;
@@ -1082,14 +1173,13 @@
         document.getElementById('password').addEventListener('input', checkFormValidity);
         document.getElementById('confirmPassword').addEventListener('input', checkFormValidity);
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const email  = urlParams.get('email');
+        const emailInUrl = urlParams.get('email');
 
         hideLoader();
 
-        } if (email) {
+        if (emailInUrl) {
             const emailInput = document.getElementById('email');
-            emailInput.value = email;
+            emailInput.value = emailInUrl;
         }
     </script>
 </body>

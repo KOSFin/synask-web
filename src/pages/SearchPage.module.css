@@ -1,0 +1,197 @@
+.searchPage {
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.searchBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.searchBar input {
+    width: 70%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.searchBar button {
+    margin-left: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff7f00;
+    color: #fff;
+    cursor: pointer;
+}
+
+.filterButton {
+    background-color: #4caf50;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.filter {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.filter label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.filter select,
+.filter input {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+.searchSummary {
+    margin-bottom: 20px;
+}
+
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.spinner div {
+    width: 15px;
+    height: 15px;
+    background-color: #ff7f00;
+    border-radius: 50%;
+    margin: 3px;
+    animation: bounce 1.2s infinite ease-in-out both;
+}
+
+.spinner div:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.spinner div:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+
+.results {
+    display: flex;
+    flex-direction: column;
+}
+
+.profileCard {
+    display: flex;
+    align-items: left;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    background-color: #2c2c2c;
+    border-radius: 5px;
+}
+
+.profileCard.expanded {
+    background-color: rgba(0, 0, 0, 0.7);
+    flex-direction: column;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.profileInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.profileInfo h2 {
+    margin: 0;
+}
+
+.profileInfo .highlight {
+    color: #ff7f00;
+}
+
+.toggleButton {
+    cursor: pointer;
+    align-self: flex-end;
+    font-size: 20px;
+}
+
+.expandedInfo {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.expandedHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.expandedAvatar {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.expandedDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.actionIcon {
+    color: #ff7f00;
+    cursor: pointer;
+    font-size: 24px;
+    margin-right: 5px;
+}

@@ -1,0 +1,95 @@
+.profile-submenu {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.profile-submenu span {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-submenu span:hover {
+    background-color: #444;
+}
+
+.profile-submenu span.active {
+    border: 1px solid orange;
+}
+
+.profile-settings-content {
+    background-color: #1c1f26;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+}
+
+.setting-item {
+    margin-bottom: 15px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ccc;
+}
+
+.setting-item input, .setting-item select, .setting-item textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #2c2f36;
+    color: #fff;
+}
+
+.media-actions, .music-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.media-gallery, .music-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.verification-service {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.service-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.service-info {
+    color: #ccc;
+    margin-left: 20px;
+}
+
+.service-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.service-info ul li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.service-info ul li span {
+    color: green;
+}

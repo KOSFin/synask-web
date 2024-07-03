@@ -1,0 +1,47 @@
+.setting-item {
+    margin-bottom: 15px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ccc;
+}
+
+.setting-item input, .setting-item button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #2c2f36;
+    color: #fff;
+}
+
+.restricted-list, .blacklist {
+    margin-top: 10px;
+}
+
+.restricted-item, .blacklist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #2c2f36;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.restricted-item p, .blacklist-item p {
+    margin: 0;
+    color: #ccc;
+}
+
+.restricted-item button, .blacklist-item button {
+    background-color: #ff4d4d;
+    border: none;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
