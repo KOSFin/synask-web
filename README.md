@@ -1,6 +1,6 @@
 # Официальный репозиторий социальной сети sYnask
 
-[![Version](https://badge.fury.io/gh/telegramdesktop%2Ftdesktop.svg)](https://github.com/KOSFin/synask-web/releases)
+![Version Badge](./version_badge.md)
 
 ## Описание проекта
 
