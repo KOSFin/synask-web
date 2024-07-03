@@ -1,0 +1,30 @@
+name: Generate Version Badge
+
+on:
+  push:
+    tags:
+      - '*'
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Generate version badge
+        run: |
+          VERSION=$(git describe --tags --abbrev=0)
+          BADGE_URL="https://img.shields.io/badge/version-$VERSION-blue"
+          echo "![Version Badge]($BADGE_URL)" > version_badge.md
+
+      - name: Commit version badge
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add version_badge.md
+          git commit -m "Update version badge"
+          git push origin HEAD:main
