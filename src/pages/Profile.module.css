@@ -70,6 +70,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 80%;
+    text-shadow: 1px 1px 5px black;
 }
 
 .profileTags {
@@ -204,6 +205,7 @@
     border-radius: 10%;
     font-size: 14px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .moreOptionsBtn {
@@ -259,4 +261,5 @@
     align-items: center;
     margin: 20px 0;
 }
+
 

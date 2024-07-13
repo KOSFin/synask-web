@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import styles from './SearchPage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faUserPlus, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
+import AccentColorContext from '../pages/settings/AccentColorContext';
 
 const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
@@ -11,6 +14,7 @@ const SearchPage = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [filtersVisible, setFiltersVisible] = useState(false);
+    const { accentColor } = useContext(AccentColorContext);
     const [filters, setFilters] = useState({
         gender: '',
         minAge: '',
@@ -65,7 +69,7 @@ const SearchPage = () => {
     };
 
     return (
-        <div className={styles.searchPage}>
+        <div className={styles.searchPage} style={{ borderColor: accentColor }}>
             <div className={styles.searchBar}>
                 <input
                     type="text"
@@ -115,9 +119,7 @@ const SearchPage = () => {
 };
 
 const ProfileCard = ({ profile, searchQuery }) => {
-    const [expanded, setExpanded] = useState(false);
-    const toggleExpand = () => setExpanded(!expanded);
-
+    const location = useLocation();
     const highlightedText = (text) => {
         if (!searchQuery) return text;
         const parts = text.split(new RegExp(`(${searchQuery})`, 'gi'));
@@ -126,63 +128,38 @@ const ProfileCard = ({ profile, searchQuery }) => {
         );
     };
 
-    const getAge = (birthdate) => {
-        const today = new Date();
-        const birthDate = new Date(birthdate);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDifference = today.getMonth() - birthDate.getMonth();
-        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    };
-
     const getHighlightedInfo = () => {
         const infoFields = [
             'description', 'display_email', 'display_phone', 'work_info', 'education_info', 'social_links', 'status', 'first_name', 'last_name', 'username'
         ];
         for (const field of infoFields) {
             if (profile[field] && profile[field].toLowerCase().includes(searchQuery.toLowerCase())) {
-                return highlightedText(profile[field]);
+                return (
+                    <p>
+                        {field.charAt(0).toUpperCase() + field.slice(1)}: {highlightedText(profile[field])}
+                    </p>
+                );
             }
         }
         return null;
     };
 
     return (
-        <div className={`${styles.profileCard} ${expanded ? styles.expanded : ''}`}>
-            <div className={styles.avatar} style={{ backgroundImage: `url(${profile.avatar_url})` }}></div>
-            <div className={styles.profileInfo}>
-                <h2>{profile.first_name} {profile.last_name}</h2>
-                <p>@{profile.username}</p>
-                <p>{profile.status ? 'Онлайн' : 'Оффлайн'}</p>
-                <p>Информация по поиску: {getHighlightedInfo() || 'Нет информации'}</p>
-                <div className={styles.toggleButton} onClick={toggleExpand}>
-                    {expanded ? '▲' : '▼'}
+        <Link
+          key={`/${profile.username}`}
+          to={`/${profile.username}`}
+          style={{ textDecoration: 'none'}}
+        >
+            <div className={styles.profileCard} style={{ backgroundImage: `url(${profile.cover_url})`, backgroundColor: 'rgba(0, 0, 0, 0.7)', backgroundBlendMode: 'darken', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <div className={styles.avatar} style={{ backgroundImage: `url(${profile.avatar_url})` }}></div>
+                <div className={styles.profileInfo}>
+                    <h2>{highlightedText(profile.first_name)} {highlightedText(profile.last_name)}</h2>
+                    <p>@{highlightedText(profile.username)}</p>
+                    <p>{profile.status ? 'Онлайн' : 'Оффлайн'}</p>
+                    {getHighlightedInfo() && <div className={styles.searchInfo}>{getHighlightedInfo()}</div>}
                 </div>
             </div>
-            {expanded && (
-                <div className={styles.expandedInfo} style={{
-                    backgroundImage: `url(${profile.cover_url})`,
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                    backgroundBlendMode: 'darken',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                }}>
-                    <p>Описание: {profile.description || 'Нет описания'}</p>
-                    <p>Пол: {profile.gender === 1 ? 'Мужской' : profile.gender === 2 ? 'Женский' : 'Не указан'}</p>
-                    <p>Возраст: {profile.birthday ? getAge(profile.birthday) : 'Не указан'}</p>
-                    <p>Email: {profile.display_email || 'Не указан'}</p>
-                    <p>Телефон: {profile.display_phone || 'Не указан'}</p>
-                    <p>Образование: {profile.education_info || 'Не указано'}</p>
-                    <p>Работа: {profile.work_info || 'Не указана'}</p>
-                    <div className={styles.actions}>
-                        <button><FontAwesomeIcon icon={faUserPlus} className={styles.actionIcon} /> Добавить в контакты</button>
-                        <button><FontAwesomeIcon icon={faEnvelope} className={styles.actionIcon} /> Сообщение</button>
-                    </div>
-                </div>
-            )}
-        </div>
+        </Link>
     );
 };
 

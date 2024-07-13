@@ -1,32 +1,69 @@
+.account-setup-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.account-setup-page h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.account-setup-page p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  margin-bottom: 15px;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.setting-item label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.setting-item input {
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.setting-item input.error {
+  border: 1px solid red;
+}
+
+.setting-item input.changed {
+  border: 1px solid blue;
+}
+
+.setting-item span {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.saved-username {
+  font-size: 12px;
+  color: gray;
+  margin-top: 5px;
+}
+
 .spinner {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Высота экрана */
+  height: 100vh;
 }
 
-.spinner div {
-  width: 15px;
-  height: 15px;
-  background-color: #ff7f00;
-  border-radius: 50%;
-  margin: 3px;
-  animation: bounce 1.2s infinite ease-in-out both;
-}
-
-.spinner div:nth-child(1) {
-  animation-delay: -0.32s;
-}
-
-.spinner div:nth-child(2) {
-  animation-delay: -0.16s;
-}
-
-@keyframes bounce {
-  0%, 80%, 100% {
-    transform: scale(0);
-  }
-  40% {
-    transform: scale(1);
-  }
+.error {
+  color: red;
+  margin-bottom: 20px;
 }

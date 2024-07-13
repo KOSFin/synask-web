@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import p from './Profile.module.css';
+import AccentColorContext from '../pages/settings/AccentColorContext';
 
 const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
 const UserProfilePage = () => {
+    const location = useLocation();
     const { username } = useParams();
     const [profile, setProfile] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
+    const [tags, setTags] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { accentColor } = useContext(AccentColorContext);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -21,15 +26,19 @@ const UserProfilePage = () => {
 
             const { data, error } = await supabase
                 .from('users_public_information')
-                .select('id, auth_id, username, first_name, last_name, avatar_url, cover_url, status')
+                .select('id, auth_id, username, first_name, last_name, avatar_url, cover_url, status, tags')
                 .eq('username', username)
                 .single();
+
 
             if (error) {
                 console.error('Error fetching user information:', error.message);
             } else {
+                setTags(JSON.parse(data.tags || '[]'));
                 setProfile(data);
             }
+
+            setLoading(false);
         };
 
         fetchUserProfile();
@@ -37,10 +46,20 @@ const UserProfilePage = () => {
 
     const isOwner = currentUser && profile && currentUser.id === profile.auth_id;
 
+    if (loading) {
+        return (
+            <div className="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        );
+    }
+
     return (
         <div className={p.container}>
             {profile && (
-                <div className={p.profileBlock}>
+                <div className={p.profileBlock} style={{ borderColor: accentColor }}>
                     <div className={p.profileHeader}>
                         <div className={p.profileCover}>
                             <img id="profile-cover" src={profile.cover_url} alt="Cover Photo" />
@@ -50,14 +69,16 @@ const UserProfilePage = () => {
                         </div>
                         <div className={p.profileInfo}>
                             <h2 className={p.profileNames}>{`${profile.first_name} ${profile.last_name}`}</h2>
-                            <div className={p.profileTags}></div>
+                            <div className={p.profileTags}>{tags.map(tag => <span key={tag} className={p.tag}>{tag}</span>)}</div>
                         </div>
                     </div>
                     {isOwner ? (
                         <div>
                             <div className={p.addFriend}>
                                 <div className={p.friendAdd}>
-                                    <div className={p.addFriendBtn}>Редактировать</div>
+                                    <Link to={'/options'} className={p.addFriendBtn}>
+                                      Редактировать
+                                    </Link>
                                     <div className={p.addFriendBtn}>Избранный чат</div>
                                 </div>
                             </div>

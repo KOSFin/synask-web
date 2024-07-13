@@ -1,0 +1,48 @@
+/* src/pages/messenger/styles/Message.module.css */
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 25%;
+  background-size: cover;
+  background-position: center;
+  margin-right: 10px;
+}
+
+.content {
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.name {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.text {
+  margin-bottom: 5px;
+}
+
+.time {
+  font-size: 12px;
+  position: absolute;
+  right: -40px;
+  bottom: 0;
+}
+
+.user {
+  background-color: #1e88e5;
+  color: #ffffff;
+}
+
+.friend {
+  background-color: #757575;
+  color: #ffffff;
+}

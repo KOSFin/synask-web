@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
-import p from './Profile.module.css';
+import './Profile.css';
 
 const UserProfilePage = () => {
     const [searchParams] = useSearchParams();
@@ -52,28 +52,28 @@ const UserProfilePage = () => {
     }, [un]);
 
     return (
-        <div className={p.container}>
+        <div className="container">
             {profile && (
-                <div className={p.profileBlock}>
-                    <div className={p.profileHeader}>
-                        <div className={p.profileCover}>
+                <div className="profile-block">
+                    <div className="profile-header">
+                        <div className="profile-cover">
                             <img id="profile-cover" src={profile.cover_url} alt="Cover Photo" />
                         </div>
-                        <div className={p.profileAvatar}>
+                        <div className="profile-avatar">
                             <img id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
                         </div>
-                        <div className={p.profileInfo}>
-                            <h2 className={p.profileNames}>{`${profile.first_name} ${profile.last_name}`}</h2>
-                            <div className={p.profileTags}></div>
+                        <div className="profile-info">
+                            <h2 className="profile-names">{`${profile.first_name} ${profile.last_name}`}</h2>
+                            <div className="profile-tags"></div>
                         </div>
                     </div>
-                    <div className={p.addFriend}>
-                        <div className={p.friendAdd}>
-                            <div className={p.addFriendBtn}>Сообщение</div>
-                            <div className={p.addFriendBtn}>Дружить</div>
-                            <div className={p.addFriendBtn}>
-                                <i className={p.fas}>Ещё</i>
-                                <div className={p.moreOptionsMenu}>
+                    <div className="addfriend">
+                        <div className="frend-add">
+                            <div className="add-friend-btn">Сообщение</div>
+                            <div className="add-friend-btn">Дружить</div>
+                            <div className="more-options-btn">
+                                <i className="fas fa-ellipsis-v">Ещё</i>
+                                <div className="more-options-menu">
                                     <a href="#">Отправить жалобу</a>
                                     <a href="#">Удалить из друзей</a>
                                     <a href="#">Еще одна опция</a>
@@ -81,15 +81,15 @@ const UserProfilePage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={p.profileMenu}>
-                        <div className={p.menuItem}>About</div>
-                        <div className={p.menuItem}>Events</div>
-                        <div className={p.menuItem}>Media</div>
-                        <div className={p.menuItem}>Friends</div>
-                        <div className={p.menuItem}>Groups</div>
-                        <div className={p.menuItem}>Settings</div>
+                    <div className="profile-menu">
+                        <div className="menu-item">About</div>
+                        <div className="menu-item">Events</div>
+                        <div className="menu-item">Media</div>
+                        <div className="menu-item">Friends</div>
+                        <div className="menu-item">Groups</div>
+                        <div className="menu-item">Settings</div>
                     </div>
-                    <div className={p.profileContent}></div>
+                    <div className="profile-content"></div>
                 </div>
             )}
         </div>

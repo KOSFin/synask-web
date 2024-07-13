@@ -1,0 +1,13 @@
+/* src/pages/messenger/styles/MessageList.module.css */
+.messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #1e1e1e;
+}
+
+.noChatSelected {
+  color: #b0b0b0;
+  text-align: center;
+  margin-top: 50%;
+}

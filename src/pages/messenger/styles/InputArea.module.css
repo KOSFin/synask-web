@@ -1,0 +1,40 @@
+/* src/pages/messenger/styles/InputArea.module.css */
+.inputArea {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #3e3e3e;
+  position: relative;
+}
+
+.attachIcon, .emojiIcon, .micIcon {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2a2a2a;
+  color: #ffffff;
+}
+
+.preview {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  display: flex;
+}
+
+.filePreview {
+  margin-right: 10px;
+}
+
+.filePreview img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+}

@@ -1,0 +1,55 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1c1f26;
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  border-bottom: 1px solid violet;
+  z-index: 101;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logoImage {
+  width: 20px;
+  height: 33px;
+}
+
+.logo .networkName {
+    font-size: 24px;
+    color: #ff7f00;
+    font-family: 'Roboto', sans-serif;
+    display: inline-block;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.divider {
+  height: 30px;
+  width: 1px;
+  background-color: violet;
+  margin: 0 20px;
+}
+
+.notifications {
+  position: relative;
+}
+
+.icon {
+  font-size: 24px;
+  color: white;
+}
+
+.clock {
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  flex-grow: 1;
+}
