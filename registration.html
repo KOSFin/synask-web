@@ -890,13 +890,6 @@
                     </div>
 
                     <div class="input-container full-width">
-                        <div class="nickname-container">
-                            <input type="text" id="nickname" name="nickname" placeholder="Ник" onkeyup="this.value = this.value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '')" required>
-                            <span class="help-icon" onclick="showNicknameHelp()">?</span>
-                        </div>
-                    </div>
-
-                    <div class="input-container full-width">
                         <div class="help-icon img_v"></div>
                         <select id="gender" name="gender" required>
                             <option value="0" disabled selected>Пол: Не указан</option>
@@ -1017,11 +1010,11 @@
             const lastName = document.getElementById('lastName').value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '');
             const birthdate = document.getElementById('birthdate').value;
             const gender = document.getElementById('gender').value;
-            const nickname = document.getElementById('nickname').value.replace(/(^[^a-zA-Z0-9а-яА-Я])|([^a-zA-Z0-9а-яА-Я]$)/g, '').replace(/[^\w.-]/g, '');
+
             const registerButton = document.getElementById('registerButton');
             onkeyup="this.value = this.value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '')"
 
-            if (!firstName ||!lastName ||!birthdate ||!nickname) {
+            if (!firstName ||!lastName ||!birthdate) {
                 showPopupWithImageAndText('Пожалуйста, заполните все поля.', 'https://imgur.com/aHcCPrp.jpg', 5000);
                 return;
             }
@@ -1053,7 +1046,6 @@
                             lastName: lastName,
                             birthday: birthdate,
                             gender: gender,
-                            nickname: nickname
                         }
                     }
                 });
