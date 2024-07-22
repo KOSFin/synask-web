@@ -1,7 +1,7 @@
 {
   "name": "synask-app",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.8.5",
+  "private": false,
   "dependencies": {
     "@cloudflare/pages-plugin-turnstile": "^1.0.2",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
