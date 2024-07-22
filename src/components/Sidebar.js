@@ -2,9 +2,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faComment, faUsers, faUserFriends, faCog, faSignInAlt, faUserPlus, faInfoCircle, faBuilding, faQuestionCircle, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faComment, faUsers, faUserFriends, faCog, faSignInAlt, faUserPlus, faInfoCircle, faBuilding, faQuestionCircle, faBell, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { createClient } from '@supabase/supabase-js';
 import styles from './Sidebar.module.css';
+import load from '../pages/Loader.module.css';
 import AccentColorContext from '../pages/settings/AccentColorContext';
 
 const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
@@ -28,7 +29,7 @@ const Sidebar = () => {
 
       const { data, error } = await supabase
         .from('users_public_information')
-        .select('username, first_name, last_name, avatar_url')
+        .select('*')
         .eq('auth_id', userData.user.id)
         .single();
 
@@ -57,9 +58,33 @@ const Sidebar = () => {
     fetchUserProfile();
   }, []);
 
+  const renderStatus = (status) => {
+    if (status === 'online') {
+        return <div className={styles.statusIndicator} data-status={status} style={{ backgroundColor: 'green' }} />;
+    } else if (status === 'offline') {
+        return <div className={styles.statusIndicator} data-status={status} style={{ backgroundColor: 'gray' }} />;
+    } else if (status) {
+        const [symbol, userStatus] = status.split(':');
+        if (userStatus && symbol.length < 4) {
+            return (
+                <div className={styles.customStatusIndicator} data-status={userStatus}>
+                    {symbol}
+                </div>
+            );
+        }
+        return (
+            <div className={styles.customStatusIndicator} data-status={status}>
+                💬
+            </div>
+        );
+    } else {
+        return;
+    }
+  };
+
   const guestMenuItems = [
     { path: '/login', icon: faSignInAlt, label: 'Войти' },
-    { path: '/register', icon: faUserPlus, label: 'Зарегистрироваться' },
+    { path: '/registration', icon: faUserPlus, label: 'Зарегистрироваться' },
     { path: '/about', icon: faInfoCircle, label: 'О платформе' },
     { path: '/company', icon: faBuilding, label: 'О компании' }
   ];
@@ -69,6 +94,7 @@ const Sidebar = () => {
     { path: '/msg', icon: faComment, label: 'Мессенджер' },
     { path: '/people', icon: faUsers, label: 'Люди' },
     { path: '/groups', icon: faUserFriends, label: 'Группы' },
+    { path: '/music', icon: faMusic, label: 'Музыка' },
   ];
 
   return (
@@ -76,7 +102,7 @@ const Sidebar = () => {
       <div className={styles.sidebarContent}>
         <div className={styles.profile}>
           {isLoading ? (
-            <div className={styles.spinner}>
+            <div className={load.spinner}>
                 <div></div>
                 <div></div>
                 <div></div>
@@ -89,7 +115,11 @@ const Sidebar = () => {
                       className={`${styles.menuItem} ${location.pathname === `/${profile.username}` ? styles.active  : ''}`}
                       style={{ borderColor: accentColor }}
                     >
-                      <img src={profile.avatar_url} alt="Avatar" className={styles.avatar} style={{ borderColor: accentColor }} />
+
+                      <div>
+                        <img className={styles.avatar} id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
+                        {renderStatus(profile.status)}
+                      </div>
                       <span className={styles.label}>Профиль - {profile.first_name} {profile.last_name}</span>
                     </Link>
                     <div className={styles.divider} style={{ backgroundColor: accentColor }}></div>

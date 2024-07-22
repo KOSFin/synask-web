@@ -4,6 +4,12 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.unsavedChanges {
+    color: red;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
 .settingItem {
     margin-bottom: 15px;
 }
@@ -14,8 +20,11 @@ label {
     margin-bottom: 5px;
 }
 
+.colorField {
+    display: flex;
+}
+
 .colorPicker {
-    display: block;
     width: 100%;
     height: 40px;
     border: none;
@@ -39,6 +48,23 @@ label {
     background-color: #45a049;
 }
 
+.cancelButton {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: block;
+}
+
+.cancelButton:hover {
+    background-color: #d32f2f;
+}
+
 .revertContainer {
     margin-top: 10px;
     display: flex;
@@ -51,4 +77,20 @@ label {
     border: 1px solid #ccc;
     margin-left: 5px;
     cursor: pointer;
+}
+
+.gradientColor {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.gradientColor input[type="color"] {
+    margin-right: 10px;
+}
+
+.buttonsContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }

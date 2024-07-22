@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import './ProfileSettings.css';
 import p from './ProfilePreview.module.css';
-import '../Loader.css';
+import load from '../Loader.module.css';
 
 const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
@@ -16,6 +16,7 @@ const ProfileSettings = () => {
     const [loading, setLoading] = useState(true);
     const [showSaved, setShowSaved] = useState(true);
     const [notification, setNotification] = useState('');
+    const [customStatus, setCustomStatus] = useState('');
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -64,6 +65,30 @@ const ProfileSettings = () => {
         return () => clearTimeout(timer);
     }, [editedProfile?.username]);
 
+    const renderStatus = (status) => {
+        if (status === 'online') {
+            return <div className={p.statusIndicator} data-status={status} style={{ backgroundColor: 'green' }} />;
+        } else if (status === 'offline') {
+            return <div className={p.statusIndicator} data-status={status} style={{ backgroundColor: 'gray' }} />;
+        } else if (status) {
+            const [symbol, userStatus] = status.split(':');
+            if (userStatus && symbol.length < 4) {
+                return (
+                    <div className={p.customStatusIndicator} data-status={userStatus}>
+                        {symbol}
+                    </div>
+                );
+            }
+            return (
+                <div className={p.customStatusIndicator} data-status={status}>
+                    💬
+                </div>
+            );
+        } else {
+            return;
+        }
+    };
+
     const checkUsernameAvailability = async (username) => {
         const { data, error } = await supabase
             .from('users_public_information')
@@ -75,11 +100,26 @@ const ProfileSettings = () => {
     };
 
     const handleChange = (field, value) => {
-        setEditedProfile({
-            ...editedProfile,
-            [field]: value,
-        });
+        if (field === 'status' && value !== 'custom') {
+            setCustomStatus(false);
+            setEditedProfile({
+                ...editedProfile,
+                status: value,
+            });
+        } else if (field === 'custom_status') {
+            setCustomStatus(value);
+            setEditedProfile({
+                ...editedProfile,
+                status: value,
+            });
+        } else {
+            setEditedProfile({
+                ...editedProfile,
+                [field]: value,
+            });
+        }
     };
+
 
     const handleTagInput = (event) => {
         if (event.key === 'Enter' && event.target.value.trim() && tags.length < 5) {
@@ -100,6 +140,7 @@ const ProfileSettings = () => {
         setNotification('');
         const updatedProfile = {
             ...editedProfile,
+            status: customStatus || editedProfile.status,
             tags: JSON.stringify(tags),
         };
 
@@ -151,22 +192,36 @@ const ProfileSettings = () => {
                         <div className="setting-item">
                             <label>Статус:</label>
                             <select
-                                value={editedProfile?.status || ''}
-                                onChange={(e) => handleChange('status', e.target.value)}
+                                value={editedProfile?.status === 'online' || editedProfile?.status === 'offline' ? editedProfile?.status : 'custom'}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === 'custom') {
+                                        handleChange('status', customStatus);
+                                    } else {
+                                        handleChange('status', value);
+                                    }
+                                }}
                                 className={profile.status !== editedProfile.status ? 'changed' : ''}
                             >
                                 <option value="online">Онлайн</option>
                                 <option value="offline">Офлайн</option>
                                 <option value="custom">Пользовательский статус</option>
                             </select>
-                            {editedProfile?.status === 'custom' && (
-                                <input
-                                    type="text"
-                                    value={editedProfile?.custom_status || ''}
-                                    onChange={(e) => handleChange('custom_status', e.target.value)}
-                                    placeholder="Введите свой статус"
-                                    className="custom-status-input"
-                                />
+                            {editedProfile?.status != 'online' && editedProfile?.status != 'offline' && (
+                                <>
+                                    <input
+                                        type="text"
+                                        value={customStatus || editedProfile?.status || ''}
+                                        onChange={(e) => handleChange('custom_status', e.target.value)}
+                                        placeholder="Введите свой статус"
+                                        className="custom-status-input"
+                                    />
+                                    {editedProfile?.status === '' && (
+                                        <div className="message">
+                                            Оставьте поле пустым, если хотите удалить статус
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                         <div className="setting-item">
@@ -329,7 +384,7 @@ const ProfileSettings = () => {
 
     if (loading) {
         return (
-            <div className="spinner">
+            <div className={load.spinner}>
                 <div></div>
                 <div></div>
                 <div></div>
@@ -351,6 +406,7 @@ const ProfileSettings = () => {
                                 </div>
                                 <div className={p.profileAvatar}>
                                     <img id="profile-avatar" src={showSaved ? profile.avatar_url : editedProfile.avatar_url} alt="User Photo" />
+                                    {renderStatus(showSaved ? profile.status : editedProfile.status)}
                                 </div>
                                 <div className={p.profileInfo}>
                                     <h2 className={p.profileNames}>{`${showSaved ? profile.first_name : editedProfile.first_name} ${showSaved ? profile.last_name : editedProfile.last_name}`}</h2>

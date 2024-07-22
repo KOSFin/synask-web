@@ -44,8 +44,8 @@
     position: relative;
     width: 150px;
     height: 150px;
-    border-radius: 10px;
-    overflow: hidden;
+    border-radius: 25%;
+    overflow: visible; /* Скрывает содержимое за границами */
     margin-right: 20px;
     z-index: 1;
 }
@@ -54,7 +54,73 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 10px; /* Скругляем изображение */
 }
+
+.statusIndicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+.statusIndicator::after {
+    content: attr(data-status);
+    position: absolute;
+    left: 30px; /* Расположение текста относительно статуса */
+    bottom: -3px; /* Отступ от нижней границы */
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 3px;
+    border-radius: 5px;
+    white-space: nowrap;
+    color: white;
+    display: none;
+    font-size: 15px;
+}
+
+.statusIndicator:hover::after {
+    display: block;
+}
+
+
+.customStatusIndicator {
+    position: absolute;
+    bottom: 0px; /* Располагаем ниже границ аватара */
+    right: 0px;  /* Располагаем за границами аватара */
+    width: 25px;
+    height: 25px;
+    border-radius: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px; /* Сделаем размер символа меньше, чтобы вмещался в кружке */
+    text-shadow: 1px 1px 2px black;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.customStatusIndicator::after {
+    content: attr(data-status);
+    position: absolute;
+    left: 30px; /* Расположение текста относительно статуса */
+    bottom: 0; /* Отступ от нижней границы */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+    white-space: nowrap;
+    display: none;
+    font-size: 15px;
+}
+
+.customStatusIndicator:hover::after {
+    display: block;
+}
+
 
 .profileInfo {
     flex: 1;
@@ -113,26 +179,114 @@
     transition: background-color 0.3s;
 }
 
-.addFriend {
+.ActionsButtons {
+    display: flex;
+    flex-direction: reverse;
+    margin-top: 10px;
+}
+
+.userActions {
     background-color: #1c1f26;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding: 15px 25px;
     border-bottom: 1px solid #444;
+    position: relative;
 }
 
-.addFriendItem {
-    padding: 10px;
-    font-size: 16px;
+.userActions::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), #1c1f26);
+    z-index: -1;
+}
+
+.userActionsBtn {
+    padding: 10px 15px;
+    margin-right: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
     color: #fff;
+    border-radius: 5px;
+    font-size: 14px;
     cursor: pointer;
-    transition: color 0.3s;
-    margin-top: 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
 }
 
-.actionButton:hover {
-    background-color: #f57c00;
+.userActionsBtn:hover {
+    background-color: rgba(206, 1, 252, 0.3);
+}
+
+.actionIcon {
+    margin-right: 5px;
+}
+
+.moreOptionsBtn {
+    position: relative;
+    padding: 10px 15px;
+    margin-right: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.moreOptionsBtn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.moreOptionsMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    display: none;
+    font-size: 15px;
+}
+
+.moreOptionsBtn:hover .moreOptionsMenu {
+    display: block;
+}
+
+.moreOptionsMenu a {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.moreOptionsMenu a:hover {
+    background-color: #444;
+}
+
+.moreOptionsMenu .actionIcon {
+    margin-right: 5px;
+}
+
+.guestView {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.ownerControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
 }
 
 .profileMenu {
@@ -152,7 +306,7 @@
 }
 
 .menuItem:hover {
-    color: #ff9800;
+    color: rgb(206 1 252);
 }
 
 .profileContent {
@@ -194,56 +348,4 @@
 .menuCollapsed {
     opacity: 0.5;
     margin-top: -50px;
-}
-
-.addFriendBtn {
-    padding: 15px 25px;
-    margin-right: 10px;
-    background-color: rgb(114 14 114);
-    color: #fff;
-    border-radius: 10%;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.moreOptionsBtn {
-    position: relative;
-    background-color: rgb(114 14 114);
-    border-radius: 10%;
-    color: #fff;
-    text-align: center;
-    padding: 15px;
-    cursor: pointer;
-}
-
-.moreOptionsMenu {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.849);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1;
-    display: none;
-    font-size: 15px;
-    left: -25px;
-}
-
-.moreOptionsMenu a {
-    display: block;
-    padding: 10px 20px;
-    color: #fff;
-    text-decoration: none;
-}
-
-.moreOptionsMenu a:hover {
-    background-color: #444;
-}
-
-.moreOptionsBtn:hover .moreOptionsMenu {
-    display: block;
-}
-
-.friendAdd {
-    display: flex;
-    flex-direction: reverse;
-    margin-top: 10px;
 }

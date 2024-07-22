@@ -1,14 +1,14 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   background-color: #1c1f26;
   padding: 10px 20px;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 40px;
+  height: 50px;
   border-bottom: 1px solid violet;
   z-index: 101;
 }
@@ -23,33 +23,154 @@
   height: 33px;
 }
 
-.logo .networkName {
-    font-size: 24px;
-    color: #ff7f00;
-    font-family: 'Roboto', sans-serif;
-    display: inline-block;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+.networkName {
+  font-size: 24px;
+  color: #ff007f;
+  margin: 0 5px;
+  font-family: 'Arial', sans-serif;
+}
+
+.timeWidget {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  color: white;
+  font-size: 18px;
 }
 
 .divider {
-  height: 30px;
   width: 1px;
-  background-color: violet;
+  height: 30px;
   margin: 0 20px;
+  background-color: #ff007f;
 }
 
-.notifications {
+.music-player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: height 0.3s ease, width 0.3s ease;
+  height: 50px;
+  overflow: hidden;
+  max-width: 500px;
+  border-radius: 10px;
+  border: 1px orange solid;
+}
+
+.music-player-header.expanded {
+  flex-direction: column;
+  height: 180px;
+  margin-top: 130px;
+}
+
+.playerContainer {
+  display: flex;
+  align-items: center;
+
+}
+
+.playerBlock {
+    display: block;
+}
+
+.trackInfo {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scrollingText {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
   position: relative;
+  width: 200px;
 }
 
-.icon {
-  font-size: 24px;
+.scrollingText span {
+  display: inline-block;
+  white-space: nowrap;
+  padding-right: 5px; /* Пробел между повторяющимися строками */
+  animation: scroll-text 10s linear infinite; /* Увеличьте время, чтобы сделать пролистывание медленнее */
+}
+
+@keyframes scroll-text {
+  0% {
+    transform: translateX(70%);
+  }
+  100% {
+    transform: translateX(-100%); /* Движение на половину ширины контейнера */
+  }
+}
+
+.trackTitle {
+  font-size: 1rem;
+  font-weight: bold;
   color: white;
 }
 
-.clock {
+.trackArtist {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+
+.controls {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.controls button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  margin: 0 2px;
+  cursor: pointer;
+  padding: 0;
+  margin-right: auto;
+}
+
+.controls button:disabled {
+  color: #555;
+  cursor: not-allowed;
+}
+
+.expandedControls {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.timeInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   color: white;
-  font-size: 16px;
-  text-align: center;
+}
+
+.seekBar {
+  flex-grow: 1;
+  margin: 0 10px;
+}
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.volumeControl input {
+  margin-left: 10px;
+}
+
+.volumeBar {
   flex-grow: 1;
 }

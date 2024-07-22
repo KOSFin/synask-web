@@ -30,6 +30,7 @@ const Settings = () => {
                 <ul>
                     <li className={activeSection === 'general' ? 'active' : ''} onClick={() => setActiveSection('general')}>Общие и Персонализация</li>
                     <li className={activeSection === 'profile' ? 'active' : ''} onClick={() => setActiveSection('profile')}>Мой профиль</li>
+                    <li className={activeSection === 'personal-data' ? 'active' : ''} onClick={() => setActiveSection('personal-data')}>Персональные данные</li>
                     <li className={activeSection === 'security' ? 'active' : ''} onClick={() => setActiveSection('security')}>Безопасность и сессии</li>
                     <li className={activeSection === 'privacy' ? 'active' : ''} onClick={() => setActiveSection('privacy')}>Приватность</li>
                 </ul>

@@ -1,0 +1,36 @@
+.App {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    color: #ffffff;
+    border: 1px solid violet;
+}
+
+.sp {
+    color: white;
+    text-align: center;
+}
+
+input {
+    padding: 10px;
+    width: 300px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+}
+
+
+.audio-controls {
+    margin-top: 20px;
+}
+
+button {
+    margin-left: 10px;
+}

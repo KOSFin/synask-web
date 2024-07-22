@@ -69,39 +69,6 @@
     margin-bottom: 20px;
 }
 
-.spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.spinner div {
-    width: 15px;
-    height: 15px;
-    background-color: #ff7f00;
-    border-radius: 50%;
-    margin: 3px;
-    animation: bounce 1.2s infinite ease-in-out both;
-}
-
-.spinner div:nth-child(1) {
-    animation-delay: -0.32s;
-}
-
-.spinner div:nth-child(2) {
-    animation-delay: -0.16s;
-}
-
-@keyframes bounce {
-    0%, 80%, 100% {
-        transform: scale(0);
-    }
-    40% {
-        transform: scale(1);
-    }
-}
-
 .results {
     display: flex;
     flex-direction: column;
@@ -122,13 +89,48 @@
     background-position: center;
 }
 
-.avatar {
+.profileAvatar {
+    position: relative;
     width: 80px;
     height: 80px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 10px;
+    border-radius: 25%;
+    overflow: visible; /* Скрывает содержимое за границами */
     margin-right: 20px;
+    z-index: 1;
+}
+
+.profileAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px; /* Скругляем изображение */
+}
+
+.statusIndicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+.customStatusIndicator {
+    position: absolute;
+    bottom: 0px; /* Располагаем ниже границ аватара */
+    right: 0px;  /* Располагаем за границами аватара */
+    width: 20px;
+    height: 20px;
+    border-radius: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px; /* Сделаем размер символа меньше, чтобы вмещался в кружке */
+    text-shadow: 1px 1px 2px black;
+    cursor: pointer;
+    z-index: 2;
 }
 
 .profileInfo {
@@ -159,3 +161,5 @@
     margin-top: 10px;
     font-size: 12px;
 }
+
+

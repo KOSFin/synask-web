@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import styles from './SearchPage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
+import load from './Loader.module.css';
 import AccentColorContext from '../pages/settings/AccentColorContext';
 
 const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
@@ -102,7 +102,7 @@ const SearchPage = () => {
                 <p>Найдено профилей: {searchResults.length}</p>
             </div>
             {loading ? (
-                <div className={styles.spinner}>
+                <div className={load.spinner}>
                     <div></div>
                     <div></div>
                     <div></div>
@@ -128,6 +128,30 @@ const ProfileCard = ({ profile, searchQuery }) => {
         );
     };
 
+    const renderStatus = (status) => {
+        if (status === 'online') {
+            return <div className={styles.statusIndicator} data-status={status} style={{ backgroundColor: 'green' }} />;
+        } else if (status === 'offline') {
+            return <div className={styles.statusIndicator} data-status={status} style={{ backgroundColor: 'gray' }} />;
+        } else if (status) {
+            const [symbol, userStatus] = status.split(':');
+            if (userStatus && symbol.length < 4) {
+                return (
+                    <div className={styles.customStatusIndicator} data-status={userStatus}>
+                        {symbol}
+                    </div>
+                );
+            }
+            return (
+                <div className={styles.customStatusIndicator} data-status={status}>
+                    💬
+                </div>
+            );
+        } else {
+            return;
+        }
+    };
+
     const getHighlightedInfo = () => {
         const infoFields = [
             'description', 'display_email', 'display_phone', 'work_info', 'education_info', 'social_links', 'status', 'first_name', 'last_name', 'username'
@@ -151,7 +175,10 @@ const ProfileCard = ({ profile, searchQuery }) => {
           style={{ textDecoration: 'none'}}
         >
             <div className={styles.profileCard} style={{ backgroundImage: `url(${profile.cover_url})`, backgroundColor: 'rgba(0, 0, 0, 0.7)', backgroundBlendMode: 'darken', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                <div className={styles.avatar} style={{ backgroundImage: `url(${profile.avatar_url})` }}></div>
+                <div className={styles.profileAvatar}>
+                    <img id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
+                    {renderStatus(profile.status)}
+                </div>
                 <div className={styles.profileInfo}>
                     <h2>{highlightedText(profile.first_name)} {highlightedText(profile.last_name)}</h2>
                     <p>@{highlightedText(profile.username)}</p>
