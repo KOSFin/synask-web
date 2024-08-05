@@ -116,7 +116,7 @@ const Header = () => {
         return () => clearInterval(timer);
     }, []);
 
-    useEffect(() => {
+    /* useEffect(() => {
         const script = document.createElement('script');
         script.src = "https://yandex.ru/ads/system/context.js";
         script.async = true;
@@ -133,7 +133,7 @@ const Header = () => {
         return () => {
             document.body.removeChild(script);
         };
-    }, []);
+    }, []); */
 
     return (
         <>

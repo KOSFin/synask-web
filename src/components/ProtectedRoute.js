@@ -60,7 +60,7 @@ const ProtectedRoute = ({ children }) => {
                     .eq('auth_id', userId)
                     .single();
 
-                if (errorPub) throw error;
+                if (errorPub) throw errorPub;
 
                 console.log('Initial data fetched:', dataPub);
 
@@ -70,7 +70,7 @@ const ProtectedRoute = ({ children }) => {
                     .eq('auth_id', userId)
                     .single();
 
-                if (errorPriv) throw error;
+                if (errorPriv) throw errorPriv;
 
                 console.log('Initial data fetched:', dataPriv);
 
