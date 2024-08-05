@@ -1,0 +1,96 @@
+.mobileSidebarContainer {
+  position: relative;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.navBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: rgba(0,0,0,0.8);
+  color: white;
+  display: flex;
+  justify-content: space-around;
+
+  z-index: 1000;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  color: #444;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navItem:hover {
+  color: #656565;
+}
+
+.active {
+  color: var(--accent-color);
+}
+
+.icon {
+  font-size: 24px;
+}
+
+.label {
+  font-size: 12px;
+}
+
+.additionalMenu {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  background-color: black;
+  transition: max-height 0.3s;
+  max-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.additionalMenu.open {
+  max-height: 240px; /* Достаточная высота для размещения всех пунктов меню */
+}
+
+.additionalItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.additionalItem:hover {
+  background-color: #2e2e2e;
+}
+
+.additionalItem .icon {
+  margin-right: 10px;
+}

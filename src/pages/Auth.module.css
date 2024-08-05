@@ -1,0 +1,142 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.userInfo img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.userInfo p {
+  margin: 5px 0;
+}
+
+.deviceInfo {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.deviceInfo h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.deviceInfo p {
+  margin: 5px 0;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.cancelButton {
+  background-color: #ccc;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.authorizeButton {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Новые стили для блока с информацией о пользователе */
+.accountInfo {
+    background-color: #0b0012;
+    padding: 15px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #f100ff;
+}
+
+.accountInfo:hover {
+    background-color: #150022;
+}
+
+.accountAvatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 25%;
+    object-fit: cover;
+}
+
+.accountDetails {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.accountName {
+    font-size: 18px;
+    margin: 0;
+    color: white;
+}
+
+.accountUsername {
+    font-size: 14px;
+    margin: 0;
+    color: #c7c7c7;
+}
+
+.accountTooltip {
+    font-size: 12px;
+    color: #c7c7c7;
+    text-align: left;
+    margin-top: 5px;
+}
+
+/* Auth.module.css */
+.info {
+  margin-top: 20px;
+}
+
+.closeButton {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.closeButton:hover {
+  background-color: #0056b3;
+}
+

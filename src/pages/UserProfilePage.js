@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from './config/SupabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faStar, faEnvelope, faUserPlus, faShare, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faBuilding, faGraduationCap, faEdit, faStar, faEnvelope, faUserPlus, faShare, faChevronDown, faInfoCircle, faImages, faLink } from '@fortawesome/free-solid-svg-icons';
 import p from './Profile.module.css';
 import AccentColorContext from '../pages/settings/AccentColorContext';
 import load from './Loader.module.css';
-
-const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
+import NotFoundPage from './NotFoundPage';
+import UserContext from '../components/UserContext';
 
 const UserProfilePage = () => {
     const location = useLocation();
@@ -17,19 +17,27 @@ const UserProfilePage = () => {
     const [tags, setTags] = useState([]);
     const [loading, setLoading] = useState(true);
     const { accentColor } = useContext(AccentColorContext);
+    const [activeSection, setActiveSection] = useState('description');
+    const { userData } = useContext(UserContext);
+    const [contacts, setContacts] = useState([]);
+
+    useEffect(() => {
+        if (userData) {
+            console.log('значение записано');
+            setCurrentUser(userData);
+        } else {
+            console.log('no');
+        }
+    }, [userData]);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
-            const { data: userData, error: userError } = await supabase.auth.getUser();
-            if (userError) {
-                setCurrentUser(null);
-            } else {
-                setCurrentUser(userData.user);
-            }
+            console.log(userData);
+            setCurrentUser(userData);
 
             const { data, error } = await supabase
                 .from('users_public_information')
-                .select('id, auth_id, username, first_name, last_name, avatar_url, cover_url, status, tags')
+                .select('*')
                 .eq('username', username)
                 .single();
 
@@ -38,15 +46,41 @@ const UserProfilePage = () => {
             } else {
                 setTags(JSON.parse(data.tags || '[]'));
                 setProfile(data);
+                console.log(userData);
+                setContacts(userData.contacts || []);
             }
 
             setLoading(false);
         };
 
         fetchUserProfile();
-    }, [username]);
+    }, [username, userData]);
 
-    const isOwner = currentUser && profile && currentUser.id === profile.auth_id;
+    let isOwner = currentUser && profile && currentUser.auth_id === profile.auth_id;
+    let isInContacts = contacts.includes(profile?.auth_id);
+
+    const handleAddContact = async () => {
+        let updatedContacts;
+        if (isInContacts) {
+            updatedContacts = contacts.filter(id => id !== profile.auth_id);
+        } else {
+            updatedContacts = [...contacts, profile.auth_id];
+        }
+
+        setContacts(updatedContacts);
+
+        // Обновление контактов на сервере
+        const { error } = await supabase
+            .from('users_private_information')
+            .update({ contacts: updatedContacts })
+            .eq('auth_id', currentUser.auth_id);
+
+        if (error) {
+            console.error('Error updating contacts:', error.message);
+        } else {
+            console.log('Contacts updated successfully');
+        }
+    };
 
     const renderStatus = (status) => {
         if (status === 'online') {
@@ -72,6 +106,19 @@ const UserProfilePage = () => {
         }
     };
 
+    const renderSection = () => {
+        switch (activeSection) {
+            case 'description':
+                return <div>Описание профиля...</div>;
+            case 'media':
+                return <div>Медиа контент...</div>;
+            case 'links':
+                return <div>Ссылки...</div>;
+            default:
+                return <div>Описание профиля...</div>;
+        }
+    };
+
     if (loading) {
         return (
             <div className={load.spinner}>
@@ -82,73 +129,131 @@ const UserProfilePage = () => {
         );
     }
 
+    if (!profile) {
+        return <NotFoundPage />;
+    }
+
     return (
         <div className={p.container}>
-            {profile && (
-                <div className={p.profileBlock} style={{ borderColor: accentColor }}>
-                    <div className={p.profileHeader}>
-                        <div className={p.profileCover}>
-                            <img id="profile-cover" src={profile.cover_url} alt="Cover Photo" />
-                        </div>
-                        <div className={p.profileAvatar}>
-                            <img id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
-                            {renderStatus(profile.status)}
-                        </div>
-                        <div className={p.profileInfo}>
-                            <h2 className={p.profileNames}>{`${profile.first_name} ${profile.last_name}`}</h2>
-                            <div className={p.profileTags}>{tags.map(tag => <span key={tag} className={p.tag}>{tag}</span>)}</div>
+            <div className={p.profileBlock} style={{ borderColor: accentColor }}>
+                <div className={p.profileHeader}>
+                    <div className={p.profileCover}>
+                        <img id="profile-cover" src={profile.cover_url} alt="Cover Photo" />
+                    </div>
+                    <div className={p.profileAvatar}>
+                        <img id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
+                        {renderStatus(profile.status)}
+                    </div>
+                    <div className={p.profileTags}>
+                        {tags.map(tag => <span key={tag} className={p.tag}>{tag}</span>)}
+                    </div>
+                </div>
+                <div className={p.profileInfo} style={{ borderColor: accentColor }}>
+                    <h2 className={p.profileNames}>{`${profile.first_name} ${profile.last_name}`}</h2>
+                    <div className={p.profileUsername}>@{profile.username}</div>
+                    <div className={p.userAchievements}>
+                        <FontAwesomeIcon icon={faStar} title="Подтверждённый аккаунт" style={{ color: 'gold' }} />
+                        <FontAwesomeIcon icon={faStar} title="Значок твича" style={{ color: 'purple' }} />
+                        <FontAwesomeIcon icon={faStar} title="Значок тестировщика" style={{ color: 'green' }} />
+                        <FontAwesomeIcon icon={faStar} title="Значок олда" style={{ color: 'blue' }} />
+                    </div>
+                </div>
+                {isOwner ? (
+                    <div>
+                        <div className={p.userActionsBar}>
+                            <div className={p.ActionsButtons}>
+                                <Link to={'/options'} className={p.userActionsBtn}>
+                                    <FontAwesomeIcon icon={faEdit} className={p.actionIcon} /> Редактировать
+                                </Link>
+                                <div className={p.userActionsBtn}>
+                                    <FontAwesomeIcon icon={faStar} className={p.actionIcon} /> Избранный чат
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    {isOwner ? (
-                        <div>
-                            <div className={p.userActions}>
-                                <div className={p.ActionsButtons}>
-                                    <Link to={'/options'} className={p.userActionsBtn}>
-                                        <FontAwesomeIcon icon={faEdit} className={p.actionIcon} /> Редактировать
-                                    </Link>
-                                    <div className={p.userActionsBtn}>
-                                        <FontAwesomeIcon icon={faStar} className={p.actionIcon} /> Избранный чат
+                ) : (
+                    currentUser ? (
+                        <div className={p.userActionsBar}>
+                            <div className={p.ActionsButtons}>
+                                <div className={p.userActionsBtn}>
+                                    <FontAwesomeIcon icon={faEnvelope} className={p.actionIcon} /> Сообщение
+                                </div>
+                                <div
+                                  className={p.userActionsBtn}
+                                  onClick={handleAddContact}
+                                  style={{
+                                    backgroundColor: isInContacts ? 'rgba(206, 1, 252, 0.3)' : 'rgba(255, 255, 255, 0.2)',
+                                  }}
+                                  title={isInContacts ? ' Удалить Контакт' : ' Добавить Контакт'}
+                                >
+                                  <FontAwesomeIcon icon={faUserPlus} className={p.actionIcon} />
+                                  {isInContacts ? ' В контактах' : ' Добавить контакт'}
+                                </div>
+                                <div className={p.moreOptionsBtn}>
+                                    <FontAwesomeIcon icon={faChevronDown} className={p.actionIcon} /> Ещё
+                                    <div className={p.moreOptionsMenu}>
+                                        <a href="#">
+                                            <FontAwesomeIcon icon={faShare} className={p.actionIcon} /> Поделиться профилем
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        currentUser ? (
-                            <div className={p.userActions}>
-                                <div className={p.ActionsButtons}>
-                                    <div className={p.userActionsBtn}>
-                                        <FontAwesomeIcon icon={faEnvelope} className={p.actionIcon} /> Сообщение
-                                    </div>
-                                    <div className={p.userActionsBtn}>
-                                        <FontAwesomeIcon icon={faUserPlus} className={p.actionIcon} /> Дружить
-                                    </div>
-                                    <div className={p.moreOptionsBtn}>
-                                        <FontAwesomeIcon icon={faChevronDown} className={p.actionIcon} /> Ещё
-                                        <div className={p.moreOptionsMenu}>
-                                            <a href="#">
-                                                <FontAwesomeIcon icon={faShare} className={p.actionIcon} /> Поделиться профилем
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div className={p.guestView}>
+                            <p>Вы не вошли в систему. Страница открыта в Гостевом режиме.</p>
+                        </div>
+                    )
+                )}
+                <div className={p.contactInfo}>
+                    <div>
+                        {profile.display_email && (
+                            <div className={p.contactItem}>
+                                <FontAwesomeIcon icon={faEnvelope} /> {profile.display_email}
                             </div>
-                        ) : (
-                            <div className={p.guestView}>
-                                <p>Вы не вошли в систему. Страница открыта в Гостевом режиме.</p>
+                        )}
+                        {profile.display_phone && (
+                            <div className={p.contactItem}>
+                                <FontAwesomeIcon icon={faPhone} /> {profile.display_phone}
                             </div>
-                        )
-                    )}
-                    <div className={p.profileMenu}>
-                        <div className={p.menuItem}>About</div>
-                        <div className={p.menuItem}>Events</div>
-                        <div className={p.menuItem}>Media</div>
-                        <div className={p.menuItem}>Friends</div>
-                        <div className={p.menuItem}>Groups</div>
-                        <div className={p.menuItem}>Settings</div>
+                        )}
+                        {profile.work_info && (
+                            <div className={p.contactItem}>
+                                <FontAwesomeIcon icon={faBuilding} /> {profile.work_info}
+                            </div>
+                        )}
+                        {profile.education_info && (
+                            <div className={p.contactItem}>
+                                <FontAwesomeIcon icon={faGraduationCap} /> {profile.education_info}
+                            </div>
+                        )}
                     </div>
-                    <div className={p.profileContent}></div>
+                    <div className={p.userStats}>
+                        <div className={p.statItem}>
+                            <div className={p.statNumber}>{profile.followers_count > 999 ? `>${(profile.followers_count / 1000).toFixed(1)}к` : profile.followers_count}</div>
+                            <div className={p.statLabel}>подписчиков</div>
+                        </div>
+                        <div className={p.statItem}>
+                            <div className={p.statNumber}>{profile.mutual_contacts_count > 999 ? `>${(profile.mutual_contacts_count / 1000).toFixed(1)}к` : profile.mutual_contacts_count}</div>
+                            <div className={p.statLabel}>взаимных контактов</div>
+                        </div>
+                    </div>
                 </div>
-            )}
+                <div className={p.profileMenu}>
+                    <div className={`${p.menuItems} ${activeSection === 'description' ? p.active : ''}`} onClick={() => setActiveSection('description')}>
+                        <FontAwesomeIcon icon={faInfoCircle} /> Описание
+                    </div>
+                    <div className={`${p.menuItems} ${activeSection === 'media' ? p.active : ''}`} onClick={() => setActiveSection('media')}>
+                        <FontAwesomeIcon icon={faImages} /> Медиа
+                    </div>
+                    <div className={`${p.menuItems} ${activeSection === 'links' ? p.active : ''}`} onClick={() => setActiveSection('links')}>
+                        <FontAwesomeIcon icon={faLink} /> Ссылки
+                    </div>
+                </div>
+                <div className={p.profileContent}>
+                    {renderSection()}
+                </div>
+            </div>
         </div>
     );
 };

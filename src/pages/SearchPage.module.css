@@ -162,4 +162,12 @@
     font-size: 12px;
 }
 
+@media (max-width: 800px) {
+    .searchPage {
+        width: 90%;
+        margin: 0 auto;
+        padding: 10px;
+    }
+}
+
 

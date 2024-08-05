@@ -6,7 +6,7 @@ const BackgroundContext = createContext();
 export const BackgroundProvider = ({ children }) => {
     const defaultSettings = {
         type: 'color',
-        colors: ['#ffffff'],
+        colors: ["#1a0024", "#2e1b00", "#0b0029"],
         imageURL: '',
         imageOpacity: 1,
         accentColor: '#ffffff'

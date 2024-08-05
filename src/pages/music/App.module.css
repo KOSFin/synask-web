@@ -1,0 +1,41 @@
+.App {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: rgba(31, 31, 31, 0.7);
+    border-radius: 0;
+    color: white;
+}
+
+.sectionSwitch {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.button:hover {
+    color: #aaa;
+}
+
+.activeButton {
+    border-bottom: 2px solid white;
+    font-weight: bold;
+    color: #fff;
+}
+
+.recommendations, .myMusic {
+    margin-top: 20px;
+}

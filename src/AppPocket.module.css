@@ -1,0 +1,22 @@
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: black;
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  background: linear-gradient(rgb(31, 0, 56), rgb(0, 2, 31));
+}
+
+.contentArea {
+  flex: 1;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 10px;
+  overflow-y: auto;
+}

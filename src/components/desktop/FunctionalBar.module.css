@@ -1,0 +1,186 @@
+/* FunctionalBar.module.css */
+.friendsBar {
+  position: fixed;
+  left: 60px;
+  width: 150px;
+  height: 70px;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  z-index: 104;
+  transition: height 0.3s ease, transform 0.3s ease;
+}
+
+.open {
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Затемнение раскрытой части */
+}
+
+.toggleButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  height: 70px;
+  cursor: pointer;
+  color: white; /* Белый цвет текста */
+}
+
+.statusIcon {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.statusIcon .faUser {
+  font-size: 1.2em;
+}
+
+.statusIndicator {
+    width: 10px;
+    height: 10px;
+    border: 3px solid black;
+    border-radius: 5px;
+    margin-left: auto;
+}
+
+.statusIndicator::after {
+    content: attr(data-status);
+    left: 30px; /* Расположение текста относительно статуса */
+    bottom: -3px; /* Отступ от нижней границы */
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 3px;
+    border-radius: 5px;
+    white-space: nowrap;
+    color: white;
+    display: none;
+    font-size: 15px;
+}
+
+.statusIndicator:hover::after {
+    display: block;
+}
+
+
+.customStatusIndicator {
+    bottom: 0px; /* Располагаем ниже границ аватара */
+    right: 0px;  /* Располагаем за границами аватара */
+    width: 15px;
+    height: 15px;
+    border-radius: 25%;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 15px; /* Сделаем размер символа меньше, чтобы вмещался в кружке */
+    text-shadow: 1px 1px 2px black;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.customStatusIndicator::after {
+    content: attr(data-status);
+    left: 30px; /* Расположение текста относительно статуса */
+    bottom: 0; /* Отступ от нижней границы */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+    white-space: nowrap;
+    display: none;
+    font-size: 15px;
+}
+
+.customStatusIndicator:hover::after {
+    display: block;
+}
+
+.friendCount {
+  margin-left: 8px;
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: -3px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+.offlineIndicator {
+  position: absolute;
+  bottom: -3px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  background-color: gray;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+.friendsList {
+  overflow-y: auto;
+  height: calc(100% - 50px);
+  overflow: visible;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.friendsList::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.friendItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin: 5px 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white; /* Белый цвет текста */
+}
+
+.avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 25%;
+  object-fit: cover;
+}
+
+.friendInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  max-width: calc(100% - 30px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.lastName {
+  font-size: 12px;
+}
+
+.statusOnline {
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  margin-left: auto;
+}
+
+.statusOffline {
+  width: 10px;
+  height: 10px;
+  background-color: gray;
+  border-radius: 50%;
+  margin-left: auto;
+}

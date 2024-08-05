@@ -1,6 +1,7 @@
 // src/pages/messenger/components/ChatList.js
 import React from 'react';
 import styles from '../styles/ChatList.module.css';
+import { supabase } from '../../config/SupabaseClient';
 
 const ChatList = ({ setSelectedChat, searchTerm }) => {
   // Пример списка чатов, в реальности данные будут получены из Supabase

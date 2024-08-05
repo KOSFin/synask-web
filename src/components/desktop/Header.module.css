@@ -2,15 +2,23 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  background-color: #1c1f26;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
   padding: 10px 20px;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  width: calc(100% - 100px);
+  margin-left: auto;
   height: 50px;
   border-bottom: 1px solid violet;
   z-index: 101;
+}
+
+.headerContent {
+    margin-left: 130px;
+    display: flex;
 }
 
 .logo {
@@ -173,4 +181,9 @@
 
 .volumeBar {
   flex-grow: 1;
+}
+
+.advertisement {
+    margin-left: auto; /* Перемещает рекламный блок вправо */
+    border-color: 1px solid orange;
 }
