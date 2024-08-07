@@ -865,25 +865,6 @@
             }
         }
 
-        async function checkUsernameAvailability(username) {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('users_public_information')
-                    .select('username')
-                    .eq('username', username);
-
-                if (error) {
-                    console.error('Ошибка при проверке уникальности ника:', error.message);
-                    return false;
-                }
-
-                return !data.length; // Возвращаем true, если ник уникален
-            } catch (error) {
-                console.error('Ошибка при выполнении запроса:', error.message);
-                return false;
-            }
-        }
-
         function replaceFormFields() {
             showLoader();
             // Изменение заголовка формы
@@ -926,43 +907,7 @@
             `;
 
             renderCaptcha();
-
             hideLoader();
-
-            // Функция для отображения помощи по нику
-
-            window.showNicknameHelp = function() {
-                alert('Ник - это ваш уникальный идентификатор в системе. Он будет использоваться для входа в систему, а также будет отображаться другим пользователям.');
-            };
-
-            // Слушатель событий на форму
-
-            form.addEventListener('input', function(event) {
-                if (event.target.id === 'nickname') { // Проверяем, изменилось ли поле с id "nickname"
-                    clearTimeout(typingTimer); // Сбрасываем предыдущий таймер
-
-                    const username = event.target.value.trim(); // Получаем значение поля
-
-                    // Проверяем, что введён хотя бы один символ
-                    if (username.length > 0) {
-                        const inputField = document.getElementById('nickname');
-                        inputField.style.backgroundColor = '#283040';
-                        typingTimer = setTimeout(async function() {
-                            const isAvailable = await checkUsernameAvailability(username); // Проверяем уникальность ника
-
-                            // Подсвечиваем поле в зависимости от результата проверки
-                            if (isAvailable) {
-                                inputField.style.backgroundColor = 'lightgreen'; // Зелёный цвет для доступного ника
-                            } else {
-                                inputField.style.backgroundColor = 'lightcoral'; // Красный цвет для занятого ника
-                            }
-                        }, 2000); // Задержка в 3 секунды перед отправкой запроса
-                    } else {
-                        // Если поле ника пустое, сбрасываем стили
-                        event.target.style.backgroundColor = '';
-                    }
-                }
-            });
         }
 
         let widgetId;
@@ -1041,14 +986,6 @@
             // Показываем уведомление о загрузке и блокируем кнопку сохранения
             showLoader();
             registerButton.disabled = true;
-
-            const isAvailable = await checkUsernameAvailability(nickname); // Проверяем уникальность ника
-
-            // Подсвечиваем поле в зависимости от результата проверки
-            if (!isAvailable) {
-                showPopupWithImageAndText('Пожалуйста, введите уникальный ник. Этот ник уже используется!', 'https://imgur.com/aHcCPrp.jpg', 5000);
-                return;
-            }
 
             try {
                 let emailRedirectTo = 'https://me.synask.ru/check';

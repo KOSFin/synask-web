@@ -44,9 +44,12 @@ const VersionRouter = () => {
     setVersion(newVersion);
 
     // Redirect to the correct version
-    if (!location.pathname.startsWith(newVersion)) {
+    if (!location.pathname.startsWith(`${newVersion}/`) || !location.pathname === `${newVersion}`) {
       navigate(UrlPath);
+    } else {
+      console.log(location.pathname);
     }
+
   }, [location.pathname, navigate]);
 
   if (version === null) return null; // or a loading spinner if needed
