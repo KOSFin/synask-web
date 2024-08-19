@@ -12,7 +12,7 @@
     max-width: 1000px;
     background-color: #2c2f36;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: visible;
     display: flex;
     flex-direction: column;
     border: 2px solid;

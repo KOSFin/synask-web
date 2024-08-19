@@ -93,16 +93,28 @@ const Settings = () => {
         <div className={styles.settingsContainer}>
             <div className={`${styles.settingsSidebar} ${isMobileView && isSectionVisible ? styles.hidden : ''}`}>
                 <ul>
-                    <li className={activeSection === 'general' ? 'active' : ''} onClick={() => handleSectionClick('general')}>
+                    <li
+                        className={`${activeSection === 'general' ? styles.active : ''}`}
+                        onClick={() => handleSectionClick('general')}
+                    >
                         <FontAwesomeIcon icon={faCog} className={styles.icon} /> Общие и Персонализация
                     </li>
-                    <li className={activeSection === 'profile' ? 'active' : ''} onClick={() => handleSectionClick('profile')}>
+                    <li
+                        className={`${activeSection === 'profile' ? styles.active : ''}`}
+                        onClick={() => handleSectionClick('profile')}
+                    >
                         <FontAwesomeIcon icon={faUser} className={styles.icon} /> Мой профиль
                     </li>
-                    <li className={activeSection === 'security' ? 'active' : ''} onClick={() => handleSectionClick('security')}>
+                    <li
+                        className={`${activeSection === 'security' ? styles.active : ''}`}
+                        onClick={() => handleSectionClick('security')}
+                    >
                         <FontAwesomeIcon icon={faLock} className={styles.icon} /> Безопасность и сессии
                     </li>
-                    <li className={activeSection === 'privacy' ? 'active' : ''} onClick={() => handleSectionClick('privacy')}>
+                    <li
+                        className={`${activeSection === 'privacy' ? styles.active : ''}`}
+                        onClick={() => handleSectionClick('privacy')}
+                    >
                         <FontAwesomeIcon icon={faShieldAlt} className={styles.icon} /> Приватность
                     </li>
                 </ul>

@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserContext from './UserContext';
 import { supabase } from '../pages/config/SupabaseClient';
+import load from '../pages/Loader.module.css';
 
 const ProtectedRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -38,6 +39,38 @@ const ProtectedRoute = ({ children }) => {
                 console.log('User authenticated:', data.user.id);
                 setIsAuthenticated(true);
                 setUserId(data.user.id);
+
+                // Далее проверяем статус работы соцсети
+                const { data: techData, error: techError } = await supabase
+                    .from('_tech_')
+                    .select('status_work, participants')
+                    .eq('name', 'technical works')
+                    .single();
+
+                if (techError) {
+                    console.error('Error fetching tech status:', techError);
+                    setLoading(false);
+                    return;
+                }
+
+                const statusWork = techData?.status_work;
+                const participants = techData?.participants || [];
+
+                // Логика перенаправления в зависимости от статуса работы
+                if (statusWork === 0 || statusWork === 2) {
+                    // Если технические работы или сбой, перенаправляем на /info
+                    console.log('Redirecting to /info due to technical status...');
+                    navigate('/info');
+                } else if (statusWork === 3) {
+                    // Если бета-тест, проверяем, находится ли пользователь в списке участников
+                    const isParticipant = participants.some(participant => participant === data.user.id);
+                    if (!isParticipant) {
+                        // Если пользователь не является участником бета-теста, перенаправляем на /info
+                        console.log('Redirecting to /info due to beta test...');
+                        navigate('/info');
+                    }
+                }
+                // Если статус "Всё работает", ничего не делаем
             } else {
                 console.log('User not authenticated');
                 setIsAuthenticated(false);
@@ -61,6 +94,10 @@ const ProtectedRoute = ({ children }) => {
                     .single();
 
                 if (errorPub) throw errorPub;
+
+                if (!dataPub) {
+                    window.location.href = "/info";
+                }
 
                 console.log('Initial data fetched:', dataPub);
 
@@ -198,7 +235,13 @@ const ProtectedRoute = ({ children }) => {
         fetchInitialData();
     }, [userId]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return (
+        <div className={load.spinner}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+    );
 
     return isAuthenticated ? children : <RedirectToLogin />;
 };

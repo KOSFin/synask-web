@@ -110,7 +110,7 @@ const SearchPage = () => {
             ) : (
                 <div className={styles.results}>
                     {searchResults.map((profile) => (
-                        <ProfileCard key={profile.id} profile={profile} searchQuery={searchQuery} />
+                        <ProfileCard key={profile.auth_id} profile={profile} searchQuery={searchQuery} />
                     ))}
                 </div>
             )}
@@ -170,8 +170,8 @@ const ProfileCard = ({ profile, searchQuery }) => {
 
     return (
         <Link
-          key={`/${profile.username}`}
-          to={`/${profile.username}`}
+          key={profile.username}
+          to={profile.username}
           style={{ textDecoration: 'none'}}
         >
             <div className={styles.profileCard} style={{ backgroundImage: `url(${profile.cover_url})`, backgroundColor: 'rgba(0, 0, 0, 0.7)', backgroundBlendMode: 'darken', backgroundSize: 'cover', backgroundPosition: 'center' }}>

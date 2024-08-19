@@ -1,0 +1,172 @@
+/* Общие стили для страницы */
+.infoPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Сдвиг контента вверх */
+  padding: 50px 20px; /* Отступы сверху и по бокам */
+  background: transparent;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.tabs button:hover,
+.tabs button.activeTab {
+  color: #ff8c00;
+}
+
+.underline {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 3px;
+  width: 100%;
+  background-color: #ff8c00;
+  border-radius: 2px;
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Сдвиг контента вверх */
+  width: 100%;
+  max-width: 600px;
+}
+
+.techStatusBlock {
+  background: rgba(255, 140, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 16px;
+  width: 100%;
+  max-width: 500px;
+  animation: fadeIn 0.5s ease;
+}
+
+.counters {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.counter {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 5px;
+  width: 45%;
+  text-align: center;
+  color: #ff8c00;
+}
+
+.newsBlock,
+.contactBlock,
+.siteVersionBlock,
+.aboutBlock {
+  background: rgba(128, 128, 128, 0.1); /* Полупрозрачный фон для блоков */
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.telegramLink {
+  display: inline-flex;
+  align-items: center;
+  color: #ff8c00;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: color 0.3s ease;
+}
+
+.telegramLink i {
+  margin-right: 8px;
+}
+
+.telegramLink:hover {
+  color: #ffa500;
+}
+
+.siteVersionBlock span {
+  font-weight: bold;
+  color: #ff8c00;
+  font-size: 18px;
+}
+
+.activeButton {
+  background-color: #ff8c00;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.activeButton:hover {
+  background-color: #ffa500;
+}
+
+.disabledButton {
+  background-color: #555;
+  color: #bbb;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.maintenance,
+.failure,
+.betaTesting {
+  font-size: 16px;
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+

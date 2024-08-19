@@ -1,29 +1,71 @@
 .profile-submenu {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-    margin-top: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    background-color: #2c2f36;
-    border-radius: 5px;
+    justify-content: space-between;
+    margin: 20px 0;
+    padding: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background-color: #2b2e34;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .profile-submenu span {
-    padding: 10px 20px;
+    flex-grow: 1;
+    padding: 12px;
+    margin: 0 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffffcc;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    border-radius: 8px;
 }
 
 .profile-submenu span:hover {
-    background-color: #444;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 .profile-submenu span.active {
-    border: 1px solid orange;
-    background-color: #444;
-    border-radius: 5px;
+    background-color: #ff8c00;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+    transform: translateY(-2px);
 }
+
+@media (max-width: 768px) {
+    .profile-submenu {
+        flex-direction: column;
+        padding: 15px;
+        background-color: #25272c;
+        box-shadow: none;
+    }
+
+    .profile-submenu span {
+        padding: 14px;
+        margin: 8px 0;
+        font-size: 18px;
+    }
+
+    .profile-submenu span:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-submenu {
+        padding: 10px;
+    }
+
+    .profile-submenu span {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
 
 .profile-settings-content {
     background-color: #1c1f26;
@@ -31,7 +73,6 @@
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
-    max-height: 80vh;
 }
 
 .setting-item {
@@ -191,4 +232,50 @@
 .notification {
     margin-top: 10px;
     color: orange;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.editor-container {
+    margin-bottom: 1rem;
+}
+
+.character-counter {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.cropper-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cropper-container button {
+    margin: 0.5rem;
+}
+
+.file-input {
+    margin-top: 1rem;
+}
+
+.char-counter {
+    color: gray;
+    font-size: 10px;
+}
+
+.char-counter-error {
+    color: red;
+    font-size: 20px;
 }

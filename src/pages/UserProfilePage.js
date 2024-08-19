@@ -8,6 +8,8 @@ import AccentColorContext from '../pages/settings/AccentColorContext';
 import load from './Loader.module.css';
 import NotFoundPage from './NotFoundPage';
 import UserContext from '../components/UserContext';
+import DOMPurify from 'dompurify';
+import 'react-quill/dist/quill.snow.css';
 
 const UserProfilePage = () => {
     const location = useLocation();
@@ -106,16 +108,25 @@ const UserProfilePage = () => {
         }
     };
 
+    const ProfileDescription = ({ description }) => {
+      // Очистка HTML перед рендером
+      const sanitizedDescription = DOMPurify.sanitize(description);
+
+      return (
+        <div className="ql-editor" data-gramm="false" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
+      );
+    };
+
     const renderSection = () => {
         switch (activeSection) {
             case 'description':
-                return <div>Описание профиля...</div>;
+                return <ProfileDescription description={profile.description} />;
             case 'media':
                 return <div>Медиа контент...</div>;
             case 'links':
                 return <div>Ссылки...</div>;
             default:
-                return <div>Описание профиля...</div>;
+                return <ProfileDescription description={profile.description} />;
         }
     };
 
@@ -227,16 +238,6 @@ const UserProfilePage = () => {
                                 <FontAwesomeIcon icon={faGraduationCap} /> {profile.education_info}
                             </div>
                         )}
-                    </div>
-                    <div className={p.userStats}>
-                        <div className={p.statItem}>
-                            <div className={p.statNumber}>{profile.followers_count > 999 ? `>${(profile.followers_count / 1000).toFixed(1)}к` : profile.followers_count}</div>
-                            <div className={p.statLabel}>подписчиков</div>
-                        </div>
-                        <div className={p.statItem}>
-                            <div className={p.statNumber}>{profile.mutual_contacts_count > 999 ? `>${(profile.mutual_contacts_count / 1000).toFixed(1)}к` : profile.mutual_contacts_count}</div>
-                            <div className={p.statLabel}>взаимных контактов</div>
-                        </div>
                     </div>
                 </div>
                 <div className={p.profileMenu}>

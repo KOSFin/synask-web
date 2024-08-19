@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import QuickProfileView from './QuickProfileView';
@@ -8,6 +8,39 @@ const FriendsBar = ({ friends }) => {
   const [isBarOpen, setIsBarOpen] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [profilePosition, setProfilePosition] = useState({ top: 0, left: 0 });
+  const [isLongPress, setIsLongPress] = useState(false);
+  const timerRef = useRef(null);
+
+  const [isHidden, setIsHidden] = useState(false);
+  const hideTimeoutRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    hideTimeoutRef.current = setTimeout(() => {
+      setIsHidden(true);
+    }, 1000); // 2 секунды
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(hideTimeoutRef.current); // Сброс таймера при уходе мыши
+    setIsHidden(false);
+  };
+
+  const handleMouseDown = () => {
+    // Устанавливаем таймер для определения длительного нажатия
+    timerRef.current = setTimeout(() => {
+      setIsHidden(true);
+      setIsLongPress(true);
+    }, 500); // 500 мс для длительного нажатия, можно изменить по необходимости
+  };
+
+  const handleMouseUp = () => {
+    // Сбрасываем таймер, если клик был кратковременным
+    clearTimeout(timerRef.current);
+    if (!isLongPress) {
+      setIsHidden(false);
+    }
+    setIsLongPress(false);
+  };
 
   const toggleBar = () => {
     setIsBarOpen((prev) => !prev);
@@ -51,7 +84,13 @@ const FriendsBar = ({ friends }) => {
   };
 
   return (
-    <div className={`${styles.friendsBar} ${isBarOpen ? styles.open : ''}`}>
+    <div
+      className={`${styles.friendsBar} ${isBarOpen ? styles.open : ''}`}
+      style={isHidden ? { opacity: 0 } : {}}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className={styles.toggleButton} onClick={toggleBar}>
         <div className={styles.statusIcon}>
           <FontAwesomeIcon icon={faUser} />

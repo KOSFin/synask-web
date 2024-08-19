@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHome, faComment, faUsers, faUserFriends, faCog, faSignInAlt, faUserPlus,
-  faInfoCircle, faBuilding, faQuestionCircle, faBell, faMusic, faEllipsisH
+  faInfoCircle, faBuilding, faArrowCircleUp, faBell, faMusic, faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import styles from './Sidebar.module.css';
 import AccentColorContext from '../../pages/settings/AccentColorContext';
@@ -31,7 +31,7 @@ const MobileSidebar = () => {
     { path: '/notifications', icon: faBell, label: 'Уведомления' },
     { path: '/p/music', icon: faMusic, label: 'Музыка' },
     { path: '/p/options', icon: faCog, label: 'Настройки' },
-    { path: '/p/help', icon: faQuestionCircle, label: 'Помощь' },
+    { path: '/p/info', icon: faArrowCircleUp, label: 'O сайте' },
   ];
 
   const handleItemClick = (item) => {

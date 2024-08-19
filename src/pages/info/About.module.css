@@ -1,0 +1,14 @@
+.about {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #b0b0b0;
+}
+
+.about h2 {
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+.about p {
+    margin-bottom: 12px;
+}

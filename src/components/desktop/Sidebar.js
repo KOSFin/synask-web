@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faComment, faUsers, faUserFriends, faCog, faSignInAlt, faUserPlus, faInfoCircle, faBuilding, faQuestionCircle, faBell, faMusic } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faComment, faUsers, faUserFriends, faCog, faSignInAlt, faUserPlus, faInfoCircle, faBuilding, faArrowCircleUp, faBell, faMusic } from '@fortawesome/free-solid-svg-icons';
 import styles from './Sidebar.module.css';
 import load from '../../pages/Loader.module.css';
 import AccentColorContext from '../../pages/settings/AccentColorContext';
@@ -67,11 +67,10 @@ const Sidebar = () => {
 
   return (
     <div className={styles.sidebar} style={{ borderColor: accentColor }}>
-      <div className={styles.logo}>
-        <span className={styles.networkName} style={{ color: accentColor }}>sYnask</span>
-      </div>
       <div className={styles.sidebarContent}>
         <div className={styles.profile}>
+          <span className={styles.networkName} style={{ color: accentColor }}>sYnask</span>
+          <div className={styles.divider} style={{ backgroundColor: accentColor }}></div>
           {isLoading ? (
             <div className={load.spinner}>
               <div></div>
@@ -92,7 +91,6 @@ const Sidebar = () => {
                 </div>
                 <span className={styles.label}>Профиль - {userData.first_name} {userData.last_name}</span>
               </Link>
-              <div className={styles.divider} style={{ backgroundColor: accentColor }}></div>
               <Link
                 key={'/notifications'}
                 to={'/notifications'}
@@ -133,9 +131,9 @@ const Sidebar = () => {
               </Link>
             </>
           ) : null}
-          <Link key={'/help'} to={'/d/help'} className={`${styles.menuItem} ${location.pathname === '/d/help' ? styles.active : ''}`}>
-            <FontAwesomeIcon icon={faQuestionCircle} className={styles.icon} />
-            <span className={styles.label}>Помощь</span>
+          <Link key={'/d/info'} to={'/d/info'} className={`${styles.menuItem} ${location.pathname === '/d/help' ? styles.active : ''}`}>
+            <FontAwesomeIcon icon={faArrowCircleUp} className={styles.icon} />
+            <span className={styles.label}>О сайте</span>
           </Link>
         </div>
       </div>

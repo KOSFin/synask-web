@@ -124,7 +124,7 @@ const QuickProfileView = ({ profile, onClose, position }) => {
               <FontAwesomeIcon icon={faShare} className={styles.actionIcon} /> Поделиться профилем
             </div>
           </div>
-          <Link to={`/${profile.username}`} className={styles.fullProfileButton}>
+          <Link to={`${profile.username}`} className={styles.fullProfileButton}>
             Полный профиль
           </Link>
         </div>

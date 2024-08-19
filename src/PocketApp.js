@@ -12,6 +12,7 @@ import UserProfilePage from './pages/UserProfilePage';
 import Groups from './pages/Groups';
 import Settings from './pages/settings/Settings';
 import BackgroundContext from './pages/settings/BackgroundContext';
+import Info from './pages/info/AboutPage';
 
 import styles from './AppPocket.module.css';
 
@@ -44,8 +45,10 @@ const PocketApp = () => {
                 <Route path="/music" element={<Music />} />
                 <Route path="/people" element={<Search />} />
                 <Route path="/:username" element={<UserProfilePage />} />
+                <Route path="/people/:username" element={<UserProfilePage />} />
                 <Route path="/groups" element={<Groups />} />
                 <Route path="/options" element={<Settings />} />
+                <Route path="/info" element={<Info />} />
               </Routes>
             </div>
           </div>

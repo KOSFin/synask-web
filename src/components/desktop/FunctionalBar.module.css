@@ -1,13 +1,15 @@
 /* FunctionalBar.module.css */
+
 .friendsBar {
   position: fixed;
-  left: 60px;
+  left: 61px;
   width: 150px;
   height: 70px;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
   z-index: 104;
-  transition: height 0.3s ease, transform 0.3s ease;
+  transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease; /* Добавить transition для opacity */
+  top: calc(10vh + 1px);
 }
 
 .open {

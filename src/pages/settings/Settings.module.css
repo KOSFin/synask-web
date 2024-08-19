@@ -10,13 +10,26 @@
     overflow: hidden;
 }
 
+.active {
+    background-color: #575656 !important; /* Цвет для активного элемента */
+    color: #fff; /* Изменение цвета текста для лучшей видимости */
+}
+
+.icon {
+    margin-right: 10px;
+}
+
 .settingsSidebar {
     display: flex;
     flex-direction: column;
     width: 20%;
     background-color: #2c2f36;
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
+}
+
+.hidden {
+    display: none;
 }
 
 .settingsSidebar ul {
@@ -33,15 +46,14 @@
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    background-color: #3e3e3e;
+    margin-top: 5px;
 }
 
 .settingsSidebar ul li .icon {
     margin-right: 10px;
 }
 
-.settingsSidebar ul li:hover, .settingsSidebar ul li.active {
-    background-color: #444;
-}
 
 .settingsContent {
     width: 80%;
@@ -67,6 +79,12 @@
     .settingsSidebar {
         width: 100%;
         padding: 10px;
+        height: 100%;
+    }
+
+    .sidebarButton {
+        background-color: #4b4b4b;
+        margin-top: 5px;
     }
 
     .settingsContent {

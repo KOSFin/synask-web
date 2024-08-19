@@ -5,36 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5556c22c-e760-4bae-9545-33757dfce2a2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../src/pages/garbage/Profile.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/.bin/jest" beforeDir="false" afterPath="$PROJECT_DIR$/../node_modules/.bin/jest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/.bin/jest.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/../node_modules/.bin/jest.ps1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/registration.html" beforeDir="false" afterPath="$PROJECT_DIR$/registration.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reset-password.html" beforeDir="false" afterPath="$PROJECT_DIR$/reset-password.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/App.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/App.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/Header.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/Header.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/ProtectedRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/ProtectedRoute.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/Sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/Sidebar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/components/Sidebar.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/Sidebar.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/GlfxWrapper.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/Login.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/Login.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/Messenger.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/Profile.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/garbage/Profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/Profile.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/Profile.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/Redactor.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/Redactor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/UserProfilePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/UserProfilePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/messenger/components/ChatList.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/messenger/components/ChatList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/settings/BackgroundContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/settings/BackgroundContext.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/settings/Settings.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/settings/Settings.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/pages/settings/Settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/settings/Settings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/DesktopApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/DesktopApp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/components/desktop/FunctionalBar.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/desktop/FunctionalBar.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/components/desktop/Header.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/desktop/Header.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/components/desktop/QuickProfileView.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/desktop/QuickProfileView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/components/desktop/Sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/desktop/Sidebar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/components/desktop/Sidebar.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/desktop/Sidebar.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/pages/SearchPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/pages/SearchPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

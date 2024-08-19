@@ -15,6 +15,8 @@ import Checker from './pages/Check';
 import ProtectedRoute from './components/ProtectedRoute';
 import { UserProvider } from './components/UserContext';
 import Settings from './pages/settings/Settings';
+import AImodele from './pages/AImodele';
+import Info from './pages/info/AboutPage';
 import { AccentColorProvider } from './pages/settings/AccentColorContext';
 import { BackgroundProvider } from './pages/settings/BackgroundContext';
 import { TrackProvider } from './pages/music/TrackContext';
@@ -27,6 +29,7 @@ const VersionRouter = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = window.location.pathname;
+  console.log(currentPath);
 
   useEffect(() => {
     const width = window.innerWidth;
@@ -57,6 +60,7 @@ const VersionRouter = () => {
   return (
     <Routes>
       <Route path="/d/*" element={<DesktopApp />} />
+      <Route path="/desktop/*" element={<DesktopApp />} />
       <Route path="/p/*" element={<PocketApp />} />
     </Routes>
   );
@@ -76,6 +80,8 @@ const App = () => {
                 <Route path="/registration" element={<Registration />} />
                 <Route path="/swap" element={<Swap />} />
                 <Route path="/check" element={<Checker />} />
+                <Route path="/ai" element={<AImodele />} />
+                <Route path="/info" element={<Info />} />
                 <Route path="/*" element={<VersionRouter />} />
                 <Route path="*" element={<Navigate to="/main" />} />
               </Routes>
