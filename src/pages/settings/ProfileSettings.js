@@ -285,7 +285,7 @@ const ProfileSettings = () => {
         setIsPreviewOpen(false);
     };
 
-
+    /*
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -293,6 +293,7 @@ const ProfileSettings = () => {
             setShowCropper(true);
         }
     };
+    */
 
     const renderEditor = () => {
 
