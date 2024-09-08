@@ -6,8 +6,9 @@ import styles from './App.module.css';
 import { useTrack } from './TrackContext';
 import AccentColorContext from '../settings/AccentColorContext';
 import getSupabaseClient from '../config/SupabaseClient'; // Инициализация Supabase клиента
-const supabase = getSupabaseClient();
 import load from '../../pages/Loader.module.css';
+
+const supabase = getSupabaseClient();
 
 const App = () => {
     const [currentSection, setCurrentSection] = useState('allMusic');
