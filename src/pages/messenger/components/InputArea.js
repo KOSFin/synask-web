@@ -60,6 +60,8 @@ const InputArea = () => {
       return;
     }
 
+    console.log('Sending message');
+
     const newMessage = {
       id: Date.now().toString(),
       chat_id: selectedChat.id,

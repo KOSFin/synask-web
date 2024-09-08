@@ -60,31 +60,7 @@
         }
       }(window.location))
     </script>
-    <script>
-      // index.js или в другом основном файле вашего React-приложения
-      if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-              navigator.serviceWorker.register('/service-worker.js').then(registration => {
-                  registration.onupdatefound = () => {
-                      const installingWorker = registration.installing;
-                      installingWorker.onstatechange = () => {
-                          if (installingWorker.state === 'installed') {
-                              if (navigator.serviceWorker.controller) {
-                                  // Новый контент доступен; обновите страницу
-                                  console.log('New content is available; please refresh.');
-                              } else {
-                                  // Контент кэширован впервые
-                                  console.log('Content is cached for offline use.');
-                              }
-                          }
-                      };
-                  };
-              }).catch(error => {
-                  console.error('Error during service worker registration:', error);
-              });
-          });
-      }
-    </script>
+
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--

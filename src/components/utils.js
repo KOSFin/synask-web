@@ -160,39 +160,39 @@ export const deleteChatById = async (chatId) => {
     }
 };
 
-export const deleteMessage = async (messageId) => {
-  try {
-    const { error } = await supabase
-      .from('messages')
-      .delete()
-      .eq('id', messageId);
+// Удаление сообщения по ID
+export const deleteMessageById = async (messageId) => {
+    try {
+        const { data, error } = await supabase
+            .from('messages')
+            .delete()
+            .eq('id', messageId);
 
-    if (error) {
-      console.error('Ошибка при удалении сообщения:', error.message);
-      return { success: false, message: error.message };
+        if (error) {
+            return { success: false, error };
+        }
+
+        return { success: true, data };
+    } catch (error) {
+        return { success: false, error };
     }
-    return { success: true, message: 'Сообщение удалено успешно.' };
-  } catch (error) {
-    console.error('Ошибка при удалении сообщения:', error);
-    return { success: false, message: 'Произошла ошибка при удалении сообщения.' };
-  }
 };
 
-export const updateMessage = async (messageId, newContent) => {
-  try {
-    const { error } = await supabase
-      .from('messages')
-      .update({ content: newContent })
-      .eq('id', messageId);
+// Обновление сообщения по ID
+export const updateMessageById = async (messageId, newContent) => {
+    try {
+        const { data, error } = await supabase
+            .from('messages')
+            .update({ content: newContent })
+            .eq('id', messageId);
 
-    if (error) {
-      console.error('Ошибка при обновлении сообщения:', error.message);
-      return { success: false, message: error.message };
+        if (error) {
+            return { success: false, error };
+        }
+
+        return { success: true, data };
+    } catch (error) {
+        return { success: false, error };
     }
-    return { success: true, message: 'Сообщение обновлено успешно.' };
-  } catch (error) {
-    console.error('Ошибка при обновлении сообщения:', error);
-    return { success: false, message: 'Произошла ошибка при обновлении сообщения.' };
-  }
 };
 

@@ -405,7 +405,7 @@ export const MessageHandler = () => {
         setChatList(prevChats => {
             const updatedChats = prevChats.map(chat => {
                 if (chat.id === updatedMessage.chat_id) {
-                    // Логика обновления last_message заменяется новым сообщением
+                    // Обновляем last_message для конкретного чата
                     return { ...chat, last_message: updatedMessage };
                 }
                 return chat;
@@ -414,43 +414,72 @@ export const MessageHandler = () => {
             updateNewMessagesCount(updatedChats);
             saveChatsToCache(updatedChats);
 
-            // Находим обновленный чат, чтобы обновить состояние сообщений
-            const updatedChat = updatedChats.find(chat => chat.id === updatedMessage.chat_id);
-            if (updatedChat) {
-                setMessages(prevMessages => {
-                    const updatedMessages = prevMessages.map(msg =>
-                        msg.id === updatedMessage.id ? updatedMessage : msg
-                    );
-
-                    // Убедитесь, что сообщения отсортированы по дате создания (от старых к новым)
-                    const sortedMessages = updatedMessages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-                    return sortedMessages;
-                });
-            }
-
-            console.log('Обновление сообщения', updatedMessage);
-            console.log('Новый массив чатов с обновленным last_message', updatedChats);
-            return updatedChats;
+            return updatedChats; // Возвращаем обновленные чаты
         });
+
+        // Обновляем сообщения только для конкретного чата
+        setMessages(prevMessages => {
+            const updatedMessages = prevMessages.map(msg =>
+                msg.id === updatedMessage.id ? updatedMessage : msg
+            );
+
+            // Сортируем только в случае необходимости
+            const sortedMessages = updatedMessages.slice().sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+            // Обновляем кэш
+            setMessagesCache(prevCache => ({
+                ...prevCache,
+                [updatedMessage.chat_id]: sortedMessages
+            }));
+
+            saveMessagesToCache(updatedMessage.chat_id, sortedMessages);
+
+            return sortedMessages;
+        });
+
+        console.log('Обновление сообщения:', updatedMessage);
     };
 
 
-    // Обработка real-time удаления сообщений
-    const handleMessageDelete = (deletedMessage) => {
+
+    const handleMessageDelete = async (deletedMessage) => {
+        // Удаляем сообщение из кэша
         setMessagesCache(prevCache => {
             const chatMessages = prevCache[deletedMessage.chat_id] || [];
             const updatedMessages = chatMessages.filter(msg => msg.id !== deletedMessage.id);
             saveMessagesToCache(deletedMessage.chat_id, updatedMessages);
+    
             return {
                 ...prevCache,
                 [deletedMessage.chat_id]: updatedMessages
             };
         });
 
-        // Удаляем из списка сообщений в UI
+        // Удаляем сообщение из UI
         setMessages(prevMessages => prevMessages.filter(msg => msg.id !== deletedMessage.id));
+
+        // Обновляем поле last_message в списке чатов
+        setChatList(prevChats => {
+            const updatedChatList = prevChats.map(chat => {
+                if (chat.id === deletedMessage.chat_id) {
+                    // Если в чате остались сообщения, обновляем last_message
+                    const chatMessages = prevChats.find(c => c.id === chat.id)?.messages || [];
+                    if (chatMessages.length > 0) {
+                        return { ...chat, last_message: chatMessages[chatMessages.length - 1] };
+                    }
+                    // Если сообщений больше нет, можно сбросить last_message или оставить какое-то значение
+                    return { ...chat, last_message: null };
+                }
+                return chat;
+            });
+
+            // Сохраняем обновленный список чатов в кэш
+            saveChatsToCache(updatedChatList);
+            return updatedChatList;
+        });
     };
+
+
 
     const playNotificationSound = () => {
         console.log('Отправка звука');
@@ -471,29 +500,39 @@ export const MessageHandler = () => {
     }, []);
 
     useEffect(() => {
-        messages.forEach(async (message) => {
-          if (messageStatus[message.id] === 'pending') {
-            try {
-              const { data, error } = await supabase
-                .from('messages')
-                .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id }]);
+        const sendMessages = async () => {
+            for (const message of messages) {
+                if (messageStatus[message.id] === 'pending') {
+                    try {
+                        console.log('Отправка сообщения', message);
+                        console.log('Список сообщений', messages);
+                        const { dataIn, errorIn } = await supabase
+                            .from('messages')
+                            .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id }])
 
-              if (error) throw error;
+                        if (errorIn) throw error;
 
-              setMessageStatus(prevStatus => ({
-                ...prevStatus,
-                [message.id]: 'sent'
-              }));
-            } catch (error) {
-              console.error('Ошибка отправки сообщения:', error);
-              setMessageStatus(prevStatus => ({
-                ...prevStatus,
-                [message.id]: 'failed'
-              }));
+                        const { data, error } = await supabase
+                            .from('messages')
+                            .select();
+
+                        setMessageStatus(prevStatus => ({
+                            ...prevStatus,
+                            [message.id]: 'sent'
+                        }));
+                    } catch (error) {
+                        console.error('Ошибка отправки сообщения:', error);
+                        setMessageStatus(prevStatus => ({
+                            ...prevStatus,
+                            [message.id]: 'failed'
+                        }));
+                    }
+                }
             }
-          }
-        });
+        };
+        sendMessages();
     }, [messages, messageStatus]);
+
 
     return null;
 };

@@ -1,0 +1,51 @@
+/* styles/MessageMenu.module.css */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* затемнение фона */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.menu {
+  background-color: #2c2c2c;
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  z-index: 1001;
+  width: 300px;
+}
+
+.actions button {
+  background-color: #444;
+  border: none;
+  padding: 10px;
+  color: white;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.actions button:hover {
+  background-color: #666;
+}
+
+.noActions {
+  text-align: center;
+  color: #888;
+}
+
+.editContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}

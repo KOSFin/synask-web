@@ -133,9 +133,16 @@ const Messenger = () => {
         <div className={`${styles.main} ${selectedChatId ? styles.chatActive : ''}`}>
           {selectedChatId ? (
             selectedChat?.error ? (
-              <div className={styles.noChatSelected}>
-                {selectedChat.error}
-              </div>
+              <>
+                  <div className={styles.noChatSelected}>
+                    {selectedChat.error}
+                  </div>
+                  {isMobile && (
+                      <button className={styles.closeButton} onClick={handleCloseChat}>
+                        ✖ Закрыть диалог
+                      </button>
+                  )}
+              </>
             ) : selectedChat?.chatExists === false ? (
               <>
                 <ChatHeader chatId={selectedChatId} />
