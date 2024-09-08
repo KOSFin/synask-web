@@ -920,11 +920,13 @@
                 document.getElementById('emailInput').disabled = true;
                 document.getElementById('passwordInput').disabled = true;
 
+                var email = '';
+
                 // Перенаправляем пользователя на нужную страницу после входа
                 supabaseClient.auth.onAuthStateChange(async (event, session) => {
                     if (event === 'SIGNED_IN') {
                         // Пользователь успешно вошел в систему
-                        const email = session.user.email; // Получаем email пользователя
+                        email = session.user.email; // Получаем email пользователя
                         console.log('Пользователь успешно вошел в систему:', email);
 
                         // Перенаправляем пользователя на нужную страницу
