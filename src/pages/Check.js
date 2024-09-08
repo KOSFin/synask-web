@@ -27,7 +27,7 @@ const AccountSetupPage = () => {
   };
 
   const checkUsernameAvailability = async (username) => {
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('users_public_information')
       .select('id')
       .eq('username', username)
@@ -53,12 +53,12 @@ const AccountSetupPage = () => {
   const setupAccount = async () => {
     setLoading(true);
     try {
-      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
 
       if (userError) throw userError;
 
       if (user) {
-        let { data: publicData, error: publicError } = await supabaseClient
+        let { data: publicData, error: publicError } = await supabase
           .from('users_public_information')
           .select('*')
           .eq('auth_id', user.id)
@@ -95,17 +95,17 @@ const AccountSetupPage = () => {
             return;
           }
 
-          let { error: upsertPubError } = await supabaseClient
+          let { error: upsertPubError } = await supabase
             .from('users_public_information')
             .upsert(updates, { onConflict: ['auth_id'] });
 
-          if (upsertPubError) throw upsertError;
+          if (upsertPubError) throw upsertPubError;
 
-          let { error: upsertPvError } = await supabaseClient
+          let { error: upsertPvError } = await supabase
             .from('users_private_information')
             .upsert(updatesPv, { onConflict: ['auth_id'] });
 
-          if (upsertPvError) throw upsertError;
+          if (upsertPvError) throw upsertPvError;
         }
 
         const updatedProfile = {
@@ -114,7 +114,7 @@ const AccountSetupPage = () => {
           username: username || '',
         };
 
-        const { dataUpdate, errorUpdate } = await supabaseClient.auth.updateUser({
+        const { dataUpdate, errorUpdate } = await supabase.auth.updateUser({
           data: {
             firstName: formData.firstName || user.user_metadata.firstName || '',
             lastName: formData.lastName || user.user_metadata.lastName || '',
@@ -137,7 +137,7 @@ const AccountSetupPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
-      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
 
       if (userError) {
         setError(`Error fetching user: ${userError.message}`);

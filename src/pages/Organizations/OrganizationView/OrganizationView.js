@@ -7,8 +7,9 @@ import { faSearch, faEllipsisV, faTimes } from '@fortawesome/free-solid-svg-icon
 import ReactQuill from 'react-quill';
 import DOMPurify from 'dompurify';
 import getSupabaseClient from '../../config/SupabaseClient';
-const supabase = getSupabaseClient();
 import moment from 'moment-timezone'; // Для форматирования даты
+
+const supabase = getSupabaseClient();
 
 const OrganizationView = () => {
   const { OrgName } = useParams();

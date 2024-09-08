@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSwipeable } from 'react-swipeable'; // Импортируем библиотеку свайпов
-import styles from './OrganizationsPage.module.css';
-import getSupabaseClient from '../config/SupabaseClient';
-const supabase = getSupabaseClient();
 import { Link } from 'react-router-dom';
-import load from '../../pages/Loader.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCheck, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import styles from './OrganizationsPage.module.css';
+import load from '../../pages/Loader.module.css';
+import getSupabaseClient from '../config/SupabaseClient';
 import ManagedOrganizations from './ManagedOrganizations'; // Импорт нового компонента
+
+const supabase = getSupabaseClient();
 
 const OrganizationsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');

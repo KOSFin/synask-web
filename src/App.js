@@ -7,7 +7,6 @@ import Music from './pages/music/App';
 import Messenger from './pages/messenger/Messenger';
 import Search from './pages/SearchPage';
 import Login from './pages/Login';
-// import Auth from './pages/Auth';
 import Swap from './pages/Swap';
 import Registration from './pages/Registration';
 import Checker from './pages/Check';
