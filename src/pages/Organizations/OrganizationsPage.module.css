@@ -1,0 +1,220 @@
+/* OrganizationsPage.module.css */
+
+/* Обнуление стилей по умолчанию */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    color: white;
+    padding: 15px;
+}
+
+.leftPane, .rightPane {
+    width: 100%;
+    padding: 10px;
+}
+
+.mainPane, .mainPaneMobile {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searchBar {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.searchBar input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 30px;
+    background-color: #444;
+    color: white;
+    outline: none;
+}
+
+.searchBar button {
+    background-color: #ff9800;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.topOrganizations, .searchResults, .randomOrganizations, .subscribedOrganizations {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.organizationCard {
+    display: flex;
+    align-items: center;
+    background-color: #222;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+
+.organizationCard:hover {
+    background-color: #333;
+}
+
+.organizationCard .avatar {
+    flex: 0 0 60px;
+    margin-right: 15px;
+}
+
+.organizationCard .avatar img {
+    width: 100%;
+    max-width: 65px;
+    border-radius: 25%;
+    font-size: 5px;
+}
+
+.organizationCard .info {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.organizationCard .info h4 {
+    margin: 0 0 5px;
+    color: #ff9800;
+    font-size: 18px;
+}
+
+.organizationCard .info p {
+    margin: 0;
+    color: #bbb;
+}
+
+.organizationCard .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.organizationCard .actions button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.organizationCard .actions button:hover {
+    background-color: #555;
+}
+
+.showMyOrganizations {
+    width: 100%;
+    padding: 6px;
+    background-color: #ff9800;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.showMyOrganizations:hover {
+    background-color: #e68a00;
+}
+
+.randomOrganizations, .subscribedOrganizations {
+    margin-top: 20px;
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.randomOrganizations::-webkit-scrollbar, .subscribedOrganizations::-webkit-scrollbar {
+    width: 6px;
+}
+
+.randomOrganizations::-webkit-scrollbar-thumb, .subscribedOrganizations::-webkit-scrollbar-thumb {
+    background-color: #ff9800;
+    border-radius: 3px;
+}
+
+.mobileMenu {
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.mobileMenu button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px;
+    transition: color 0.3s;
+}
+
+.mobileMenu button.active {
+    color: #ff9800;
+    border-bottom: 2px solid #ff9800;
+    padding-bottom: 6px;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 1200px) {
+    .container {
+        flex-direction: row;
+    }
+
+    .leftPane, .rightPane {
+        width: 25%;
+    }
+
+    .mainPane {
+        width: 50%;
+    }
+}
+
+@media (max-width: 1199px) {
+    .leftPane, .rightPane {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .container {
+        padding: 10px;
+        width: 100%;
+    }
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    color: #fff;
+    background-color: transparent;
+}

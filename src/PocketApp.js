@@ -9,7 +9,7 @@ import Messenger from './pages/messenger/Messenger';
 import Music from './pages/music/App';
 import Search from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
-import Groups from './pages/Groups';
+import Groups from './pages/Organizations/Groups';
 import Settings from './pages/settings/Settings';
 import BackgroundContext from './pages/settings/BackgroundContext';
 import Info from './pages/info/AboutPage';

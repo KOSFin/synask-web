@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../config/SupabaseClient';
+import getSupabaseClient from '../config/SupabaseClient';
 import DOMPurify from 'dompurify';
 import 'react-quill/dist/quill.snow.css';
 import styles from './AboutPage.module.css';
+
+const supabase = getSupabaseClient();
 
 const InfoPage = () => {
   const [activeSection, setActiveSection] = useState(0);

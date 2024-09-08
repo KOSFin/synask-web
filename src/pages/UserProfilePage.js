@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { supabase } from './config/SupabaseClient';
+import getSupabaseClient from './config/SupabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faBuilding, faGraduationCap, faEdit, faStar, faEnvelope, faUserPlus, faShare, faChevronDown, faInfoCircle, faImages, faLink } from '@fortawesome/free-solid-svg-icons';
 import p from './Profile.module.css';
@@ -10,6 +10,8 @@ import NotFoundPage from './NotFoundPage';
 import UserContext from '../components/UserContext';
 import DOMPurify from 'dompurify';
 import 'react-quill/dist/quill.snow.css';
+
+const supabase = getSupabaseClient();
 
 const UserProfilePage = () => {
     const location = useLocation();
@@ -186,9 +188,9 @@ const UserProfilePage = () => {
                     currentUser ? (
                         <div className={p.userActionsBar}>
                             <div className={p.ActionsButtons}>
-                                <div className={p.userActionsBtn}>
+                                <Link to={`/msg?id=${profile.auth_id}`} className={p.userActionsBtn}>
                                     <FontAwesomeIcon icon={faEnvelope} className={p.actionIcon} /> Сообщение
-                                </div>
+                                </Link>
                                 <div
                                   className={p.userActionsBtn}
                                   onClick={handleAddContact}

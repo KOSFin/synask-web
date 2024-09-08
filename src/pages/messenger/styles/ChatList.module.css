@@ -1,11 +1,10 @@
 .chatList {
   flex-grow: 1;
   overflow-y: auto;
-  background-color: #2a2a2a;
-  padding: 10px 0;
 }
 
 .chat {
+  background-color: rgba(41, 41, 41, 0.75);
   display: flex;
   align-items: center;
   padding: 10px;
@@ -15,7 +14,7 @@
 }
 
 .chat:hover {
-  background-color: #353535;
+  background-color: rgba(41, 41, 41, 0);
 }
 
 .avatar {

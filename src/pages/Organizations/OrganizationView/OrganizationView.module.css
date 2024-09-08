@@ -1,0 +1,212 @@
+/* Обнуление стилей по умолчанию */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+}
+
+.sidebar {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.subscriptionBlock {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.subscribeButton, .unsubscribeButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.subscribeButton {
+  background-color: #ff9800;
+  color: #ffffff;
+}
+
+.unsubscribeButton {
+  background-color: #757575;
+  color: #ffffff;
+}
+
+.subscribeButton:hover, .unsubscribeButton:hover {
+  opacity: 0.8;
+}
+
+.avatarBlock {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 25%;
+}
+
+.details {
+  padding: 10px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 10px;
+  color: orange;
+  margin-bottom: 5px;
+}
+
+.description {
+  font-size: 16px;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.staff {
+  margin-top: 20px;
+}
+
+.staffMember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.staffMember:last-child {
+  border-bottom: none;
+}
+
+.staffAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.postsBlock {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.searchInput {
+  padding: 8px;
+  border-radius: 20px;
+  border: 1px solid #cccccc;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #cccccc;
+}
+
+.searchIcon, .icon {
+  cursor: pointer;
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+.searchIcon:hover, .icon:hover {
+  color: #ff9800;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.post {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.postDate {
+  font-size: 14px;
+  color: #cccccc;
+}
+
+.media-carousel, .media-grid, .media-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+video, img {
+  max-height: 200px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .sidebar {
+    margin-bottom: 20px;
+  }
+
+  .header {
+    justify-content: center;
+  }
+}

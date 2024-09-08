@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { createClient } from '@supabase/supabase-js';
+import getSupabaseClient from '../config/SupabaseClient';
+const supabase = getSupabaseClient();
 import './ProfileSettings.css';
 import p from '../Profile.module.css';
 import load from '../Loader.module.css';
@@ -10,9 +11,6 @@ import { faEye, faSave, faTimes, faToggleOn, faToggleOff } from '@fortawesome/fr
 import AccentColorContext from './AccentColorContext';
 import DOMPurify from 'dompurify';
 import { faPhone, faBuilding, faGraduationCap, faEdit, faStar, faEnvelope, faUserPlus, faShare, faChevronDown, faInfoCircle, faImages, faLink } from '@fortawesome/free-solid-svg-icons';
-
-
-const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
 const ProfileSettings = () => {
     const [tags, setTags] = useState([]);

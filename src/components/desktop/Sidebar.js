@@ -61,7 +61,7 @@ const Sidebar = () => {
     { path: '/d/', icon: faHome, label: 'Главная' },
     { path: '/d/msg', icon: faComment, label: 'Мессенджер' },
     { path: '/d/people', icon: faUsers, label: 'Люди' },
-    { path: '/d/groups', icon: faUserFriends, label: 'Группы' },
+    { path: '/d/org', icon: faUserFriends, label: 'Группы' },
     { path: '/d/music', icon: faMusic, label: 'Музыка' },
   ];
 

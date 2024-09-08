@@ -2,7 +2,6 @@
 .friendsBar {
   position: fixed;
   width: 100px;
-  height: 70px;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
   z-index: 104;
@@ -20,7 +19,6 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
-  height: 70px;
   cursor: pointer;
   color: white; /* Белый цвет текста */
   font-size: 12px;

@@ -1,12 +1,19 @@
 /* SearchPage.module.css */
 .searchPage {
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
     padding: 20px;
-    background-color: #1f1f1f;
-    border-radius: 10px;
-    color: #ffffff;
-    border: 1px solid violet;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    color: white;
+    padding: 15px;
+}
+
+@media (max-width: 1199px) {
+    .searchPage {
+        padding: 10px;
+        width: 100%;
+    }
 }
 
 .searchBar {
@@ -160,14 +167,6 @@
 .searchInfo {
     margin-top: 10px;
     font-size: 12px;
-}
-
-@media (max-width: 800px) {
-    .searchPage {
-        width: 90%;
-        margin: 0 auto;
-        padding: 10px;
-    }
 }
 
 

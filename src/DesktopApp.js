@@ -9,7 +9,8 @@ import Messenger from './pages/messenger/Messenger';
 import Music from './pages/music/App';
 import Search from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
-import Groups from './pages/Groups';
+import Org from './pages/Organizations/Groups';
+import OrgView from './pages/Organizations/OrganizationView/OrganizationView';
 import Settings from './pages/settings/Settings';
 import BackgroundContext from './pages/settings/BackgroundContext';
 import Info from './pages/info/AboutPage';
@@ -46,7 +47,8 @@ const DesktopApp = () => {
                 <Route path="/people" element={<Search />} />
                 <Route path="/people/:username" element={<UserProfilePage />} />
                 <Route path="/:username" element={<UserProfilePage />} />
-                <Route path="/groups" element={<Groups />} />
+                <Route path="/org" element={<Org />} />
+                <Route path="/org/:OrgName" element={<OrgView />} />
                 <Route path="/options" element={<Settings />} />
                 <Route path="/info" element={<Info />} />
               </Routes>

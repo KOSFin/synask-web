@@ -2,17 +2,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1%;
+  height: 100%;
 }
 
 .container {
   display: flex;
-  height: 80vh;
-  width: 80vw;
-  background-color: #1e1e1e;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid violet;
   position: relative;
 }
 
@@ -26,7 +25,8 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: #252525;
+  flex: 1;
+  overflow: hidden;
 }
 
 .noChatSelected {
@@ -35,16 +35,58 @@
   margin-top: 35%;
 }
 
+.noMessages {
+  color: #b0b0b0;
+  text-align: center;
+  margin-top: 35%;
+}
+
+.startChatButton {
+	position: absolute;
+	bottom: 0px;
+	width: -webkit-fill-available;
+	width: -moz-available;
+	padding: 8px;
+	border-radius: 4px;
+	color: white;
+	background: #d24f00;
+	border: none;
+	cursor: pointer;
+}
+
 .closeButtonContainer {
   padding: 5px;
-  background-color: #3e3e3e;
 }
 
 .closeButton {
   width: 100%;
   padding: 10px;
   border: none;
-  background: none;
+  background: rgba(67, 0, 0, 0.47);
   color: #ffffff;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(41, 41, 41);
+    z-index: 1000;
+    transition: transform 0.5s ease; /* Обновлено для плавности */
+    height: 100%;
+  }
+
+  .chatActive {
+    transform: translateY(0); /* Чат виден */
+    display: flex;
+  }
+
+
+  .main:not(.chatActive) {
+    transform: translateY(100%); /* Чат скрыт */
+  }
 }

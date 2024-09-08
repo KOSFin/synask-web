@@ -1,0 +1,35 @@
+/* CacheManagement.module.css */
+
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.diagramContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.progress {
+    margin: 20px;
+}
+
+.info {
+    text-align: center;
+}
+
+.settings {
+    margin-top: 20px;
+}
+
+.settings div {
+    margin-bottom: 10px;
+}
+
+.warning {
+    color: red;
+}
+

@@ -7,6 +7,9 @@ const GeneralSettings = () => {
     const { accentColor, setAccentColor } = useContext(AccentColorContext);
     const { backgroundSettings, setBackgroundSettings } = useContext(BackgroundContext);
 
+    // Добавляем состояние для времени неактивности
+    const [inactiveTime, setInactiveTime] = useState(localStorage.getItem('settings_inactive_time') || 1);
+
     const [tempColor, setTempColor] = useState(accentColor);
     const [backgroundType, setBackgroundType] = useState(backgroundSettings.type);
     const [colorFields, setColorFields] = useState(backgroundSettings.colors);
@@ -18,6 +21,11 @@ const GeneralSettings = () => {
     useEffect(() => {
         setTempColor(accentColor);
     }, [accentColor]);
+
+    const handleInactiveTimeChange = (event) => {
+        setInactiveTime(event.target.value);
+        setHasUnsavedChanges(true);
+    };
 
     const handleColorChange = (event) => {
         setAccentColor(event.target.value);
@@ -32,10 +40,12 @@ const GeneralSettings = () => {
             colors: colorFields,
             imageURL,
             imageOpacity,
-            accentColor: tempColor
+            accentColor: tempColor,
+            inactiveTime: inactiveTime
         };
         localStorage.setItem('settings_background', JSON.stringify(settings));
         localStorage.setItem('settings_accent_color', tempColor);
+        localStorage.setItem('settings_inactive_time', inactiveTime);
         setBackgroundSettings(settings);
         setIsColorChanged(false);
         setHasUnsavedChanges(false);
@@ -45,6 +55,7 @@ const GeneralSettings = () => {
         const savedSettings = JSON.parse(localStorage.getItem('settings_background')) || {};
         setBackgroundType(savedSettings.type || 'color');
         setColorFields(savedSettings.colors || ['#ffffff']);
+        setInactiveTime(savedSettings.inactiveTime || 1);
         setImageURL(savedSettings.imageURL || '');
         setImageOpacity(savedSettings.imageOpacity || 1);
         setAccentColor(savedSettings.accentColor || '#ffffff');
@@ -102,6 +113,14 @@ const GeneralSettings = () => {
                 <label>Тема:</label>
                 <select disabled>
                     <option value="dark">Темная</option>
+                </select>
+            </div>
+            <div className={styles.settingItem}>
+                <label>Время неактивности для отключения (в разработке):</label>
+                <select value={inactiveTime} onChange={handleInactiveTimeChange}>
+                    {[...Array(6)].map((_, i) => (
+                        <option key={i} value={i + 1}>{i + 1} час</option>
+                    ))}
                 </select>
             </div>
 

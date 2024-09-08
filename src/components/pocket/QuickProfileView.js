@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faEnvelope, faUserPlus, faEdit, faStar, faChevronDown, faShare } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faEnvelope, faUserPlus, faStar, faShare } from '@fortawesome/free-solid-svg-icons';
 import styles from './QuickProfileView.module.css';
 import UserContext from '../UserContext'; // Добавляем UserContext для получения информации о текущем пользователе
 import { Link } from 'react-router-dom'; // Для навигации на страницу полного профиля
-import { supabase } from '../../pages/config/SupabaseClient';
+import getSupabaseClient from '../../pages/config/SupabaseClient';
+
+const supabase = getSupabaseClient();
 
 const QuickProfileView = ({ profile, onClose, position }) => {
   const [tags, setTags] = useState([]);

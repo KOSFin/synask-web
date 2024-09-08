@@ -6,9 +6,12 @@ import GeneralSettings from './GeneralSettings';
 import ProfileSettings from './ProfileSettings';
 import SecuritySettings from './SecuritySettings';
 import PrivacySettings from './PrivacySettings';
-import { supabase } from '../config/SupabaseClient';
+import DataSettings from './DataSettings';
+import getSupabaseClient from '../config/SupabaseClient';
 import load from '../Loader.module.css';
 import styles from './Settings.module.css';
+
+const supabase = getSupabaseClient();
 
 const Settings = () => {
     const [activeSection, setActiveSection] = useState('general');
@@ -36,6 +39,8 @@ const Settings = () => {
                 return <SecuritySettings />;
             case 'privacy':
                 return <PrivacySettings />;
+            case 'data':
+                return <DataSettings />;
             default:
                 return <GeneralSettings />;
         }
@@ -116,6 +121,12 @@ const Settings = () => {
                         onClick={() => handleSectionClick('privacy')}
                     >
                         <FontAwesomeIcon icon={faShieldAlt} className={styles.icon} /> Приватность
+                    </li>
+                    <li
+                        className={`${activeSection === 'data' ? styles.active : ''}`}
+                        onClick={() => handleSectionClick('data')}
+                    >
+                        <FontAwesomeIcon icon={faCog} className={styles.icon} /> Данные и память
                     </li>
                 </ul>
                 <div

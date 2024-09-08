@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
+import getSupabaseClient from './config/SupabaseClient';
 import styles from './SearchPage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import load from './Loader.module.css';
-import AccentColorContext from '../pages/settings/AccentColorContext';
 
-const supabase = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
+const supabase = getSupabaseClient();
 
 const SearchPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [filtersVisible, setFiltersVisible] = useState(false);
-    const { accentColor } = useContext(AccentColorContext);
     const [filters, setFilters] = useState({
         gender: '',
         minAge: '',
@@ -69,7 +67,7 @@ const SearchPage = () => {
     };
 
     return (
-        <div className={styles.searchPage} style={{ borderColor: accentColor }}>
+        <div className={styles.searchPage}>
             <div className={styles.searchBar}>
                 <input
                     type="text"

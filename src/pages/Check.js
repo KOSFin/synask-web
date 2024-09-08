@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import styles from './AccountSetupPage.module.css';
 import l from './Loader.module.css';
+import getSupabaseClient from './config/SupabaseClient';
 
-const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
+const supabase = getSupabaseClient();
 
 const AccountSetupPage = () => {
   const [error, setError] = useState(null);
@@ -74,7 +75,13 @@ const AccountSetupPage = () => {
             first_name: formData.firstName || user.user_metadata.firstName || '',
             last_name: formData.lastName || user.user_metadata.lastName || '',
             gender: genderValue,
-            created_at: new Date(),
+            created_at: user.created_at,
+          };
+
+          const updatesPv = {
+            auth_id: user.id,
+            email: user.email,
+            phone: user.phone || '',
           };
 
           if (Object.values(updates).some(value => value === '')) {
@@ -88,11 +95,17 @@ const AccountSetupPage = () => {
             return;
           }
 
-          let { error: upsertError } = await supabaseClient
+          let { error: upsertPubError } = await supabaseClient
             .from('users_public_information')
             .upsert(updates, { onConflict: ['auth_id'] });
 
-          if (upsertError) throw upsertError;
+          if (upsertPubError) throw upsertError;
+
+          let { error: upsertPvError } = await supabaseClient
+            .from('users_private_information')
+            .upsert(updatesPv, { onConflict: ['auth_id'] });
+
+          if (upsertPvError) throw upsertError;
         }
 
         const updatedProfile = {
@@ -103,9 +116,9 @@ const AccountSetupPage = () => {
 
         const { dataUpdate, errorUpdate } = await supabaseClient.auth.updateUser({
           data: {
-            firstName: updatedProfile.first_name,
-            lastName: updatedProfile.last_name,
-            nickname: updatedProfile.username,
+            firstName: formData.firstName || user.user_metadata.firstName || '',
+            lastName: formData.lastName || user.user_metadata.lastName || '',
+            nickname: username || '',
           }
         });
 

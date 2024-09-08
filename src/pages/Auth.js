@@ -1,9 +1,12 @@
+/*
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from './config/SupabaseClient';
+import getSupabaseClient from './config/SupabaseClient';
 import axios from 'axios'; // Используем axios для запросов
 import styles from './Auth.module.css';
 import load from './Loader.module.css';
+
+const supabase = getSupabaseClient();
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -200,3 +203,4 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+*/

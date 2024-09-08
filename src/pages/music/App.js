@@ -5,7 +5,8 @@ import TrackList from './TrackList';
 import styles from './App.module.css';
 import { useTrack } from './TrackContext';
 import AccentColorContext from '../settings/AccentColorContext';
-import { supabase } from '../config/SupabaseClient'; // Инициализация Supabase клиента
+import getSupabaseClient from '../config/SupabaseClient'; // Инициализация Supabase клиента
+const supabase = getSupabaseClient();
 import load from '../../pages/Loader.module.css';
 
 const App = () => {

@@ -1,33 +1,48 @@
-// src/pages/messenger/components/ChatList.js
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';  // Импортируем useNavigate
 import styles from '../styles/ChatList.module.css';
-import { supabase } from '../../config/SupabaseClient';
+import ChatContext from '../../../components/ChatContext';
+import UserContext from '../../../components/UserContext';
+import ChatItem from './ChatItem';  // Импортируем компонент ChatItem
 
-const ChatList = ({ setSelectedChat, searchTerm }) => {
-  // Пример списка чатов, в реальности данные будут получены из Supabase
-  const chats = [
-    { id: 1, name: 'Дмитрий Попов', lastMessage: 'Ало ☎!', time: '10:45', newMessages: 3, username: 'parapopovich', avatar: 'https://i.pinimg.com/736x/11/33/19/113319f0ffe91f4bb0f468914b9916da.jpg'},
-    { id: 1, name: 'Kanye West', lastMessage: 'fuck bro!', time: '10:45', newMessages: 3, username: 'kanye', avatar: 'https://i.pinimg.com/736x/11/33/19/113319f0ffe91f4bb0f468914b9916da.jpg' },
+const ChatList = ({ searchTerm }) => {
+  const { chatList, newMessagesCount } = useContext(ChatContext);
+  const { userId } = useContext(UserContext);  // Получаем userId из контекста пользователя
+  const navigate = useNavigate();  // Используем navigate для изменения URL
 
-    // Добавьте дополнительные чаты по мере необходимости
-  ];
+  const filteredChats = useMemo(() => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return chatList.filter(chat => {
+      if (chat.is_group) {
+        return chat.name && chat.name.toLowerCase().includes(lowerCaseSearchTerm);
+      } else if (chat.membersInfo && chat.membersInfo.length > 1) {
+        // Получаем собеседника, исключая текущего пользователя
+        const otherUser = chat.membersInfo.find(member => member.auth_id !== userId);
+        console.log('Other User:', otherUser); // Если собеседник найден, проверяем его данные на наличие в поиске
+        if (otherUser) {
+          return `${otherUser.first_name} ${otherUser.last_name}`.toLowerCase().includes(lowerCaseSearchTerm);
+        }
+      }
+      return false;
+    });
+  }, [chatList, searchTerm, userId]);  // Добавляем userId в зависимости
 
-  const filteredChats = chats.filter(chat => chat.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const selectChat = (chatId) => {
+    console.log('Selected Chat Id:', chatId);
+
+    // Меняем параметр id в URL на айди выбранного чата
+    navigate(`?id=${chatId}`, { replace: true });
+  };
 
   return (
     <div className={styles.chatList}>
-      {filteredChats.map((chat) => (
-        <div className={styles.chat} key={chat.id} onClick={() => setSelectedChat(chat)}>
-          <div className={styles.avatar} style={{ backgroundImage: `url(${chat.avatar})` }}></div>
-          <div className={styles.details}>
-            <div className={styles.name}>{chat.name}</div>
-            <div className={styles.lastMessage}>{chat.lastMessage}</div>
-          </div>
-          <div className={styles.meta}>
-            <div className={styles.time}>{chat.time}</div>
-            <div className={styles.newMessages}>{chat.newMessages}</div>
-          </div>
-        </div>
+      {filteredChats.map(chat => (
+        <ChatItem
+          key={chat.id}
+          chat={chat}
+          selectChat={selectChat}
+          newMessagesCount={newMessagesCount}
+        />
       ))}
     </div>
   );

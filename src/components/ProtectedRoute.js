@@ -1,257 +1,100 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserContext from './UserContext';
-import { supabase } from '../pages/config/SupabaseClient';
+import getSupabaseClient from '../pages/config/SupabaseClient';
 import load from '../pages/Loader.module.css';
+import RedirectToLogin from './RedirectToLogin';
+import NetworkStatusHandler from './NetworkStatusHandler';
+import MessageHandler from './MessageHandler'; // Импортируем компонент мессенджера
+import { checkSession, fetchInitialData, subscribeToUserDataChanges } from './utils';
+
+const supabase = getSupabaseClient();
 
 const ProtectedRoute = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [userId, setUserId] = useState(null);
-    const navigate = useNavigate();
-    const { userData, setUserData, friends, setFriends } = useContext(UserContext);
-    var UserData = {};
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { userData, setUserData, setFriends, userId, setUserId, isAuthenticated, setIsAuthenticated } = useContext(UserContext);
 
-    const arraysAreEqual = (arr1, arr2) => {
-      if (arr1.length !== arr2.length) {
-        return false;
+  const messengerInitialized = useRef(false); // Флаг для отслеживания инициализации мессенджера
+
+  useEffect(() => {
+    // Проверка сессии пользователя
+    const initializeSession = async () => {
+      const { authenticated, userId } = await checkSession(supabase, navigate);
+      if (authenticated) {
+          console.log('User is authenticated');
+          setIsAuthenticated(authenticated);
+          setUserId(userId);
+      } else {
+          console.log('User is not authenticated');
+          setIsAuthenticated(false);
+          window.location.href = "/login.html";
       }
-      for (let i = 0; i < arr1.length; i++) {
-        if (arr1[i] !== arr2[i]) {
-          return false;
-        }
-      }
-      return true;
     };
 
-    useEffect(() => {
-        const checkSession = async () => {
-            console.log('Checking session...');
-            const { data, error } = await supabase.auth.getUser();
-            if (error) {
-                console.error('Error checking session:', error);
-                setIsAuthenticated(false);
-                setLoading(false);
-                return;
-            }
+    initializeSession();
+  }, []); // Данный эффект должен запускаться один раз при монтировании компонента
 
-            if (data) {
-                console.log('User authenticated:', data.user.id);
-                setIsAuthenticated(true);
-                setUserId(data.user.id);
+  useEffect(() => {
+    if (!userId) return;
 
-                // Далее проверяем статус работы соцсети
-                const { data: techData, error: techError } = await supabase
-                    .from('_tech_')
-                    .select('status_work, participants')
-                    .eq('name', 'technical works')
-                    .single();
+    // Загрузка данных пользователя и подписка на обновления
+    const initializeUserData = async () => {
+      const userChannel = await fetchInitialData(supabase, userId, setUserData, setFriends);
+      const unsubscribe = subscribeToUserDataChanges(supabase, userId, setUserData, setFriends);
+      setLoading(false);
 
-                if (techError) {
-                    console.error('Error fetching tech status:', techError);
-                    setLoading(false);
-                    return;
-                }
+      return () => {
+        if (userChannel) {
+          supabase.removeChannel(userChannel);
+        }
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      };
+    };
 
-                const statusWork = techData?.status_work;
-                const participants = techData?.participants || [];
+    const cleanup = initializeUserData();
 
-                // Логика перенаправления в зависимости от статуса работы
-                if (statusWork === 0 || statusWork === 2) {
-                    // Если технические работы или сбой, перенаправляем на /info
-                    console.log('Redirecting to /info due to technical status...');
-                    navigate('/info');
-                } else if (statusWork === 3) {
-                    // Если бета-тест, проверяем, находится ли пользователь в списке участников
-                    const isParticipant = participants.some(participant => participant === data.user.id);
-                    if (!isParticipant) {
-                        // Если пользователь не является участником бета-теста, перенаправляем на /info
-                        console.log('Redirecting to /info due to beta test...');
-                        navigate('/info');
-                    }
-                }
-                // Если статус "Всё работает", ничего не делаем
-            } else {
-                console.log('User not authenticated');
-                setIsAuthenticated(false);
-            }
-            setLoading(false);
-        };
+    // Cleanup при размонтировании компонента или изменении userId
+    return () => {
+      if (cleanup && typeof cleanup === 'function') {
+        cleanup();
+      }
+    };
+  }, [userId, setUserData, setFriends]);
 
-        checkSession();
-    }, []);
+  // Эффект для инициализации компонента мессенджера
+  useEffect(() => {
+    if (isAuthenticated && !messengerInitialized.current) {
+      // Проверяем, прошел ли пользователь аутентификацию и не был ли мессенджер уже инициализирован
+      messengerInitialized.current = true; // Помечаем, что мессенджер инициализирован
+    }
+  }, [isAuthenticated]);
 
-    useEffect(() => {
-        if (!userId) return;
+  if (loading) return <LoadingSpinner />;
 
-        const fetchInitialData = async () => {
-            console.log('Fetching initial data...');
-            try {
-                const { data: dataPub, error: errorPub } = await supabase
-                    .from('users_public_information')
-                    .select('*')
-                    .eq('auth_id', userId)
-                    .single();
-
-                if (errorPub) throw errorPub;
-
-                if (!dataPub) {
-                    window.location.href = "/info";
-                }
-
-                console.log('Initial data fetched:', dataPub);
-
-                const { data: dataPriv, error: errorPriv } = await supabase
-                    .from('users_private_information')
-                    .select('*')
-                    .eq('auth_id', userId)
-                    .single();
-
-                if (errorPriv) throw errorPriv;
-
-                console.log('Initial data fetched:', dataPriv);
-
-                // Set user data
-                UserData = {
-                    auth_id: dataPub.auth_id,
-                    first_name: dataPub.first_name,
-                    last_name: dataPub.last_name,
-                    avatar_url: dataPub.avatar_url,
-                    status: dataPub.status,
-                    username: dataPub.username,
-                    contacts: dataPriv.contacts
-                };
-                setUserData(UserData);
-
-                // Extract contacts
-                const initialContacts = dataPriv.contacts || [];
-                console.log('Initial contacts:', initialContacts);
-                updateFriendsList(initialContacts);
-
-                // Subscribe to changes
-                const userChannel = supabase
-                  .channel(`user:${userId}`)
-                  .on(
-                    'postgres_changes',
-                    { event: 'UPDATE', schema: 'public', table: 'users_public_information', filter: `auth_id=eq.${userId}` },
-                    (payload) => {
-                      console.log('Public information change detected:', payload);
-                      handleUserDataChange(payload);
-                    }
-                  )
-                  .on(
-                    'postgres_changes',
-                    { event: 'UPDATE', schema: 'public', table: 'users_private_information', filter: `auth_id=eq.${userId}` },
-                    (payload) => {
-                      console.log('Private information change detected:', payload);
-                      handleUserDataChange(payload);
-                    }
-                  )
-                  .subscribe();
-
-                // Function to handle the update
-                function handleUserDataChange(payload) {
-                  console.log(payload.new.contacts, UserData.contacts);
-                  if (!arraysAreEqual(payload.new.contacts || [], UserData.contacts || [])) {
-                    const newContacts = payload.new.contacts || [];
-                    console.log('Contacts updated:', newContacts);
-                    console.log('UserData:', UserData);
-                    const updatedUserData = {
-                      ...UserData,
-                      contacts: newContacts
-                    };
-                    UserData = updatedUserData
-                    setUserData(updatedUserData);
-                    updateFriendsList(newContacts);
-                  } else {
-                    UserData = {
-                      auth_id: payload.new.auth_id,
-                      first_name: payload.new.first_name,
-                      last_name: payload.new.last_name,
-                      avatar_url: payload.new.avatar_url,
-                      status: payload.new.status,
-                      username: payload.new.username,
-                      contacts: payload.new.contacts,
-                    };
-                    setUserData(UserData);
-                  }
-                }
-
-
-                // Subscribe to changes for each contact
-                const friendsChannels = initialContacts.map(auth_id =>
-                    supabase
-                        .channel(`contact:${auth_id}`)
-                        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users_public_information', filter: `auth_id=eq.${auth_id}` },
-                            (payload) => {
-                                console.log('Contact status change detected:', payload);
-                                setFriends(prev =>
-                                    prev.map(friend =>
-                                        friend.auth_id === payload.new.auth_id ? { ...friend, status: payload.new.status } : friend
-                                    )
-                                );
-                            }
-                        )
-                        .subscribe()
-                );
-
-                return () => {
-                    console.log('Removing user channel');
-                    supabase.removeChannel(userChannel);
-                    friendsChannels.forEach(channel => supabase.removeChannel(channel));
-                };
-            } catch (error) {
-                console.error('Error fetching initial data:', error);
-            }
-        };
-
-        const updateFriendsList = async (contacts) => {
-              console.log('Updating friends list...');
-              const currentFriendsIds = friends.map(friend => friend.auth_id);
-              const newFriendsIds = contacts.filter(auth_id => !currentFriendsIds.includes(auth_id));
-              const removedFriends = friends.filter(friend => !contacts.includes(friend.auth_id));
-
-              console.log('Removed friends:', removedFriends);
-              setFriends(prev => prev.filter(friend => !removedFriends.some(removedFriend => removedFriend.auth_id === friend.auth_id)));
-
-              if (newFriendsIds.length > 0) {
-                const { data, error } = await supabase
-                  .from('users_public_information')
-                  .select('auth_id, username, first_name, last_name, avatar_url, cover_url, status, tags')
-                  .in('auth_id', newFriendsIds);
-
-                if (error) {
-                  console.error('Error fetching new friends data:', error);
-                  return;
-                }
-
-                console.log('New friends data:', data);
-
-                setFriends(data);
-
-            }
-        };
-
-        fetchInitialData();
-    }, [userId]);
-
-    if (loading) return (
-        <div className={load.spinner}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-    );
-
-    return isAuthenticated ? children : <RedirectToLogin />;
+  return (
+    <>
+      <NetworkStatusHandler />
+      {isAuthenticated ? (
+        <>
+          {messengerInitialized.current && <MessageHandler />} {/* Инициализируем мессенджер, если пользователь аутентифицирован */}
+          {children}
+        </>
+      ) : (
+        <RedirectToLogin />
+      )}
+    </>
+  );
 };
 
-const RedirectToLogin = () => {
-    useEffect(() => {
-        console.log('Redirecting to login...');
-        window.location.href = "/login.html";
-    }, []);
-    return null;
-};
+const LoadingSpinner = () => (
+  <div className={load.spinner}>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+);
 
 export default ProtectedRoute;

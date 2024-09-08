@@ -61,7 +61,7 @@
   margin-left: 20px;
   cursor: pointer;
   transition: height 0.3s ease, width 0.3s ease;
-  height: 50px;
+  height: 8vh;
   overflow: hidden;
   max-width: 500px;
   border-radius: 10px;

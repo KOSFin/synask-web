@@ -5,21 +5,23 @@ import Welcome from './pages/HomePage';
 import UserProfilePage from './pages/UserProfilePage';
 import Music from './pages/music/App';
 import Messenger from './pages/messenger/Messenger';
-import Groups from './pages/Groups';
 import Search from './pages/SearchPage';
 import Login from './pages/Login';
-import Auth from './pages/Auth';
+// import Auth from './pages/Auth';
 import Swap from './pages/Swap';
 import Registration from './pages/Registration';
 import Checker from './pages/Check';
 import ProtectedRoute from './components/ProtectedRoute';
 import { UserProvider } from './components/UserContext';
+import { ChatProvider } from './components/ChatContext';
+import { NotificationProvider } from './components/NotificationContext';
 import Settings from './pages/settings/Settings';
 import AImodele from './pages/AImodele';
 import Info from './pages/info/AboutPage';
 import { AccentColorProvider } from './pages/settings/AccentColorContext';
 import { BackgroundProvider } from './pages/settings/BackgroundContext';
 import { TrackProvider } from './pages/music/TrackContext';
+import Test from './pages/garbage/test_notif';
 
 import DesktopApp from './DesktopApp';
 import PocketApp from './PocketApp';
@@ -28,7 +30,7 @@ const VersionRouter = () => {
   const [version, setVersion] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const currentPath = window.location.pathname;
+  const currentPath = `${location.pathname}${location.search}`;
   console.log(currentPath);
 
   useEffect(() => {
@@ -70,24 +72,29 @@ const App = () => {
   return (
     <Router>
       <UserProvider>
-        <AccentColorProvider>
-          <BackgroundProvider>
-            <TrackProvider>
-              <Routes>
-                <Route path="/main" element={<MainPage />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/registration" element={<Registration />} />
-                <Route path="/swap" element={<Swap />} />
-                <Route path="/check" element={<Checker />} />
-                <Route path="/ai" element={<AImodele />} />
-                <Route path="/info" element={<Info />} />
-                <Route path="/*" element={<VersionRouter />} />
-                <Route path="*" element={<Navigate to="/main" />} />
-              </Routes>
-            </TrackProvider>
-          </BackgroundProvider>
-        </AccentColorProvider>
+        <ChatProvider>
+          <NotificationProvider>
+            <AccentColorProvider>
+              <BackgroundProvider>
+                <TrackProvider>
+                  <Routes>
+                    <Route path="/main" element={<MainPage />} />
+                    {/*<Route path="/auth" element={<Auth />} />*/}
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/registration" element={<Registration />} />
+                    <Route path="/swap" element={<Swap />} />
+                    <Route path="/check" element={<Checker />} />
+                    <Route path="/ai" element={<AImodele />} />
+                    <Route path="/info" element={<Info />} />
+                    <Route path="/test" element={<Test />} />
+                    <Route path="/*" element={<VersionRouter />} />
+                    <Route path="*" element={<Navigate to="/main" />} />
+                  </Routes>
+                </TrackProvider>
+              </BackgroundProvider>
+            </AccentColorProvider>
+          </NotificationProvider>
+        </ChatProvider>
       </UserProvider>
     </Router>
   );

@@ -3,10 +3,9 @@
 .friendsBar {
   position: fixed;
   left: 61px;
-  width: 150px;
-  height: 70px;
+  width: 135px;
   background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
   z-index: 104;
   transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease; /* Добавить transition для opacity */
   top: calc(10vh + 1px);
@@ -21,8 +20,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
-  height: 70px;
+  padding: 5px 5px;
   cursor: pointer;
   color: white; /* Белый цвет текста */
 }

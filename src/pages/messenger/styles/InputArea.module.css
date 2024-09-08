@@ -1,40 +1,140 @@
-/* src/pages/messenger/styles/InputArea.module.css */
 .inputArea {
+  position: revert;
   display: flex;
-  align-items: center;
-  padding: 10px;
-  background-color: #3e3e3e;
-  position: relative;
+  padding: 8px;
+  border-radius: 4px;
+  align-items: flex-start;
+  background-color: #333;
+  color: #fff;
+  width: 100%;
+  margin: auto;
 }
 
-.attachIcon, .emojiIcon, .micIcon {
-  margin-right: 10px;
+.icon {
+  margin-right: 8px;
   cursor: pointer;
 }
 
-input {
-  flex-grow: 1;
-  padding: 10px;
+textarea {
+  flex: 1;
+  resize: none;
+  overflow-y: hidden;
+  padding: 8px;
   border: none;
-  border-radius: 5px;
-  background-color: #2a2a2a;
-  color: #ffffff;
+  border-radius: 4px;
+  outline: none;
+  background: none;
+  color: white;
+  width: 100%;
 }
 
-.preview {
+.characterCount {
+  margin-left: 5px;
+  margin-right: 5px;
+  color: #888;
+  font-size: 10px;
+}
+
+.emojiPicker {
   position: absolute;
-  bottom: 60px;
-  left: 10px;
+  bottom: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.linkPopup {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.linkPreview {
   display: flex;
+  align-items: center;
+  margin-top: 8px;
 }
 
-.filePreview {
-  margin-right: 10px;
+.previewIcon {
+  width: 50px;
+  height: 50px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  margin-right: 8px;
 }
 
-.filePreview img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 5px;
+.previewLink {
+  flex: 1;
+}
+
+.previewType {
+  color: #888;
+}
+
+.removeLink {
+  margin-left: 8px;
+  cursor: pointer;
+  color: red;
+}
+
+.emojiWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.emojiPreview {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  z-index: 10;
+}
+
+.fullEmojiPicker {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  z-index: 10;
+}
+
+.emojiWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fullEmojiPicker {
+  position: absolute;
+  bottom: 60px; /* Adjust as needed */
+  right: 0;
+  z-index: 10;
+  background-color: #222; /* Dark background for the picker */
+}
+
+.emojiWrapper .icon {
+  cursor: pointer;
+}
+
+.linkPopup, .linkPreview {
+  background-color: #444; /* Dark background for popups */
+  color: #fff; /* Light text color */
+}
+
+.linkPopup input {
+  background-color: #555; /* Dark background for input */
+  color: #fff; /* Light text color */
+}
+
+.characterCount {
+  color: #ccc; /* Light color for character count */
+}
+
+@media (max-width: 768px) {
+  .inputArea {
+     margin-bottom: 0px;
+  }
 }

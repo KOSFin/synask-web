@@ -22,7 +22,7 @@ const MobileSidebar = () => {
     { path: '/p/', icon: faHome, label: 'Главная' },
     { path: '/p/msg', icon: faComment, label: 'Мессенджер' },
     { path: '/p/people', icon: faUsers, label: 'Люди' },
-    { path: '/p/groups', icon: faUserFriends, label: 'Группы' },
+    { path: '/p/org', icon: faUserFriends, label: 'Группы' },
     { path: '#', icon: faEllipsisH, label: 'Еще', onClick: toggleMenu },
   ];
 
