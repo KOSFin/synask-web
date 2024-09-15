@@ -1,6 +1,6 @@
 {
   "name": "synask-app",
-  "version": "0.91.110",
+  "version": "0.91.300",
   "private": true,
   "dependencies": {
     "@cloudflare/pages-plugin-turnstile": "^1.0.2",
