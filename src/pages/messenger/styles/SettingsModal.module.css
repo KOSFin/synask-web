@@ -1,0 +1,44 @@
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  width: 400px;
+  padding: 20px;
+  position: relative;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.closeIcon {
+  cursor: pointer;
+  color: #fff;
+  height: 20px;
+}
+
+.modalContent {
+  color: #fff;
+}

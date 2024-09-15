@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import Message from './Message';
 import styles from '../styles/MessageList.module.css';
 import ChatContext from '../../../components/ChatContext';
@@ -7,13 +7,21 @@ import { ru } from 'date-fns/locale';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import MessageMenu from './MessageMenu';
+import MessengerSettingsContext from '../../../components/contexts/MessengerSettingsContext';
 
 const MessageList = () => {
-  const { messages, selectedChat } = useContext(ChatContext);
+  const { messages, selectedChat, selectedChatId, pendingQueue, setPendingQueue, messageStatus, setMessageStatus } = useContext(ChatContext);
+  const { backgroundChat } = useContext(MessengerSettingsContext);
   const [calendarDate, setCalendarDate] = useState(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [activeMessage, setActiveMessage] = useState(null);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const messagesToRender = 20; // Количество сообщений, отображаемых сразу
+  const [renderedMessages, setRenderedMessages] = useState([]);
+  const [startIndex, setStartIndex] = useState(0);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const containerRef = useRef(null);
+  const isAutoScroll = useRef(true);
 
   // Функция форматирования даты
   const formatDate = (date) => {
@@ -37,6 +45,52 @@ const MessageList = () => {
     setCalendarDate(date);
     setIsCalendarOpen(true);
   };
+
+ // Прокрутка до низа
+  const scrollToBottom = () => {
+    containerRef.current?.scrollTo({
+      top: containerRef.current.scrollHeight,
+      behavior: 'smooth', // Плавная анимация
+    });
+  };
+
+  // Отслеживание изменений в списке сообщений
+  useEffect(() => {
+    if (isAutoScroll.current) {
+      scrollToBottom(); // Авто-прокрутка до низа при появлении новых сообщений
+    }
+  }, [messages, pendingQueue]);
+
+  // Обнуление сообщений при смене чата
+  useEffect(() => {
+    if (selectedChatId) {
+      setRenderedMessages([]); // Очищаем рендеренные сообщения
+      setStartIndex(messages.length - messagesToRender); // Начинаем с конца
+      scrollToBottom(); // Прокручиваем до конца при открытии нового чата
+    }
+  }, [selectedChatId]);
+
+  // Подгрузка сообщений при прокрутке вверх
+  const handleScroll = () => {
+    if (containerRef.current.scrollTop === 0 && startIndex > 0) {
+      setIsLoadingMore(true);
+      setTimeout(() => {
+        const newStartIndex = Math.max(startIndex - messagesToRender, 0);
+        setStartIndex(newStartIndex);
+        setIsLoadingMore(false);
+      }, 500);
+    }
+
+    // Проверка, находится ли пользователь внизу чата
+    const isUserAtBottom =
+      containerRef.current.scrollHeight - containerRef.current.scrollTop === containerRef.current.clientHeight;
+
+    isAutoScroll.current = isUserAtBottom; // Если пользователь не внизу, отключаем авто-прокрутку
+  };
+
+  useEffect(() => {
+    setRenderedMessages(messages.slice(startIndex, messages.length));
+  }, [startIndex, messages]);
 
   const handleOutsideClick = (e) => {
     if (!e.target.closest('.calendar-container') && isCalendarOpen) {
@@ -69,6 +123,13 @@ const MessageList = () => {
       };
   }, []);
 
+  // Функция для рендеринга статуса сообщения
+  const renderMessageStatus = (messageId) => {
+    const status = messageStatus[messageId] || 'sent'; // По умолчанию "sent"
+
+    return status;
+  };
+
   // Функция для обновления сообщения
   const handleMessageUpdated = (messageId, newContent) => {
     const updatedMessages = messages.map((msg) =>
@@ -86,34 +147,61 @@ const MessageList = () => {
   }
 
   return (
-    <div className={styles.messages}>
+    <div
+      className={styles.messages}
+      ref={containerRef}
+      onScroll={handleScroll}
+      style={{
+        backgroundImage: backgroundChat.type === 'color'
+          ? `linear-gradient(${backgroundChat.colors.length > 1 ? backgroundChat.colors.join(', ') : `${backgroundChat.colors[0]}, ${backgroundChat.colors[0]}`})`
+          : `url(${backgroundChat.imageURL})`,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed', // чтобы изображение не двигалось при прокрутке
+        backgroundPosition: 'center', // центрируем изображение
+        backgroundBlendMode: backgroundChat.type === 'image' ? 'overlay' : 'normal', // для затемнения изображения
+        backgroundColor: backgroundChat.type === 'image' ? `rgba(0, 0, 0, ${backgroundChat.imageOpacity})` : 'transparent' // затемнение изображения
+      }}
+    >
       {Object.keys(groupedMessages).map((date) => (
         <div key={date}>
-          <div className={styles.dateSeparator} onClick={() => handleDateClick(parseISO(date))}>
-            {formatDate(parseISO(date))}
-          </div>
+          <div className={styles.dateSeparator} onClick={() => handleDateClick(parseISO(date))}>{formatDate(parseISO(date))}</div>
           {groupedMessages[date].map((message) => {
             const userInfo = selectedChat.membersInfo.find(member => member.auth_id === message.user_id);
             if (!userInfo) return null;
 
             return (
-              <div
-                  onContextMenu={(e) => handleMessageClick(e, message)} // Контекстное меню по правой кнопке мыши
-                  key={message.id}
-              >
-                  <Message
-                    message={{
-                      id: message.id,
-                      user: `${userInfo.first_name} ${userInfo.last_name}`,
-                      text: message.content,
-                      time: new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                      isUser: selectedChat.is_user,
-                      avatar: userInfo.avatar_url,
-                    }}
-                  />
+              <div key={message.id} className={styles.messageContainer} onContextMenu={(e) => handleMessageClick(e, message)} >
+                <Message
+                  message={{
+                    id: message.id,
+                    user: `${userInfo.first_name} ${userInfo.last_name}`,
+                    text: message.content,
+                    time: new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    isUser: message.user_id === selectedChat.currentUserId,
+                    avatar: userInfo.avatar_url,
+                  }}
+                />
+                {message.user_id === selectedChat.currentUserId && renderMessageStatus(message.id)}
               </div>
             );
           })}
+        </div>
+      ))}
+
+      {/* Рендер сообщений из очереди */}
+      {pendingQueue.map((message) => (
+        <div key={message.id} className={styles.messageContainer}>
+          <Message
+            message={{
+              id: message.id,
+              user: 'Пользователь',
+              text: message.content,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              isUser: 'yes',
+              avatar: 'gf',
+              status: renderMessageStatus(message.id),
+            }}
+          />
         </div>
       ))}
 

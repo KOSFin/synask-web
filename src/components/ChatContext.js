@@ -14,9 +14,10 @@ export const ChatProvider = ({ children }) => {
     const [isPageVisible, setIsPageVisible] = useState(true); // Состояние видимости страницы
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [messageStatus, setMessageStatus] = useState({});
+    const [pendingQueue, setPendingQueue] = useState([]); // Очередь сообщений
 
     return (
-        <ChatContext.Provider value={{ messages, setMessages, newMessagesCount, setNewMessagesCount, isLoadingChats, setIsLoadingChats, chatList, setChatList, messagesCache, setMessagesCache, selectedChatId, setSelectedChatId, isPageVisible, setIsPageVisible, isLoadingMessages, setIsLoadingMessages, selectedChat, setSelectedChat, messageStatus, setMessageStatus}}>
+        <ChatContext.Provider value={{ messages, setMessages, newMessagesCount, setNewMessagesCount, isLoadingChats, setIsLoadingChats, chatList, setChatList, messagesCache, setMessagesCache, selectedChatId, setSelectedChatId, isPageVisible, setIsPageVisible, isLoadingMessages, setIsLoadingMessages, selectedChat, setSelectedChat, messageStatus, setMessageStatus, pendingQueue, setPendingQueue}}>
             {children}
         </ChatContext.Provider>
     );

@@ -8,16 +8,15 @@
 .container {
   display: flex;
   height: 100%;
-  width: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 10px;
   overflow: hidden;
   position: relative;
+  width: 100%;
 }
 
 .resizer {
-  width: 10px;
-  cursor: ew-resize;
+  width: 5px;
   background-color: #4a4a4a;
 }
 
@@ -67,6 +66,13 @@
   cursor: pointer;
 }
 
+.chatListContainer {
+  transition: width 0.2s ease; /* Добавляем плавный переход */
+  width: 30%;
+  resize: horizontal;
+  overflow: auto;
+}
+
 @media (max-width: 768px) {
   .main {
     position: fixed;
@@ -89,4 +95,10 @@
   .main:not(.chatActive) {
     transform: translateY(100%); /* Чат скрыт */
   }
+
+  .chatListContainer {
+      width: 100%;
+      resize: none;
+  }
 }
+

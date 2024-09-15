@@ -10,6 +10,7 @@ import NotFoundPage from './NotFoundPage';
 import UserContext from '../components/UserContext';
 import DOMPurify from 'dompurify';
 import 'react-quill/dist/quill.snow.css';
+import VersionContext from '../components/contexts/VersionContext';
 
 const supabase = getSupabaseClient();
 
@@ -24,6 +25,7 @@ const UserProfilePage = () => {
     const [activeSection, setActiveSection] = useState('description');
     const { userData } = useContext(UserContext);
     const [contacts, setContacts] = useState([]);
+    const { version } = useContext(VersionContext);
 
     useEffect(() => {
         if (userData) {
@@ -188,7 +190,7 @@ const UserProfilePage = () => {
                     currentUser ? (
                         <div className={p.userActionsBar}>
                             <div className={p.ActionsButtons}>
-                                <Link to={`/msg?id=${profile.auth_id}`} className={p.userActionsBtn}>
+                                <Link to={`${version}/msg?id=${profile.auth_id}`} className={p.userActionsBtn}>
                                     <FontAwesomeIcon icon={faEnvelope} className={p.actionIcon} /> Сообщение
                                 </Link>
                                 <div

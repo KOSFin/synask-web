@@ -1,5 +1,5 @@
-// NetworkStatusHandler.js
 import React, { useState, useEffect } from 'react';
+import styles from './NetworkStatusHandler.module.css';
 
 // Функция для проверки статуса сети
 export const checkNetworkStatus = () => {
@@ -27,8 +27,16 @@ const NetworkStatusHandler = () => {
     // Рендер компонента в зависимости от статуса сети
     if (!isOnline) {
         return (
-            <div style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>
-                Нет подключения к интернету.
+            <div className={styles.overlay}>
+                <div className={styles.messageContainer}>
+                    <div className={styles.messageTitle}>Нет подключения к интернету</div>
+                    <div className={styles.messageBody}>
+                        Соединение с интернетом потеряно. Пожалуйста, подождите...
+                    </div>
+                    <div className={styles.autoReconnect}>
+                        Подключение восстановится автоматически при появлении сети.
+                    </div>
+                </div>
             </div>
         );
     }

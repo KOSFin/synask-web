@@ -7,7 +7,7 @@ import UserContext from '../../../components/UserContext';
 import Picker from 'emoji-picker-react'; // Updated import
 
 const InputArea = () => {
-  const { messages, setMessages, messageStatus, setMessageStatus, selectedChat } = useContext(ChatContext);
+  const { messages, setMessages, messageStatus, setMessageStatus, selectedChat, pendingQueue, setPendingQueue } = useContext(ChatContext);
   const { userId } = useContext(UserContext);
   const [inputValue, setInputValue] = useState('');
   const [link, setLink] = useState('');
@@ -71,7 +71,8 @@ const InputArea = () => {
       created_at: date.toISOString(),
     };
 
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    // Добавляем сообщение в очередь на отправку
+    setPendingQueue((prevQueue) => [...prevQueue, newMessage]);
 
     setMessageStatus((prevStatus) => ({
       ...prevStatus,
@@ -121,7 +122,7 @@ const InputArea = () => {
       )}
       <textarea
         ref={textareaRef}
-        placeholder="Enter message..."
+        placeholder="Написать сообщение..."
         value={inputValue}
         onChange={handleTextChange}
         onInput={handleTextAreaExpand}

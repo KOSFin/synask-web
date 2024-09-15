@@ -1,0 +1,52 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный темный фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Поверх всех элементов */
+}
+
+.messageContainer {
+    background-color: #222;
+    color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 80%;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    animation: slideDown 0.5s ease-in-out;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.messageTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ff6b6b; /* Красный акцент для заголовка */
+}
+
+.messageBody {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.autoReconnect {
+    font-size: 14px;
+    color: #aaa;
+    font-style: italic;
+}

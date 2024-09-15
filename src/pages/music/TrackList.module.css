@@ -28,7 +28,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 300px; /* 5,5 треков */
+    max-height: 1000px; /* 5,5 треков */
     overflow-y: auto;
     padding-right: 10px; /* для скроллбара */
 }

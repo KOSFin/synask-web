@@ -7,6 +7,7 @@ import DropdownMenu from './DropdownMenu'; // Импортируйте новы�
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { deleteChatById } from '../../../components/utils'; // Импортируйте функцию удаления
+import VersionContext from '../../../components/contexts/VersionContext';
 
 const ChatHeader = () => {
   const { setSelectedChatId, selectedChatId, selectedChat, isLoadingMessages } = useContext(ChatContext);
@@ -21,6 +22,7 @@ const ChatHeader = () => {
   const [coverUrl, setCoverUrl] = useState(null);
   const [username, setUsername] = useState(null);
   const [confirmChecked, setConfirmChecked] = useState(false);
+  const { version } = useContext(VersionContext);
 
   useEffect(() => {
     console.log(isLoadingMessages);
@@ -72,7 +74,7 @@ const ChatHeader = () => {
 
   const handleProfileClick = () => {
     if (selectedChat && !selectedChat.is_group) {
-      navigate(`/${username}`);
+      navigate(`${version}/${username}`);
     }
   };
 

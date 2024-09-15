@@ -56,3 +56,9 @@
   background-color: #ff9800 !important;
   color: white;
 }
+
+.noMessages {
+  color: #b0b0b0;
+  text-align: center;
+  margin-top: 35%;
+}

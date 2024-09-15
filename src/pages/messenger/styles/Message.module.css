@@ -18,7 +18,6 @@
   max-width: 60%;
   padding: 10px;
   border-radius: 10px;
-  position: relative;
 }
 
 .name {
@@ -32,7 +31,6 @@
 
 .time {
   font-size: 12px;
-  position: absolute;
   right: -40px;
   bottom: 0;
 }
@@ -45,4 +43,45 @@
 .friend {
   background-color: #757575;
   color: #ffffff;
+}
+
+/* Стили для статусов */
+.status {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  display: flex;
+  align-items: center;
+}
+
+.statusIcon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.statusIcon:hover {
+  transform: scale(1.2);
+}
+
+.statusTooltip {
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  right: 0;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.statusIcon:hover + .statusTooltip {
+  visibility: visible;
+  opacity: 1;
 }

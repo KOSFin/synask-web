@@ -39,3 +39,12 @@
 .recommendations, .myMusic {
     margin-top: 20px;
 }
+
+@media (max-width: 768px) {
+  .App {
+    width: 100%;
+    padding: 0px;
+    max-width: none;
+
+  }
+}

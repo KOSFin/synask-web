@@ -16,7 +16,8 @@ export const MessageHandler = () => {
         newMessagesCount, setNewMessagesCount,
         isPageVisible, setIsPageVisible,
         selectedChat, setSelectedChat,
-        messageStatus, setMessageStatus
+        messageStatus, setMessageStatus,
+        pendingQueue, setPendingQueue
     } = useContext(ChatContext);
     const { isAuthenticated, userId, usersCache, setUsersCache } = useContext(UserContext);
 
@@ -109,89 +110,96 @@ export const MessageHandler = () => {
     };
 
     useEffect(() => {
-      if (!selectedChatId) return;
+  if (!selectedChatId) return;
 
-      console.log(selectedChatId);
-
-      const fetchSelectedChat = async () => {
+  const fetchSelectedChat = async () => {
         // 1. Проверяем, не совпадает ли selectedChatId с userId
         if (selectedChatId === userId) {
-            setSelectedChat({ error: 'Указанное айди совпадает с айди пользователя' });
-            return;
+          setSelectedChat({ error: 'Указанное айди совпадает с айди пользователя' });
+          return;
         }
 
-        // 2. Проверяем, существует ли чат с таким selectedChatId
-        const chat = chatList.find(chat => chat.id === selectedChatId);
-        if (chat) {
-            setSelectedChat(chat);
-            return;
+        // 2. Проверяем в состоянии, существует ли чат с таким selectedChatId
+        const chatFromState = chatList.find(chat => chat.id === selectedChatId);
+        if (chatFromState) {
+          setSelectedChat(chatFromState);
+          return;
         }
 
-        // 3. Если чата с таким selectedChatId не существует, ищем чат, где userId является членом
+        // 3. Проверяем кеш чатов в локальном хранилище
+        const cachedChats = getCachedChats();
+        const chatFromCache = cachedChats.find(chat => chat.id === selectedChatId);
+        if (chatFromCache) {
+          setSelectedChat(chatFromCache);
+          return;
+        }
+
+        // 4. Если чата с таким selectedChatId не существует, ищем чат, где userId является членом
         const chatWithUser = chatList.find(
-            chat => chat.members.includes(selectedChatId) && chat.is_group === false
+          chat => chat.members.includes(selectedChatId) && chat.is_group === false
         );
         if (chatWithUser) {
-            setSelectedChat(chatWithUser);
-            return;
+          setSelectedChat(chatWithUser);
+          return;
         }
 
-        // 4. Если не найдено чатов, проверяем в базе пользователей
+        // 5. Если не найдено чатов, проверяем в базе данных пользователей
         const { data: userInfo, error: userError } = await supabase
-            .from('users_public_information')
-            .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id')
-            .eq('auth_id', selectedChatId)
-            .single();
+          .from('users_public_information')
+          .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id')
+          .eq('auth_id', selectedChatId)
+          .single();
 
         if (userError || !userInfo) {
-            setSelectedChat({ error: 'Диалога по указанному айди не существует или пользователь был удалён' });
+          setSelectedChat({ error: 'Диалога по указанному айди не существует или пользователь был удалён' });
         } else {
-            // Создаём новый чат с участником, если чат не найден
-            setSelectedChat({
-                membersInfo: [userInfo, { auth_id: userId }], // Добавляем информацию о текущем пользователе
-                chatExists: false
-            });
+          // Создаём новый чат с участником, если чат не найден
+          setSelectedChat({
+            membersInfo: [userInfo, { auth_id: userId }], // Добавляем информацию о текущем пользователе
+            chatExists: false
+          });
         }
       };
 
-
       // Вызываем сначала функцию поиска или создания чата
       fetchSelectedChat();
-    }, [selectedChatId, chatList]);
+  }, [selectedChatId, chatList]);
 
-    // Теперь загружаем сообщения только после установки selectedChat
-    useEffect(() => {
-        if (!selectedChat.id || selectedChat.error) return;
+  // Теперь загружаем сообщения только после установки selectedChat
+  useEffect(() => {
+      if (!selectedChat.id || selectedChat.error) return;
 
-        setIsLoadingMessages(true);
+      setIsLoadingMessages(true);
 
-        const fetchMessages = async () => {
-            if (messagesCache[selectedChat.id]) {
-                setMessages(messagesCache[selectedChat.id]);
-                setIsLoadingMessages(false);
-                return;
-            }
+      const fetchMessages = async () => {
+        // Проверяем кеш сообщений
+        if (messagesCache[selectedChat.id]) {
+          setMessages(messagesCache[selectedChat.id]);
+          setIsLoadingMessages(false);
+          return;
+        }
 
-            const cachedMessages = getCachedMessages(selectedChat.id);
-            if (cachedMessages.length > 0) {
-                setMessages(cachedMessages);
-                setIsLoadingMessages(false);
-            } else {
-                setMessages([]);
-            }
+        // Проверяем кеш сообщений в локальном хранилище
+        const cachedMessages = getCachedMessages(selectedChat.id);
+        if (cachedMessages.length > 0) {
+          setMessages(cachedMessages);
+          setIsLoadingMessages(false);
+          return;
+        }
 
-            const fetchedMessages = await fetchMessagesFromDB(selectedChat.id);
-            setMessages(fetchedMessages);
-            setMessagesCache(prevCache => ({
-                ...prevCache,
-                [selectedChat.id]: fetchedMessages
-            }));
-            setIsLoadingMessages(false);
-            saveMessagesToCache(selectedChat.id, fetchedMessages);
-        };
+        // Если в кеше нет сообщений, загружаем из базы данных
+        const fetchedMessages = await fetchMessagesFromDB(selectedChat.id);
+        setMessages(fetchedMessages);
+        setMessagesCache(prevCache => ({
+          ...prevCache,
+          [selectedChat.id]: fetchedMessages
+        }));
+        setIsLoadingMessages(false);
+        saveMessagesToCache(selectedChat.id, fetchedMessages);
+      };
 
-        fetchMessages();
-    }, [selectedChat]);
+      fetchMessages();
+  }, [selectedChat]);
 
 
     const getCachedChats = () => {
@@ -448,7 +456,7 @@ export const MessageHandler = () => {
             const chatMessages = prevCache[deletedMessage.chat_id] || [];
             const updatedMessages = chatMessages.filter(msg => msg.id !== deletedMessage.id);
             saveMessagesToCache(deletedMessage.chat_id, updatedMessages);
-    
+
             return {
                 ...prevCache,
                 [deletedMessage.chat_id]: updatedMessages
@@ -501,37 +509,52 @@ export const MessageHandler = () => {
 
     useEffect(() => {
         const sendMessages = async () => {
-            for (const message of messages) {
-                if (messageStatus[message.id] === 'pending') {
-                    try {
-                        console.log('Отправка сообщения', message);
-                        console.log('Список сообщений', messages);
-                        const { dataIn, errorIn } = await supabase
-                            .from('messages')
-                            .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id }])
+            if (pendingQueue.length === 0) return; // Если нет сообщений в очереди, ничего не делаем
 
-                        if (errorIn) throw error;
+            const message = pendingQueue[0]; // Берем первое сообщение в очереди
 
-                        const { data, error } = await supabase
-                            .from('messages')
-                            .select();
+            if (messageStatus[message.id] === 'pending') {
+                try {
+                    console.log('Отправка сообщения', message);
 
-                        setMessageStatus(prevStatus => ({
-                            ...prevStatus,
-                            [message.id]: 'sent'
-                        }));
-                    } catch (error) {
-                        console.error('Ошибка отправки сообщения:', error);
+                    const { dataIn, errorIn } = await supabase
+                        .from('messages')
+                        .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id }]);
+
+                    if (errorIn) {
+                        // Обновляем статус на 'failed'
                         setMessageStatus(prevStatus => ({
                             ...prevStatus,
                             [message.id]: 'failed'
                         }));
+                        throw errorIn;
                     }
+
+                    // Обновляем статус на 'sent'
+                    setMessageStatus(prevStatus => ({
+                        ...prevStatus,
+                        [message.id]: 'sent'
+                    }));
+
+                    // Убираем сообщение из очереди
+                    setPendingQueue((prevQueue) => prevQueue.slice(1));
+
+                } catch (error) {
+                    console.error('Ошибка отправки сообщения:', error);
+
+                    // Обновляем статус на 'failed'
+                    setMessageStatus(prevStatus => ({
+                        ...prevStatus,
+                        [message.id]: 'failed'
+                    }));
                 }
             }
         };
-        sendMessages();
-    }, [messages, messageStatus]);
+
+        if (pendingQueue.length > 0) {
+            sendMessages();
+        }
+    }, [pendingQueue, messageStatus]);
 
 
     return null;

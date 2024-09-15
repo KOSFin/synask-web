@@ -16,8 +16,6 @@ const supabase = getSupabaseClient();
 const Messenger = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [chatListWidth, setChatListWidth] = useState(250);
-  const resizerRef = useRef(null);
-  const isResizing = useRef(false);
 
   const { accentColor } = useContext(AccentColorContext);
   const { setSelectedChatId, selectedChatId, selectedChat } = useContext(ChatContext);
@@ -44,36 +42,12 @@ const Messenger = () => {
     }
   }, [location.search, selectedChatId, setSelectedChatId]);
 
-  const startResizing = (e) => {
-    resizerRef.current = e.clientX;
-    isResizing.current = true;
-    document.addEventListener('mousemove', resizePanel);
-    document.addEventListener('mouseup', stopResizing);
-    document.body.style.cursor = 'col-resize';
-  };
-
-  const resizePanel = (e) => {
-    if (!isResizing.current) return;
-    const newWidth = chatListWidth + (e.clientX - resizerRef.current);
-    if (newWidth > 50 && newWidth < 500) {
-      setChatListWidth(newWidth);
-      resizerRef.current = e.clientX;
-    }
-  };
 
   const handleCloseChat = () => {
     navigate({ search: '' });
     setSelectedChatId(null);
     // setIsChatVisible(false); // Remove this line if not used
   };
-
-  const stopResizing = () => {
-    isResizing.current = false;
-    document.removeEventListener('mousemove', resizePanel);
-    document.removeEventListener('mouseup', stopResizing);
-    document.body.style.cursor = 'default';
-  };
-
 
   const createChat = async () => {
       try {
@@ -128,7 +102,7 @@ const Messenger = () => {
           )}
           <ChatList searchTerm={searchTerm} />
         </div>
-        {!isMobile && <div className={styles.resizer} onMouseDown={startResizing}></div>}
+        {!isMobile && <div className={styles.resizer}></div>}
 
         <div className={`${styles.main} ${selectedChatId ? styles.chatActive : ''}`}>
           {selectedChatId ? (

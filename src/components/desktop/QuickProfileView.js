@@ -113,9 +113,9 @@ const QuickProfileView = ({ profile, onClose, position }) => {
         </div>
         <div className={styles.userActions}>
           <div className={styles.ActionsButtons}>
-            <div className={styles.userActionsBtn}>
+            <Link to={`msg?id=${profile.auth_id}`} className={styles.userActionsBtn}>
               <FontAwesomeIcon icon={faEnvelope} className={styles.actionIcon} /> Сообщение
-            </div>
+            </Link>
             <div className={styles.userActionsBtn} onClick={handleAddContact} style={{
               backgroundColor: isInContacts ? 'rgba(206, 1, 252, 0.3)' : 'rgba(255, 255, 255, 0.2)',
             }}>
