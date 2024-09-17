@@ -131,7 +131,6 @@ export const MessageHandler = () => {
         const chatFromCache = cachedChats.find(chat => chat.id === selectedChatId);
         if (chatFromCache) {
           setSelectedChat(chatFromCache);
-          return;
         }
 
         // 4. Если чата с таким selectedChatId не существует, ищем чат, где userId является членом
@@ -140,7 +139,6 @@ export const MessageHandler = () => {
         );
         if (chatWithUser) {
           setSelectedChat(chatWithUser);
-          return;
         }
 
         // 5. Если не найдено чатов, проверяем в базе данных пользователей
@@ -184,7 +182,6 @@ export const MessageHandler = () => {
         if (cachedMessages.length > 0) {
           setMessages(cachedMessages);
           setIsLoadingMessages(false);
-          return;
         }
 
         // Если в кеше нет сообщений, загружаем из базы данных
