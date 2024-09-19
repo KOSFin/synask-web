@@ -2,15 +2,18 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import Message from './Message';
 import styles from '../styles/MessageList.module.css';
 import ChatContext from '../../../components/ChatContext';
+import UserContext from '../../../components/UserContext';
 import { format, isToday, isYesterday, differenceInDays, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import MessageMenu from './MessageMenu';
 import MessengerSettingsContext from '../../../components/contexts/MessengerSettingsContext';
+import load from '../../Loader.module.css';
 
 const MessageList = () => {
-  const { messages, selectedChat, selectedChatId, pendingQueue, setPendingQueue, messageStatus, setMessageStatus } = useContext(ChatContext);
+  const { userId } = useContext(UserContext);
+  const { messages, selectedChat, selectedChatId, pendingQueue, setPendingQueue, messageStatus, setMessageStatus, isLoadingMessages } = useContext(ChatContext);
   const { backgroundChat } = useContext(MessengerSettingsContext);
   const [calendarDate, setCalendarDate] = useState(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -146,6 +149,16 @@ const MessageList = () => {
     return <div className={styles.noMessages}>Нет сообщений</div>;
   }
 
+  if (isLoadingMessages) {
+    return (
+      <>
+          <div className={load.spinner}>
+            <div></div>
+          </div>
+      </>
+    );
+  }
+
   return (
     <div
       className={styles.messages}
@@ -177,9 +190,12 @@ const MessageList = () => {
                     user: `${userInfo.first_name} ${userInfo.last_name}`,
                     text: message.content,
                     time: new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    isUser: message.user_id === selectedChat.currentUserId,
+                    isUser: message.user_id === userId,
                     avatar: userInfo.avatar_url,
+                    replyTo: message.reply_to,
                   }}
+                  status={renderMessageStatus(message.id)}
+                  replyMessages={messages}
                 />
                 {message.user_id === selectedChat.currentUserId && renderMessageStatus(message.id)}
               </div>
@@ -194,7 +210,7 @@ const MessageList = () => {
           <Message
             message={{
               id: message.id,
-              user: 'Пользователь',
+              user: 'Вы',
               text: message.content,
               time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
               isUser: 'yes',

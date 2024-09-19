@@ -40,3 +40,25 @@
   width: 200px;
   opacity: 1;
 }
+
+.loadingText {
+  margin-left: 2px;
+  margin-right: 5px;
+  margin-bottom: 0;
+}
+
+.searchPanel .searchInput:focus {
+  width: 300px;
+}
+
+.searchPanel .searchInput:focus + p {
+  opacity: 0;
+}
+
+.searchPanel .searchInput:focus + p + p {
+  opacity: 1;
+}
+
+.searchPanel .searchInput:focus + p + p + p {
+  opacity: 0;
+}

@@ -8,9 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { deleteChatById } from '../../../components/utils'; // Импортируйте функцию удаления
 import VersionContext from '../../../components/contexts/VersionContext';
+import load from '../../Loader.module.css';
 
 const ChatHeader = () => {
-  const { setSelectedChatId, selectedChatId, selectedChat, isLoadingMessages } = useContext(ChatContext);
+  const { setSelectedChatId, selectedChatId, selectedChat, isLoadingMessages, isLoadingUser } = useContext(ChatContext);
   const { userId } = useContext(UserContext);
   const navigate = useNavigate();
   const isMobile = window.innerWidth <= 768;
@@ -129,53 +130,73 @@ const ChatHeader = () => {
           <FontAwesomeIcon icon={faChevronLeft} style={{ color: 'white', backgroundColor: 'black', borderRadius: '5px', marginRight: '10px'}}/>
         </button>
       )}
-      <DropdownMenu
-        onDeleteChat={() => setShowConfirmation(true)} // Показать окно подтверждения
-        onProfileClick={handleProfileClick}
-        onCopyLink={handleCopyLink}
-        show={showDropdown}
-        onClose={() => setShowDropdown(false)}
-      />
-      {showConfirmation && (
-        <div className={styles.confirmationOverlay}>
-          <div className={styles.confirmationDialog}>
-            <h3>Подтвердите удаление чата</h3>
-            <p>Вы уверены, что хотите удалить чат с {name}?</p>
-            <label>
-              <input
-                type="checkbox"
-                checked={confirmChecked}
-                onChange={handleConfirmChange}
-              />
-              <span>Я подтверждаю удаление</span>
-            </label>
-            <button
-              onClick={handleDeleteChat}
-              disabled={!confirmChecked}
-              className={styles.confirmButton}
-            >
-              Удалить
-            </button>
-            <button
-              onClick={() => setShowConfirmation(false)}
-              className={styles.cancelButton}
-            >
-              Отмена
-            </button>
+      {selectedChat ? (
+        <>
+          <DropdownMenu
+            onDeleteChat={() => setShowConfirmation(true)} // Показать окно подтверждения
+            onProfileClick={handleProfileClick}
+            onCopyLink={handleCopyLink}
+            show={showDropdown}
+            onClose={() => setShowDropdown(false)}
+          />
+          {showConfirmation && (
+            <div className={styles.confirmationOverlay}>
+              <div className={styles.confirmationDialog}>
+                <h3>Подтвердите удаление чата</h3>
+                <p>Вы уверены, что хотите удалить чат с {name}?</p>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={confirmChecked}
+                    onChange={handleConfirmChange}
+                  />
+                  <span>Я подтверждаю удаление</span>
+                </label>
+                <button
+                  onClick={handleDeleteChat}
+                  disabled={!confirmChecked}
+                  className={styles.confirmButton}
+                >
+                  Удалить
+                </button>
+                <button
+                  onClick={() => setShowConfirmation(false)}
+                  className={styles.cancelButton}
+                >
+                  Отмена
+                </button>
+              </div>
+            </div>
+          )}
+          <div
+            className={styles.avatar}
+            style={{ backgroundImage: avatar ? `url(${avatar})` : undefined }}
+          />
+          <div className={styles.info}>
+            <div className={styles.name}>{name}</div>
+            {!isLoadingUser ? (
+              <div className={styles.status}>{subText}</div>
+            ) : (
+              <div className={styles.status}>
+                <div className={load.spinner}>
+                  <div></div>
+                </div>
+                <p className={styles.loadingText}>Загрузка...</p>
+              </div>
+            )}
           </div>
-        </div>
+          <button className={styles.backButton} onClick={() => setShowDropdown(!showDropdown)}>
+            <FontAwesomeIcon icon={faEllipsisV} style={{ color: 'white', backgroundColor: 'black', borderRadius: '5px', marginRight: '10px'}}/>
+          </button>
+        </>
+      ) : (
+        <>
+          <div className={styles.loading}>
+            <div></div>
+          </div>
+          <p className={styles.loadingText}>Загрузка...</p>
+        </>
       )}
-      <div
-        className={styles.avatar}
-        style={{ backgroundImage: avatar ? `url(${avatar})` : undefined }}
-      />
-      <div className={styles.info}>
-        <div className={styles.name}>{name}</div>
-        <div className={styles.status}>{subText}</div>
-      </div>
-      <button className={styles.backButton} onClick={() => setShowDropdown(!showDropdown)}>
-        <FontAwesomeIcon icon={faEllipsisV} style={{ color: 'white', backgroundColor: 'black', borderRadius: '5px', marginRight: '10px'}}/>
-      </button>
     </div>
   );
 };

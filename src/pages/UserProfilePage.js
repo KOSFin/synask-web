@@ -177,7 +177,7 @@ const UserProfilePage = () => {
                     <div>
                         <div className={p.userActionsBar}>
                             <div className={p.ActionsButtons}>
-                                <Link to={'/options'} className={p.userActionsBtn}>
+                                <Link to={`${version}/options`} className={p.userActionsBtn}>
                                     <FontAwesomeIcon icon={faEdit} className={p.actionIcon} /> Редактировать
                                 </Link>
                                 <div className={p.userActionsBtn}>

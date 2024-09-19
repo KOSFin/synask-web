@@ -20,7 +20,7 @@ const DropdownMenu = ({ onDeleteChat, onProfileClick, onCopyLink, show, onClose 
         <FontAwesomeIcon icon={faTrashAlt} />
         <span>Удалить чат</span>
       </button>
-      <button onClick={onClose} className={styles.closeButton}>X</button>
+      <button onClick={onClose} className={styles.closeButton}>X Закрыть окно</button>
     </div>
   );
 };

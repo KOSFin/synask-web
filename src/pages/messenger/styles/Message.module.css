@@ -1,87 +1,112 @@
-/* src/pages/messenger/styles/Message.module.css */
-.message {
+.messageGroup {
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 10px;
+  align-items: flex-end;
+  margin-bottom: 15px;
+  position: relative;
 }
 
-.avatar {
+.groupStart .avatar {
   width: 40px;
   height: 40px;
-  border-radius: 25%;
+  border-radius: 50%;
   background-size: cover;
   background-position: center;
   margin-right: 10px;
+  position: sticky;
+  top: 10px;
 }
 
-.content {
-  max-width: 60%;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.name {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.text {
-  margin-bottom: 5px;
-}
-
-.time {
-  font-size: 12px;
-  right: -40px;
-  bottom: 0;
+.message {
+  max-width: 70%;
+  padding: 10px 15px 15px 10px;
+  border-radius: 15px;
+  position: relative;
+  margin: 0;
+  clear: both;
 }
 
 .user {
   background-color: #1e88e5;
   color: #ffffff;
+  align-self: flex-end;
+  border-bottom-left-radius: 0px;
 }
 
 .friend {
   background-color: #757575;
   color: #ffffff;
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
 }
 
-/* Стили для статусов */
+.name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.text {
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.time {
+  font-size: 12px;
+  color: #989898;
+  text-align: right;
+  position: absolute;
+  bottom: -2px;
+  right: -35px;
+  font-weight: bold;
+}
+
 .status {
   position: absolute;
-  right: 0;
-  bottom: -5px;
+  bottom: 0;
+  right: 3px;
   display: flex;
   align-items: center;
-}
-
-.statusIcon {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.statusIcon:hover {
-  transform: scale(1.2);
-}
-
-.statusTooltip {
-  visibility: hidden;
-  background-color: #333;
+  justify-content: center;
   color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  right: 0;
-  margin-left: -60px;
-  opacity: 0;
-  transition: opacity 0.3s;
+  font-size: 14px;
 }
 
-.statusIcon:hover + .statusTooltip {
-  visibility: visible;
-  opacity: 1;
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 25%;
+  background-size: cover;
+  background-position: center;
+  margin-right: 10px;
+  filter: brightness(150%);
+  z-index: 1;
+}
+
+.replyIcon {
+  position: absolute;
+  bottom: 15px;
+  right: -25px;
+  cursor: pointer;
+  color: #ffffff9c;
+  font-size: 10px;
+  background-color: #84848433;
+  border-radius: 50%;
+  padding: 5px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.replyBox {
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 4px;
+  position: relative;
+  border-left: 4px solid aqua;
+}
+
+.replyName {
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.replyText {
+  font-size: 10px;
 }

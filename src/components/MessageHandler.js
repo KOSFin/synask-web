@@ -13,6 +13,7 @@ export const MessageHandler = () => {
         selectedChatId,
         isLoadingChats, setIsLoadingChats,
         isLoadingMessages, setIsLoadingMessages,
+        isLoadingUser, setIsLoadingUser,
         newMessagesCount, setNewMessagesCount,
         isPageVisible, setIsPageVisible,
         selectedChat, setSelectedChat,
@@ -28,6 +29,7 @@ export const MessageHandler = () => {
         if (!isAuthenticated) return;
 
         setIsLoadingChats(true);
+        setIsLoadingUser(true);
 
         const initializeChats = async () => {
             if (chatsCache.length > 0) {
@@ -39,7 +41,6 @@ export const MessageHandler = () => {
             const cachedChats = getCachedChats();
             if (cachedChats.length > 0) {
                 setChatList(cachedChats);
-                setIsLoadingChats(false);
                 setChatsCache(cachedChats);
             }
 
@@ -53,6 +54,7 @@ export const MessageHandler = () => {
 
             setChatList(enrichedChats);
             setIsLoadingChats(false);
+            // setIsLoadingUser(false);
             setChatsCache(enrichedChats);
             saveChatsToCache(enrichedChats);
 
@@ -110,12 +112,16 @@ export const MessageHandler = () => {
     };
 
     useEffect(() => {
-  if (!selectedChatId) return;
+      if (!selectedChatId) return;
+      setSelectedChat(null);
+      setIsLoadingUser(true);
 
-  const fetchSelectedChat = async () => {
+      const fetchSelectedChat = async () => {
         // 1. Проверяем, не совпадает ли selectedChatId с userId
         if (selectedChatId === userId) {
           setSelectedChat({ error: 'Указанное айди совпадает с айди пользователя' });
+          setIsLoadingMessages(false);
+          setIsLoadingUser(false);
           return;
         }
 
@@ -123,6 +129,7 @@ export const MessageHandler = () => {
         const chatFromState = chatList.find(chat => chat.id === selectedChatId);
         if (chatFromState) {
           setSelectedChat(chatFromState);
+          setIsLoadingUser(false);
           return;
         }
 
@@ -135,39 +142,42 @@ export const MessageHandler = () => {
 
         // 4. Если чата с таким selectedChatId не существует, ищем чат, где userId является членом
         const chatWithUser = chatList.find(
-          chat => chat.members.includes(selectedChatId) && chat.is_group === false
+            chat => chat.members.includes(selectedChatId) && chat.is_group === false
         );
         if (chatWithUser) {
-          setSelectedChat(chatWithUser);
+            setSelectedChat(chatWithUser);
+            setIsLoadingUser(false);
+            return;
         }
 
         // 5. Если не найдено чатов, проверяем в базе данных пользователей
         const { data: userInfo, error: userError } = await supabase
-          .from('users_public_information')
-          .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id')
-          .eq('auth_id', selectedChatId)
-          .single();
+            .from('users_public_information')
+            .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id')
+            .eq('auth_id', selectedChatId)
+            .single();
 
         if (userError || !userInfo) {
-          setSelectedChat({ error: 'Диалога по указанному айди не существует или пользователь был удалён' });
+            setSelectedChat({ error: 'Диалога по указанному айди не существует или пользователь был удалён' });
         } else {
-          // Создаём новый чат с участником, если чат не найден
-          setSelectedChat({
-            membersInfo: [userInfo, { auth_id: userId }], // Добавляем информацию о текущем пользователе
-            chatExists: false
-          });
+            // Создаём новый чат с участником, если чат не найден
+            setSelectedChat({
+                membersInfo: [userInfo, { auth_id: userId }], // Добавляем информацию о текущем пользователе
+                chatExists: false
+            });
         }
+        setIsLoadingUser(false);
       };
-
       // Вызываем сначала функцию поиска или создания чата
       fetchSelectedChat();
-  }, [selectedChatId, chatList]);
+    }, [selectedChatId, chatList]);
 
-  // Теперь загружаем сообщения только после установки selectedChat
-  useEffect(() => {
-      if (!selectedChat.id || selectedChat.error) return;
+    // Теперь загружаем сообщения только после установки selectedChat
+    useEffect(() => {
+      if (!selectedChat || !selectedChat.id || selectedChat.error) return;
 
       setIsLoadingMessages(true);
+
 
       const fetchMessages = async () => {
         // Проверяем кеш сообщений
@@ -180,23 +190,26 @@ export const MessageHandler = () => {
         // Проверяем кеш сообщений в локальном хранилище
         const cachedMessages = getCachedMessages(selectedChat.id);
         if (cachedMessages.length > 0) {
+          console.log(cachedMessages);
           setMessages(cachedMessages);
           setIsLoadingMessages(false);
         }
 
         // Если в кеше нет сообщений, загружаем из базы данных
         const fetchedMessages = await fetchMessagesFromDB(selectedChat.id);
-        setMessages(fetchedMessages);
-        setMessagesCache(prevCache => ({
-          ...prevCache,
-          [selectedChat.id]: fetchedMessages
-        }));
+        if (!fetchedMessages.error) {
+            setMessages(fetchedMessages);
+            setMessagesCache(prevCache => ({
+              ...prevCache,
+              [selectedChat.id]: fetchedMessages
+            }));
+            saveMessagesToCache(selectedChat.id, fetchedMessages);
+        }
         setIsLoadingMessages(false);
-        saveMessagesToCache(selectedChat.id, fetchedMessages);
       };
 
       fetchMessages();
-  }, [selectedChat]);
+    }, [selectedChat]);
 
 
     const getCachedChats = () => {
@@ -227,7 +240,10 @@ export const MessageHandler = () => {
                 .order('created_at', { ascending: false })
                 .limit(1);
 
-            if (error) throw error;
+            if (error) {
+                return 'Ошибка получения данных';
+                throw error;
+            }
 
             return messages.length > 0 ? messages[0] : null;
         } catch (error) {
@@ -291,7 +307,10 @@ export const MessageHandler = () => {
                 .eq('chat_id', chatId)
                 .order('created_at', { ascending: true });
 
-            if (error) throw error;
+            if (error) {
+                return { data, error };
+                throw error;
+            }
 
             return Array.isArray(data) ? data : [];
         } catch (error) {
@@ -446,7 +465,6 @@ export const MessageHandler = () => {
     };
 
 
-
     const handleMessageDelete = async (deletedMessage) => {
         // Удаляем сообщение из кэша
         setMessagesCache(prevCache => {
@@ -461,18 +479,30 @@ export const MessageHandler = () => {
         });
 
         // Удаляем сообщение из UI
-        setMessages(prevMessages => prevMessages.filter(msg => msg.id !== deletedMessage.id));
+        setMessages(prevMessages => {
+            const updatedMessages = prevMessages.filter(msg => msg.id !== deletedMessage.id);
+
+            // Обновляем кэш с учетом удаления сообщения
+            setMessagesCache(prevCache => ({
+                ...prevCache,
+                [deletedMessage.chat_id]: updatedMessages
+            }));
+
+            saveMessagesToCache(deletedMessage.chat_id, updatedMessages);
+
+            return updatedMessages;
+        });
 
         // Обновляем поле last_message в списке чатов
         setChatList(prevChats => {
             const updatedChatList = prevChats.map(chat => {
                 if (chat.id === deletedMessage.chat_id) {
                     // Если в чате остались сообщения, обновляем last_message
-                    const chatMessages = prevChats.find(c => c.id === chat.id)?.messages || [];
+                    const chatMessages = updatedChatList.find(c => c.id === chat.id)?.messages || [];
                     if (chatMessages.length > 0) {
                         return { ...chat, last_message: chatMessages[chatMessages.length - 1] };
                     }
-                    // Если сообщений больше нет, можно сбросить last_message или оставить какое-то значение
+                    // Если сообщений больше нет, сбрасываем last_message
                     return { ...chat, last_message: null };
                 }
                 return chat;
@@ -480,10 +510,10 @@ export const MessageHandler = () => {
 
             // Сохраняем обновленный список чатов в кэш
             saveChatsToCache(updatedChatList);
+
             return updatedChatList;
         });
     };
-
 
 
     const playNotificationSound = () => {
@@ -516,7 +546,7 @@ export const MessageHandler = () => {
 
                     const { dataIn, errorIn } = await supabase
                         .from('messages')
-                        .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id }]);
+                        .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id, reply_to: message.reply_to}]);
 
                     if (errorIn) {
                         // Обновляем статус на 'failed'

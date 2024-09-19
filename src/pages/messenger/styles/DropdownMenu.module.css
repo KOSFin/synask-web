@@ -13,7 +13,8 @@
 
 .menuItem {
   padding: 10px;
-  border-bottom: 1px solid #444;
+  border: none;
+  border: 1px solid #555;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -38,4 +39,6 @@
   color: #fff;
   font-size: 16px;
   align-self: flex-end;
+  width: 100%;
+  color: red;
 }

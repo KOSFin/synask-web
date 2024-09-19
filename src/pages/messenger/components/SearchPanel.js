@@ -27,10 +27,12 @@ const SearchPanel = ({ setSearchTerm }) => {
     <div className={styles.searchPanel}>
       <div className={styles.icons}>
         {isLoadingChats ? (
-          <div className={load.spinner}>
-            <div></div>
-            <div></div>
-          </div>
+          <>
+              <div className={load.spinner}>
+                <div></div>
+              </div>
+              <p className={styles.loadingText}>Загрузка...</p>
+          </>
         ) : (
           <FontAwesomeIcon
             icon={isSearchOpen ? faTimes : faSearch}

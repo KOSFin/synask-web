@@ -52,14 +52,13 @@ const MobileSidebar = () => {
             to={item.path}
             onClick={() => handleItemClick(item)}
             className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
-            style={{ borderColor: accentColor }}
           >
             <FontAwesomeIcon icon={item.icon} className={styles.icon} />
             {isMenuOpen && item.label !== 'Еще' && <span className={styles.label}>{item.label}</span>}
           </Link>
         ))}
       </div>
-      <div className={`${styles.additionalMenu} ${isMenuOpen ? styles.open : ''}`} style={{ borderColor: accentColor }}>
+      <div className={`${styles.additionalMenu} ${isMenuOpen ? styles.open : ''}`} style={{ color: accentColor }}>
         {additionalItems.map(item => (
           <Link
             key={item.path}

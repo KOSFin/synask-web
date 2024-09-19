@@ -139,3 +139,36 @@ textarea {
      margin-bottom: 0px;
   }
 }
+
+.replyBlock {
+  display: flex;
+  align-items: flex-start;
+  padding: 8px;
+  background: #444;
+  border-radius: 4px;
+  background: #4d4d4d75;
+}
+
+.replyBlock .icon {
+  color: #fff;
+  margin-right: 8px;
+}
+
+.replyInfo {
+  flex: 1;
+}
+
+.replyUserName {
+  font-weight: bold;
+  color: #fff;
+}
+
+.replyText {
+  color: #ccc;
+}
+
+.cancelReply {
+  cursor: pointer;
+  color: #fff;
+  font-size: 18px;
+}

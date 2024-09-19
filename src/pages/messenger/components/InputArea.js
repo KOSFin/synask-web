@@ -1,13 +1,13 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import styles from '../styles/InputArea.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faSmile, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperclip, faSmile, faPaperPlane, faReply } from '@fortawesome/free-solid-svg-icons';
 import ChatContext from '../../../components/ChatContext';
 import UserContext from '../../../components/UserContext';
-import Picker from 'emoji-picker-react'; // Updated import
+import Picker from 'emoji-picker-react';
 
 const InputArea = () => {
-  const { messages, setMessages, messageStatus, setMessageStatus, selectedChat, pendingQueue, setPendingQueue } = useContext(ChatContext);
+  const { messages, setMessages, messageStatus, setMessageStatus, selectedChat, pendingQueue, setPendingQueue, replyTo, setReplyTo } = useContext(ChatContext);
   const { userId } = useContext(UserContext);
   const [inputValue, setInputValue] = useState('');
   const [link, setLink] = useState('');
@@ -17,13 +17,16 @@ const InputArea = () => {
   const [characterCount, setCharacterCount] = useState(0);
   const textareaRef = useRef(null);
 
+
+
+
   const handleLinkSubmit = () => {
     setLinkType('image'); // Example type
     setShowLinkPopup(false);
   };
 
   const handleEmojiClick = (emoji) => {
-    setInputValue((prev) => prev + emoji.emoji); // Insert emoji
+    setInputValue((prev) => prev + emoji.emoji);
     setCharacterCount((prev) => prev + emoji.emoji.length);
   };
 
@@ -60,8 +63,6 @@ const InputArea = () => {
       return;
     }
 
-    console.log('Sending message');
-
     const newMessage = {
       id: Date.now().toString(),
       chat_id: selectedChat.id,
@@ -69,9 +70,9 @@ const InputArea = () => {
       user_id: userId,
       status: 'pending',
       created_at: date.toISOString(),
+      reply_to: replyTo || null
     };
 
-    // Добавляем сообщение в очередь на отправку
     setPendingQueue((prevQueue) => [...prevQueue, newMessage]);
 
     setMessageStatus((prevStatus) => ({
@@ -81,6 +82,7 @@ const InputArea = () => {
 
     setInputValue('');
     setCharacterCount(0);
+    setReplyTo(null); // Clear reply state after sending message
   };
 
   const handleKeyDown = (e) => {
@@ -95,7 +97,29 @@ const InputArea = () => {
     }
   };
 
+  const handleCancelReply = () => {
+    setReplyTo(null);
+  };
+
+  const replyMessage = messages.find(msg => msg.id === replyTo);
+  const userInfo = replyMessage ? selectedChat.membersInfo.find(member => member.auth_id === replyMessage.user_id) : null;
+  const replyUserName = userInfo ? `${userInfo.first_name} ${userInfo.last_name}` : 'Удалённый пользователь'; // Replace with actual username if possible
+  const replyText = replyMessage ? replyMessage.content : '';
+
   return (
+  <>
+      {replyTo && replyMessage && (
+        <div className={styles.replyBlock}>
+          <FontAwesomeIcon icon={faReply} />
+          <div className={styles.replyInfo}>
+            <div className={styles.replyUserName}>В ответ {replyUserName}</div>
+            <div className={styles.replyText}>{replyText}</div>
+          </div>
+          <div className={styles.cancelReply} onClick={handleCancelReply}>
+            &times;
+          </div>
+        </div>
+      )}
     <div className={styles.inputArea}>
       <div className={styles.icon} onClick={handleLinkPopupToggle}>
         <FontAwesomeIcon icon={faPaperclip} />
@@ -147,6 +171,7 @@ const InputArea = () => {
         <FontAwesomeIcon icon={faPaperPlane} />
       </div>
     </div>
+  </>
   );
 };
 
