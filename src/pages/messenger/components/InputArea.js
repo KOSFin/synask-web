@@ -5,9 +5,11 @@ import { faPaperclip, faSmile, faPaperPlane, faReply } from '@fortawesome/free-s
 import ChatContext from '../../../components/ChatContext';
 import UserContext from '../../../components/UserContext';
 import Picker from 'emoji-picker-react';
+import MessengerSettingsContext from '../../../components/contexts/MessengerSettingsContext';
 
 const InputArea = () => {
   const { messages, setMessages, messageStatus, setMessageStatus, selectedChat, pendingQueue, setPendingQueue, replyTo, setReplyTo } = useContext(ChatContext);
+  const { colorMessage } = useContext(MessengerSettingsContext);
   const { userId } = useContext(UserContext);
   const [inputValue, setInputValue] = useState('');
   const [link, setLink] = useState('');
@@ -16,9 +18,6 @@ const InputArea = () => {
   const [showLinkPopup, setShowLinkPopup] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const textareaRef = useRef(null);
-
-
-
 
   const handleLinkSubmit = () => {
     setLinkType('image'); // Example type
@@ -110,9 +109,9 @@ const InputArea = () => {
   <>
       {replyTo && replyMessage && (
         <div className={styles.replyBlock}>
-          <FontAwesomeIcon icon={faReply} />
+          <FontAwesomeIcon style={{ color:'white', marginRight: '10px', height: '30px'}}icon={faReply} />
           <div className={styles.replyInfo}>
-            <div className={styles.replyUserName}>В ответ {replyUserName}</div>
+            <div className={styles.replyUserName} style={{ color: colorMessage }}>В ответ {replyUserName}</div>
             <div className={styles.replyText}>{replyText}</div>
           </div>
           <div className={styles.cancelReply} onClick={handleCancelReply}>

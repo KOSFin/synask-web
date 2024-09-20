@@ -11,33 +11,17 @@
   border-radius: 50%;
   background-size: cover;
   background-position: center;
-  margin-right: 10px;
-  position: sticky;
-  top: 10px;
 }
 
 .message {
   max-width: 70%;
-  padding: 10px 15px 15px 10px;
+  padding: 10px 15px;
   border-radius: 15px;
   position: relative;
   margin: 0;
-  clear: both;
+  transition: transform 0.3s ease;
 }
 
-.user {
-  background-color: #1e88e5;
-  color: #ffffff;
-  align-self: flex-end;
-  border-bottom-left-radius: 0px;
-}
-
-.friend {
-  background-color: #757575;
-  color: #ffffff;
-  align-self: flex-start;
-  border-bottom-left-radius: 5px;
-}
 
 .name {
   font-size: 14px;
@@ -55,8 +39,15 @@
   text-align: right;
   position: absolute;
   bottom: -2px;
-  right: -35px;
   font-weight: bold;
+}
+
+.timeRight {
+  left: -35px;
+}
+
+.timeLeft {
+  right: -35px;
 }
 
 .status {
@@ -76,9 +67,6 @@
   border-radius: 25%;
   background-size: cover;
   background-position: center;
-  margin-right: 10px;
-  filter: brightness(150%);
-  z-index: 1;
 }
 
 .replyIcon {
@@ -91,7 +79,6 @@
   background-color: #84848433;
   border-radius: 50%;
   padding: 5px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
 }
 
 .replyBox {
@@ -109,4 +96,25 @@
 
 .replyText {
   font-size: 10px;
+}
+
+.user {
+  background-color: #1e88e5;
+  color: #ffffff;
+  align-self: flex-end;
+  border-bottom-right-radius: 0px; /* Изменяем угол для зеркального отображения */
+  border-bottom-left-radius: 15px; /* Скругляем только левый нижний угол */
+  float: right; /* Выравнивание по правому краю для сообщений пользователя */
+  margin-left: auto; /* Чтобы сообщения пользователя отображались справа */
+  margin-right: 10px;
+}
+
+.friend {
+  background-color: #757575;
+  color: #ffffff;
+  align-self: flex-start;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 15px;
+  float: left; /* Выравнивание по левому краю для сообщений собеседника */
+  margin-left: 10px;
 }
