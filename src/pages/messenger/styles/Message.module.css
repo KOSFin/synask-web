@@ -26,6 +26,7 @@
 .name {
   font-size: 14px;
   font-weight: bold;
+  margin-bottom: 6px;
 }
 
 .text {
@@ -34,7 +35,7 @@
 }
 
 .time {
-  font-size: 12px;
+  font-size: 10px;
   color: #989898;
   text-align: right;
   position: absolute;
@@ -58,7 +59,7 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 14px;
+  font-size: 10px;
 }
 
 .avatar {
@@ -86,12 +87,14 @@
   padding: 8px;
   margin-bottom: 4px;
   position: relative;
-  border-left: 4px solid aqua;
+  border-left: 5px solid aqua;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .replyName {
   font-weight: bold;
-  font-size: 10px;
+  font-size: 9px;
+  margin-bottom: 2px;
 }
 
 .replyText {

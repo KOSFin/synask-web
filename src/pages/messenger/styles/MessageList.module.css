@@ -11,10 +11,14 @@
   margin: 10px 0;
   color: #fff;
   background-color: rgba(75, 75, 75, 0.55);
-  padding: 2px;
+  padding: 5px;
   border-radius: 15px;
   cursor: pointer;
   font-size: 12px;
+  margin-right: auto;
+  margin-left: auto;
+  width: fit-content;
+  font-weight: bold;
 }
 
 .calendarOverlay {

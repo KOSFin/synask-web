@@ -44,8 +44,6 @@ const Message = ({ message, status, isGroupStart, replyMessages }) => {
       }
   };
 
-
-
   const swipeHandlers = useSwipeable({
       onSwiping: (eventData) => handleSwipe(eventData.deltaX),
       onSwipedLeft: handleSwipeEnd,
@@ -54,9 +52,9 @@ const Message = ({ message, status, isGroupStart, replyMessages }) => {
       trackTouch: true, // Трекинг пальца
   });
 
-  const friendColor = !isUser
-    ? chroma(colorMessage).luminance() > 0.5 ? '#a0a0a0' : chroma(colorMessage).darken(2).hex()
-    : colorMessage;
+  const friendColor = chroma(colorMessage).luminance() > 0.6 ? '#a0a0a0' : chroma(colorMessage).darken(1.8).hex()
+  const replyColor = chroma(colorMessage).luminance() > 0.7 ? '#a0a0a0' : chroma(colorMessage).darken(1.5).hex()
+  const lighterColor = chroma(colorMessage).luminance() < 0.05 ? '#a0a0a0' : chroma(colorMessage).brighten(1).hex();
 
   const replyMessage = replyMessages?.find(msg => msg.id === message.replyTo);
   const replyText = replyMessage ? replyMessage.content : 'Сообщение удалено';
@@ -79,10 +77,10 @@ const Message = ({ message, status, isGroupStart, replyMessages }) => {
         className={`${styles.message} ${isUser && isMobile ? styles.user : styles.friend}`}
         style={{ backgroundColor: isUser ? colorMessage : friendColor }}
       >
-        {!isUser && <div className={styles.name} style={{ color: colorMessage }}>{message.user}</div>}
+        {!isUser && <div className={styles.name} style={{ color: lighterColor }}>{message.user}</div>}
 
         {message.replyTo && (
-          <div className={styles.replyBox} style={{ backgroundColor: !isUser ? friendColor : 'rgba(0, 0, 0, 0.3)' }}>
+          <div className={styles.replyBox} style={{  borderLeftColor: isUser ? friendColor: colorMessage }}>
             <div className={styles.replyName}>{replyUserName}</div>
             <div className={styles.replyText}>{replyText}</div>
           </div>

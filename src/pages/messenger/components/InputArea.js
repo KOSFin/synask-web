@@ -6,6 +6,7 @@ import ChatContext from '../../../components/ChatContext';
 import UserContext from '../../../components/UserContext';
 import Picker from 'emoji-picker-react';
 import MessengerSettingsContext from '../../../components/contexts/MessengerSettingsContext';
+import chroma from 'chroma-js';
 
 const InputArea = () => {
   const { messages, setMessages, messageStatus, setMessageStatus, selectedChat, pendingQueue, setPendingQueue, replyTo, setReplyTo } = useContext(ChatContext);
@@ -18,6 +19,8 @@ const InputArea = () => {
   const [showLinkPopup, setShowLinkPopup] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const textareaRef = useRef(null);
+
+  const lighterColor = chroma(colorMessage).luminance() < 0.05 ? '#a0a0a0' : chroma(colorMessage).brighten(1).hex();
 
   const handleLinkSubmit = () => {
     setLinkType('image'); // Example type
@@ -36,8 +39,8 @@ const InputArea = () => {
 
   const handleTextAreaExpand = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      const newHeight = Math.min(textareaRef.current.scrollHeight, 8 * 24); // Max 8 rows
+      textareaRef.current.style.height = '20px';
+      const newHeight = Math.min(textareaRef.current.scrollHeight, 6 * 24); // Max 8 rows
       textareaRef.current.style.height = `${newHeight}px`;
     }
   };
@@ -121,7 +124,7 @@ const InputArea = () => {
       )}
     <div className={styles.inputArea}>
       <div className={styles.icon} onClick={handleLinkPopupToggle}>
-        <FontAwesomeIcon icon={faPaperclip} />
+        <FontAwesomeIcon style={{ color: lighterColor }}icon={faPaperclip} />
       </div>
       {showLinkPopup && (
         <div className={styles.linkPopup}>
@@ -158,7 +161,7 @@ const InputArea = () => {
           className={styles.icon}
           onClick={handleEmojiPickerToggle}
         >
-          <FontAwesomeIcon icon={faSmile} />
+          <FontAwesomeIcon style={{ color: lighterColor }} icon={faSmile} />
         </div>
         {showEmojiPicker && (
           <div className={styles.fullEmojiPicker}>
@@ -166,9 +169,11 @@ const InputArea = () => {
           </div>
         )}
       </div>
+      {inputValue.trim()!== '' && (
       <div className={styles.icon} onClick={handleSend}>
-        <FontAwesomeIcon icon={faPaperPlane} />
+        <FontAwesomeIcon style={{ color: lighterColor }} icon={faPaperPlane} />
       </div>
+      )}
     </div>
   </>
   );
