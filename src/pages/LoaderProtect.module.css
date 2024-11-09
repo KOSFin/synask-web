@@ -1,0 +1,52 @@
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.letter {
+  font-size: 50px;
+  font-weight: bold;
+  color: #ff7f00;
+  margin: 0 10px;
+  animation: bounce 1.2s infinite ease-in-out both;
+}
+
+.letter:nth-child(1) {
+  animation-delay: -0.48s; /* Задержка для первого элемента */
+}
+
+.letter:nth-child(2) {
+  animation-delay: -0.32s; /* Задержка для второго элемента */
+}
+
+.letter:nth-child(3) {
+  animation-delay: -0.16s; /* Задержка для третьего элемента */
+}
+
+.letter:nth-child(4) {
+  animation-delay: 0s; /* Задержка для четвертого элемента */
+}
+
+.letter:nth-child(5) {
+  animation-delay: 0.16s; /* Задержка для пятого элемента */
+}
+
+.letter:nth-child(6) {
+  animation-delay: 0.32s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1.2); /* Немного увеличиваем масштаб */
+  }
+}

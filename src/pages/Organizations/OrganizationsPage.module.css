@@ -10,17 +10,20 @@
 .container {
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
-    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 12px;
     color: white;
-    padding: 15px;
+    padding: 0px;
 }
 
-.leftPane, .rightPane {
-    width: 100%;
+.rightPane {
     padding: 10px;
+    height: 100%;
+}
+
+.rightBlock {
+    width: 40%;
 }
 
 .mainPane, .mainPaneMobile {
@@ -29,7 +32,59 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
+    overflow-y: auto;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 12px;
+  color: white;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease;
+}
+
+.rightPane {
+  padding: 10px;
+  height: 100%;
+}
+
+.rightBlock {
+  width: 40%;
+}
+
+.mainPane, .mainPaneMobile {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Мобильные стили */
+@media (max-width: 768px) {
+
+  .container {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    padding: 0;
+    position: relative;
+    z-index: 3;
+  }
+
+  .mainPaneMobile {
+    align-items: flex-start;
+    padding: 20px;
+  }
+}
+
 
 .searchBar {
     display: flex;
@@ -74,6 +129,7 @@
     border-radius: 8px;
     margin-bottom: 15px;
     transition: background-color 0.3s;
+    cursor: pointer;
 }
 
 .organizationCard:hover {
@@ -146,7 +202,6 @@
 .randomOrganizations, .subscribedOrganizations {
     margin-top: 20px;
     overflow-y: auto;
-    max-height: 300px;
 }
 
 .randomOrganizations::-webkit-scrollbar, .subscribedOrganizations::-webkit-scrollbar {
@@ -181,33 +236,6 @@
     color: #ff9800;
     border-bottom: 2px solid #ff9800;
     padding-bottom: 6px;
-}
-
-/* Media queries for responsive design */
-@media (min-width: 1200px) {
-    .container {
-        flex-direction: row;
-    }
-
-    .leftPane, .rightPane {
-        width: 25%;
-    }
-
-    .mainPane {
-        width: 50%;
-    }
-}
-
-@media (max-width: 1199px) {
-    .leftPane, .rightPane {
-        width: 100%;
-        padding: 10px;
-    }
-
-    .container {
-        padding: 10px;
-        width: 100%;
-    }
 }
 
 .backButton {

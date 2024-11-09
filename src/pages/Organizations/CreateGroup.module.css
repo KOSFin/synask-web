@@ -1,0 +1,74 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.title {
+  font-size: 24px;
+  color: #f39c12;
+  margin-bottom: 10px;
+}
+
+.note {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  gap: 15px;
+}
+
+.label {
+  font-size: 16px;
+  color: #fff;
+}
+
+.input, .select {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #222;
+  color: #fff;
+}
+
+.preview {
+  margin-top: 10px;
+  max-width: 100px;
+  border-radius: 8px;
+}
+
+.submitButton {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f39c12;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+  background-color: #e67e22;
+}
+
+.message {
+  font-size: 16px;
+  color: #fff;
+  margin-top: 20px;
+  text-align: center;
+}

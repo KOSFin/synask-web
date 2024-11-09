@@ -1,0 +1,221 @@
+/* PostEditor.module.css */
+
+.editorContainer {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 10px;
+  background: #1c1c1c;
+  color: #e0e0e0;
+  border-radius: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  font-size: 1.5em;
+  color: #f5a623;
+}
+
+.closeButton {
+  background: transparent;
+  color: #f5a623;
+  font-size: 1.2em;
+  border: none;
+  cursor: pointer;
+}
+
+.reactQuill {
+  margin: 10px 0;
+  background: #2b2b2b;
+  color: #e0e0e0;
+  border-radius: 5px;
+}
+
+.reactQuill .ql-toolbar {
+  border-radius: 5px 5px 0 0;
+  background: #333;
+  border: none;
+}
+
+.reactQuill .ql-container {
+  background: #2b2b2b;
+  border: none;
+  border-radius: 0 0 5px 5px;
+}
+
+.tagInputContainer,
+.authorInputContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tagInputContainer input,
+.authorInputContainer input {
+  padding: 10px;
+  background: #333;
+  border: none;
+  color: #e0e0e0;
+  border-radius: 5px;
+  outline: none;
+}
+
+.tagList,
+.authorList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tag {
+  background: #f5a623;
+  color: #1c1c1c;
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.tag button {
+  background: transparent;
+  border: none;
+  color: #1c1c1c;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.author {
+  background: #333;
+  color: #e0e0e0;
+  padding: 8px 12px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.author img.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.author button {
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.mediaUpload input[type="file"] {
+  display: block;
+}
+
+.mediaUpload label {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #f5a623;
+  color: #1c1c1c;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mediaList {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mediaItem {
+  display: flex;
+  align-items: center;
+  background: #2b2b2b;
+  color: #e0e0e0;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.mediaItem img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.mediaItem button {
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  cursor: pointer;
+}
+
+.submitButton {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: #f5a623;
+  color: #1c1c1c;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.loadingLog {
+  margin-top: 15px;
+  font-size: 0.9em;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.loadingLog .logItem {
+  display: flex;
+  align-items: center;
+}
+
+.loadingLog .logItem .progress {
+  background: #333;
+  height: 5px;
+  flex: 1;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+.loadingLog .logItem .progress .fill {
+  background: #f5a623;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.closeIcon {
+  font-size: 22px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.closeIcon:hover {
+  color: #ff9800;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .editorContainer {
+      height: 100%;
+      position: absolute;
+      z-index: 2;
+    }
+}

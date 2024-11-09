@@ -1,3 +1,14 @@
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px); /* Эффект вылета снизу */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Конечное положение */
+  }
+}
+
 .chatList {
   flex-grow: 1;
   overflow-y: auto;
@@ -9,11 +20,13 @@
   align-items: center;
   padding: 10px;
   cursor: pointer;
-  transition: background-color 0.3s, max-height 0.3s ease;
   border-bottom: 1px solid #000;
   max-height: 80px; /* Исходная высота */
   overflow: hidden;
   user-select: none;
+  opacity: 0; /* Начальное состояние прозрачности */
+  animation: fadeInUp 0.5s ease forwards; /* Анимация появления */
+  animation-delay: calc(var(--chat-index) * 0.1s); /* Задержка для плавного последовательного появления */
 }
 
 .chat:hover {
@@ -23,7 +36,7 @@
 .avatar {
   width: 50px;
   height: 50px;
-  border-radius: 25%;
+  border-radius: 30%;
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
@@ -44,6 +57,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   transition: font-size 0.3s ease;
+  font-weight: 600;
 }
 
 .lastMessage {
@@ -84,16 +98,12 @@
   }
 
   .avatar {
-    width: 40px;
-    height: 40px;
-  }
-
-  .name {
-    font-size: 14px;
+    width: 50px;
+    height: 50px;
   }
 
   .lastMessage {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 

@@ -7,98 +7,68 @@
 
 .content {
   width: 100%;
-  display: flex;
-  flex-direction: row;
   gap: 20px;
+  height: 100%;
+  position: relative;
 }
 
 .container {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 12px;
   display: flex;
   flex-direction: row;
-  gap: 20px;
-  padding: 20px;
   color: #ffffff;
   font-family: 'Arial', sans-serif;
 }
 
 .sidebar {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 20px;
+  background-color: rgba(110, 110, 110, 0.4);
+  backdrop-filter: blur(5px);
+  padding: 5px;
   border-radius: 12px;
-  display: flex;
-  flex-direction: column;
   gap: 20px;
-}
-
-.subscriptionBlock {
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.subscribeButton, .unsubscribeButton {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.subscribeButton {
-  background-color: #ff9800;
-  color: #ffffff;
-}
-
-.unsubscribeButton {
-  background-color: #757575;
-  color: #ffffff;
-}
-
-.subscribeButton:hover, .unsubscribeButton:hover {
-  opacity: 0.8;
+  margin-bottom: 10px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
 }
 
 .avatarBlock {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
 }
 
 .avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 25%;
-}
-
-.details {
-  padding: 10px;
+  width: 45px;
+  height: auto;
+  border-radius: 35%;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 15px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 
 .subtitle {
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+.topic {
+  margin-bottom: 0;
   font-size: 10px;
-  color: orange;
-  margin-bottom: 5px;
 }
 
 .description {
   font-size: 16px;
   color: #e0e0e0;
-  margin-bottom: 20px;
 }
 
 .staff {
   margin-top: 20px;
+  display: flex;
 }
 
 .staffMember {
@@ -131,8 +101,7 @@
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  padding: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin-left: auto;
 }
 
 .searchContainer {
@@ -148,6 +117,7 @@
   background-color: rgba(255, 255, 255, 0.1);
   color: #ffffff;
   outline: none;
+  height: 25px;
 }
 
 .searchInput::placeholder {
@@ -158,6 +128,7 @@
   cursor: pointer;
   color: #ffffff;
   transition: color 0.3s ease;
+  font-size: 20px;
 }
 
 .searchIcon:hover, .icon:hover {
@@ -167,22 +138,10 @@
 .posts {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.post {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 12px;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
   gap: 10px;
-}
-
-.postDate {
-  font-size: 14px;
-  color: #cccccc;
+  overflow-y: scroll;
+  height: 100%;
+  padding-top: 65px; /* Высота отступа, равная высоте sidebar */
 }
 
 .media-carousel, .media-grid, .media-list {
@@ -199,14 +158,370 @@ video, img {
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-    padding: 10px;
-  }
-
-  .sidebar {
-    margin-bottom: 20px;
+    padding: 3px;
   }
 
   .header {
     justify-content: center;
   }
+}
+
+/* Overlay for the description */
+.descriptionOverlay {
+  padding: 10px;
+  background-color: rgba(28, 28, 28, 0.95); /* Darker and more transparent */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Soft shadow for depth */
+  color: #ffffff;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .descriptionOverlay,
+    .settingsOverlay {
+      height: 100%;
+      position: absolute;
+      z-index: 2;
+    }
+}
+
+/* Стили для полосы прокрутки */
+.posts::-webkit-scrollbar,
+.descriptionOverlay::-webkit-scrollbar,
+.settingsOverlay::-webkit-scrollbar {
+  width: 6px; /* Тонкая полоса прокрутки */
+}
+
+.posts::-webkit-scrollbar-track,
+.descriptionOverlay::-webkit-scrollbar-track,
+.settingsOverlay::-webkit-scrollbar-track {
+  background: transparent; /* Прозрачный трек */
+  margin-top: 65px; /* Сдвигаем трек на высоту верхнего отступа */
+}
+
+.posts::-webkit-scrollbar-thumb,
+.descriptionOverlay::-webkit-scrollbar-thumb,
+.settingsOverlay::-webkit-scrollbar-thumb {
+  background-color: orange; /* Оранжевый цвет полосы прокрутки */
+  border-radius: 8px; /* Закругленные края */
+}
+
+.posts::-webkit-scrollbar-thumb:hover,
+.descriptionOverlay::-webkit-scrollbar-thumb:hover,
+.settingsOverlay::-webkit-scrollbar-thumb:hover {
+  background-color: #ff8c00; /* Более яркий оранжевый при наведении */
+}
+
+
+/* Cover image and dark overlay for background */
+.coverImage {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.darkOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Stronger dark overlay */
+}
+
+.avatarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+}
+
+.avatarInDescription {
+  width: 100px;
+  height: 100px;
+  border-radius: 35%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.groupInfo {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.groupInfo h1 {
+  font-size: 26px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+}
+
+.groupInfo p {
+  font-size: 16px;
+  color: #d3d3d3;
+  margin-top: 5px;
+}
+
+.linkButton {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.linkButton:hover {
+  transform: scale(1.1);
+}
+
+.linkButton:active {
+  transform: scale(0.9);
+}
+
+/* Modal overlay and content */
+.modalOverlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  background-color: #2e2e2e;
+  padding: 10px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #ff9800;
+}
+
+input[type="text"] {
+  background-color: #333333;
+  color: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #ff9800;
+}
+
+.qrCodeContainer {
+  margin-top: 20px;
+}
+
+/* Information sections */
+.infoSection {
+  display: block;
+  align-items: center;
+  padding: 10px;
+  margin-top: 15px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+}
+
+.section {
+  display: flex;
+}
+
+.sectionIcon {
+  color: #ff9800;
+  font-size: 22px;
+  margin-right: 5px;
+}
+
+.infoSection h4 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+}
+
+.infoSection p {
+  font-size: 16px;
+  color: #cccccc;
+  margin-top: 5px;
+}
+
+.subscriptionBlock {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.subscribeButton, .unsubscribeButton {
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.subscribeButton {
+  background-color: #ff9800;
+  color: #ffffff;
+}
+
+.unsubscribeButton {
+  background-color: #757575;
+  color: #ffffff;
+}
+
+.subscribeButton:hover, .unsubscribeButton:hover {
+  opacity: 0.8;
+}
+
+/* Admin button */
+.adminButton {
+  background: transparent;
+  border: none;
+  color: #ff9800;
+  font-size: 18px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.3s ease;
+}
+
+.adminButton:hover {
+  transform: scale(1.1);
+}
+
+/* Settings Overlay */
+.settingsOverlay {
+  background-color: rgba(28, 28, 28, 0.95);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.overlayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.overlayHeader h3 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.closeIcon {
+  font-size: 22px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.closeIcon:hover {
+  color: #ff9800;
+}
+
+.inputGroup {
+  margin-top: 20px;
+}
+
+.inputGroup label {
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #333333;
+  color: #ffffff;
+  border: 1px solid #444444;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: #ff9800;
+}
+
+.imagePreview {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  margin-top: 10px;
+  object-fit: cover;
+}
+
+/* Error message */
+.error {
+  color: #ff0000;
+  font-size: 16px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Save Button */
+.saveButton {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.saveButton button {
+  background-color: #ff9800;
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.saveButton button:hover {
+  background-color: #ff8c00;
 }

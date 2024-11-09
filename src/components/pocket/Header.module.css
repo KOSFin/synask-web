@@ -1,56 +1,121 @@
+/* Основной контейнер хедера */
+.headerContainer {
+    position: relative;
+    z-index: 999;
+    border-bottom: 1px solid violet;
+    transition: all 0.5s ease;
+}
+
+/* Хедер */
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  padding: 10px 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  margin-left: auto;
-  height: 50px;
-  border-bottom: 1px solid violet;
-  z-index: 101;
-}
-
-.headerContent {
-    margin-left: 130px;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1a1a;
+    padding: 5px;
+    border-bottom: 1px solid #333;
+    transition: all 0.5s ease;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
+/* Контент в хедере */
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.logoImage {
-  width: 20px;
-  height: 33px;
+/* Виджеты */
+.widgets {
+    display: flex;
+    align-items: center;
 }
 
-.networkName {
-  font-size: 24px;
-  color: #ff007f;
-  margin: 0 5px;
-  font-family: 'Arial', sans-serif;
+/* Иконки виджетов */
+.widgetIcon {
+    color: white;
+    margin-left: 10px;
+    font-size: 20px;
 }
 
-.timeWidget {
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
-  color: white;
-  font-size: 18px;
+/* Кнопка для открытия шторки */
+.toggleButton {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
 }
 
-.divider {
-  width: 1px;
-  height: 30px;
-  margin: 0 20px;
-  background-color: #ff007f;
+
+/* Анимация dropdown */
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(26, 26, 26, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%);
+    max-height: 100vh;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    height: calc(100vh - 85px);
+}
+
+.dropdown.expanded {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Уведомления */
+.notifications {
+    padding: 10px;
+}
+
+/* Индивидуальное уведомление */
+.notification {
+    background-color: #333;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+}
+
+/* Секция активных виджетов */
+.activeWidgets {
+    padding: 10px;
+}
+
+/* Плейсхолдер для виджетов */
+.widgetPlaceholder {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+}
+
+/* Фон (затемнение) при открытии шторки */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    backdrop-filter: blur(2px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, filter 0.3s ease;
+}
+
+.backdrop.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 .music-player-header {
@@ -59,40 +124,33 @@
   justify-content: space-between;
   background-color: #333;
   color: white;
-  padding: 5px 10px;
-  margin-left: 20px;
+  padding: 10px 15px;
+  margin: 20px 0;
   cursor: pointer;
   transition: height 0.3s ease, width 0.3s ease;
-  height: 50px;
-  overflow: hidden;
+  height: 8vh;
   max-width: 500px;
   border-radius: 10px;
-  border: 1px orange solid;
-}
-
-.music-player-header.expanded {
-  flex-direction: column;
-  height: 180px;
-  margin-top: 130px;
+  border: 1px solid orange;
 }
 
 .playerContainer {
   display: flex;
   align-items: center;
-
-}
-
-.playerBlock {
-    display: block;
+  padding: 10px;
+  background-color: #444; /* Цвет фона контейнера плеера */
+  border-radius: 8px;
+  width: 100%;
 }
 
 .trackInfo {
-  margin-left: 10px;
   display: flex;
   flex-direction: column;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: 10px; /* Пробел между текстом и иконками управления */
+  margin-left: 10px;
 }
 
 .scrollingText {
@@ -100,22 +158,25 @@
   white-space: nowrap;
   overflow: hidden;
   position: relative;
-  width: 200px;
+  width: 200px; /* Ширина контейнера для прокрутки */
 }
 
 .scrollingText span {
   display: inline-block;
   white-space: nowrap;
   padding-right: 5px; /* Пробел между повторяющимися строками */
-  animation: scroll-text 10s linear infinite; /* Увеличьте время, чтобы сделать пролистывание медленнее */
+  animation: scroll-text 15s linear infinite; /* Увеличьте время, чтобы сделать пролистывание медленнее */
 }
 
 @keyframes scroll-text {
   0% {
-    transform: translateX(70%);
+    transform: translateX(100%); /* Начинаем справа */
+  }
+  50% {
+    transform: translateX(-50%); /* Двигаемся до центра */
   }
   100% {
-    transform: translateX(-100%); /* Движение на половину ширины контейнера */
+    transform: translateX(-100%); /* Движение на всю ширину контейнера */
   }
 }
 
@@ -123,13 +184,17 @@
   font-size: 1rem;
   font-weight: bold;
   color: white;
+  max-width: 100px;
+  display: block;
 }
 
 .trackArtist {
   font-size: 0.9rem;
   color: #aaa;
+  text-align: start;
+  max-width: 100px;
+  display: block;
 }
-
 
 .controls {
   display: flex;
@@ -144,7 +209,6 @@
   margin: 0 2px;
   cursor: pointer;
   padding: 0;
-  margin-right: auto;
 }
 
 .controls button:disabled {
@@ -157,33 +221,3 @@
   margin-top: 10px;
 }
 
-.timeInfo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: white;
-}
-
-.seekBar {
-  flex-grow: 1;
-  margin: 0 10px;
-}
-
-.volumeControl {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.volumeControl input {
-  margin-left: 10px;
-}
-
-.volumeBar {
-  flex-grow: 1;
-}
-
-.advertisement {
-    margin-left: auto; /* Перемещает рекламный блок вправо */
-    border-color: 1px solid orange;
-}

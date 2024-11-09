@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [usersCache, setUsersCache] = useState([]);
     const [user, setUser] = useState(null);
+    const [statusUsers, setStatusUsers] = useState([]);
 
     useEffect(() => {
         if (userId) {
@@ -18,7 +19,7 @@ export const UserProvider = ({ children }) => {
     }, [userId]);
 
     return (
-        <UserContext.Provider value={{ userData, setUserData, friends, setFriends, userId, setUserId, isAuthenticated, setIsAuthenticated, usersCache, setUsersCache, user, setUser }}>
+        <UserContext.Provider value={{ userData, setUserData, friends, setFriends, userId, setUserId, isAuthenticated, setIsAuthenticated, usersCache, setUsersCache, user, setUser, statusUsers, setStatusUsers }}>
             {children}
         </UserContext.Provider>
     );

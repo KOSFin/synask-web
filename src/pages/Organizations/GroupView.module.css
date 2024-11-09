@@ -1,0 +1,104 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.groupView {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: gray;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.groupHeaderInfo {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.subscribeButton,
+.unsubscribeButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subscribeButton {
+  background-color: #4caf50;
+}
+
+.unsubscribeButton {
+  background-color: #f44336;
+}
+
+.groupDetails {
+  padding: 12px;
+  background-color: #ececec;
+  border-radius: 4px;
+  animation: expand 0.3s ease-in-out;
+}
+
+@keyframes expand {
+  from {
+    opacity: 0;
+    transform: scaleY(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.postList {
+  margin-top: 16px;
+}
+
+.postItem {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.randomComment {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.options {
+  cursor: pointer;
+  font-size: 1.5rem;
+  margin-left: 8px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #888;
+}
+
+.descriptionOverlay {
+  padding: 20px;
+  border-left: 1px solid #2b2b2b;
+}

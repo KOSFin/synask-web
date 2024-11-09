@@ -14,7 +14,7 @@ import Settings from './pages/settings/Settings';
 import BackgroundContext from './pages/settings/BackgroundContext';
 import Info from './pages/info/AboutPage';
 import Org from './pages/Organizations/Groups';
-import OrgView from './pages/Organizations/OrganizationView/OrganizationView';
+import OrgView from './pages/Organizations/MainGroupComponent';
 
 import styles from './AppPocket.module.css';
 
@@ -48,8 +48,7 @@ const PocketApp = () => {
                 <Route path="/people" element={<Search />} />
                 <Route path="/:username" element={<UserProfilePage />} />
                 <Route path="/people/:username" element={<UserProfilePage />} />
-                <Route path="/org" element={<Org />} />
-                <Route path="/org/:OrgName" element={<OrgView />} />
+                <Route path="/org" element={<OrgView />} />
                 <Route path="/options" element={<Settings />} />
                 <Route path="/info" element={<Info />} />
               </Routes>

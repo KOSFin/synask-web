@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSwipeable } from 'react-swipeable'; // Импортируем библиотеку свайпов
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCheck, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import styles from './OrganizationsPage.module.css';
@@ -17,7 +17,6 @@ const OrganizationsPage = () => {
   const [subscribedOrganizations, setSubscribedOrganizations] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [userId, setUserId] = useState(null);
-  const [activeTab, setActiveTab] = useState('random');
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
   const [showManagedOrganizations, setShowManagedOrganizations] = useState(false); // Новое состояние
   const [managedOrganizations, setManagedOrganizations] = useState([]); // Данные управляемых организаций
@@ -27,6 +26,9 @@ const OrganizationsPage = () => {
   const [loadingTopOrganizations, setLoadingTopOrganizations] = useState(true);
   const [loadingRandomOrganizations, setLoadingRandomOrganizations] = useState(true);
   const [loadingSearchResults, setLoadingSearchResults] = useState(false); // Для поиска
+
+  const location = useLocation();
+  let activeTab = new URLSearchParams(location.search).get('page') || 'rec';
 
 
   useEffect(() => {
@@ -40,12 +42,12 @@ const OrganizationsPage = () => {
   // Используем хук для добавления свайпов
   const handlers = useSwipeable({
     onSwipedLeft: () => {
-      if (activeTab === 'random') setActiveTab('top');
-      else if (activeTab === 'top') setActiveTab('subscribed');
+      if (activeTab === 'random') activeTab = 'top';
+      else if (activeTab === 'top') activeTab = 'subscribed';
     },
     onSwipedRight: () => {
-      if (activeTab === 'subscribed') setActiveTab('top');
-      else if (activeTab === 'top') setActiveTab('random');
+      if (activeTab === 'subscribed') activeTab = 'top';
+      else if (activeTab === 'top') activeTab = 'random';
     },
     trackMouse: true
   });
@@ -214,124 +216,114 @@ const OrganizationsPage = () => {
     }
   };
 
-  return (
-    <div className={styles.container} {...handlers}> {/* Оборачиваем в свайпы */}
+   return (
+    <div className={styles.container} {...handlers}>
       {showManagedOrganizations ? (
         <ManagedOrganizations
           managedOrganizations={managedOrganizations}
-          onBack={() => setShowManagedOrganizations(false)} // Функция обратного вызова для возврата
+          onBack={() => setShowManagedOrganizations(false)}
           userId={userId}
         />
       ) : (
         <>
-            {isMobile && (
-              <div className={styles.mobileMenu}>
-                <button onClick={() => setActiveTab('random')} className={activeTab === 'random' ? styles.active : ''}>Рекомендуемые</button>
-                <button onClick={() => setActiveTab('top')} className={activeTab === 'top' ? styles.active : ''}>Топ</button>
-                <button onClick={() => setActiveTab('subscribed')} className={activeTab === 'subscribed' ? styles.active : ''}>Подписки</button>
-              </div>
-            )}
-            {!isMobile || activeTab === 'random' ? (
-                <div className={styles.leftPane}>
-                    <h3>Рекомендуемые организации</h3>
-                    <div className={styles.randomOrganizations}>
-                        {loadingRandomOrganizations ? (
-                            <div className={load.spinner}>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        ) : (
-                            randomOrganizations.length > 0 ? (
-                                randomOrganizations.map((org) => (
-                                    <OrganizationCard
-                                        key={org.id}
-                                        organization={org}
-                                        userId={userId}
-                                        toggleSubscription={toggleSubscription}
-                                    />
-                                ))
-                            ) : (
-                                <p>Нет данных для отображения</p>
-                            )
-                        )}
-                    </div>
-                </div>
-            ) : null}
+          <div className={styles.mainPane}>
+            <form onSubmit={handleSearch} className={styles.searchBar}>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Поиск организаций..."
+              />
+              <button type="submit">🔍</button>
+            </form>
 
-
-            {!isMobile || activeTab === 'top' ? (
-                <div className={styles.mainPane}>
-                    <form onSubmit={handleSearch} className={styles.searchBar}>
-                        <input
-                            type="text"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Поиск организаций..."
-                        />
-                        <button type="submit">🔍</button>
-                    </form>
-
-                    {searchTerm ? (
-                        <div className={styles.searchResults}>
-                            {loadingSearchResults ? (
-                                <div className={load.spinner}>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                </div>
-                            ) : (
-                                searchResults.length > 0 ? (
-                                    searchResults.map((org) => (
-                                        <OrganizationCard key={org.id} organization={org} userId={userId} toggleSubscription={toggleSubscription} />
-                                    ))
-                                ) : (
-                                    <p>Ничего не найдено</p>
-                                )
-                            )}
+            {searchTerm && (
+                <div className={styles.searchResults}>
+                    {loadingSearchResults ? (
+                        <div className={load.spinner}>
+                            <div></div>
+                            <div></div>
+                            <div></div>
                         </div>
                     ) : (
-                        <div className={styles.topOrganizations}>
-                            <h3>Топ организаций по активности</h3>
-                            {loadingTopOrganizations ? (
-                                <div className={load.spinner}>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                </div>
-                            ) : (
-                                topOrganizations.map((org) => (
-                                    <OrganizationCard key={org.id} organization={org} userId={userId} toggleSubscription={toggleSubscription} />
-                                ))
-                            )}
-                        </div>
+                        searchResults.length > 0 ? (
+                            searchResults.map((org) => (
+                                <OrganizationCard key={org.id} organization={org} userId={userId} toggleSubscription={toggleSubscription} />
+                            ))
+                        ) : (
+                            <p>Ничего не найдено</p>
+                        )
                     )}
                 </div>
-            ) : null}
+            )}
 
-            {!isMobile || activeTab === 'subscribed' ? (
-                <div className={styles.rightPane}>
-                    <button onClick={() => setShowManagedOrganizations(true)} className={styles.showMyOrganizations}>Показать мои организации</button>
-                    <h3>Мои подписки</h3>
-                    <div className={styles.subscribedOrganizations}>
-                        {loadingUserData ? (
-                            <div className={load.spinner}>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        ) : (
-                            subscribedOrganizations.length > 0 ? (
-                                subscribedOrganizations.map((org) => (
-                                    <OrganizationCard key={org.id} organization={org} userId={userId} toggleSubscription={toggleSubscription} />
-                                ))
-                            ) : (
-                                <p>Нет подписок</p>
-                            )
-                        )}
-                    </div>
-                </div>
-            ) : null}
+            {activeTab === 'top' && (
+              <div className={styles.topOrganizations}>
+                <h3>Топ организаций по активности</h3>
+                {loadingTopOrganizations ? (
+                  <div className={load.spinner}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                ) : (
+                  topOrganizations.map((org) => (
+                    <OrganizationCard
+                      key={org.id}
+                      organization={org}
+                      userId={userId}
+                      toggleSubscription={toggleSubscription}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+
+            {activeTab === 'sub' && (
+              <div className={styles.subscribedOrganizations}>
+                <h3>Мои подписки</h3>
+                <button onClick={() => setShowManagedOrganizations(true)} className={styles.showMyOrganizations}>Показать мои организации</button>
+                {loadingUserData ? (
+                  <div className={load.spinner}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                ) : (
+                  subscribedOrganizations.map((org) => (
+                    <OrganizationCard
+                      key={org.id}
+                      organization={org}
+                      userId={userId}
+                      toggleSubscription={toggleSubscription}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+
+            {activeTab === 'rec' && (
+              <div className={styles.randomOrganizations}>
+                <h3>Рекомендуемые организации</h3>
+                {loadingRandomOrganizations ? (
+                  <div className={load.spinner}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                ) : (
+                  randomOrganizations.map((org) => (
+                    <OrganizationCard
+                      key={org.id}
+                      organization={org}
+                      userId={userId}
+                      toggleSubscription={toggleSubscription}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </>
       )}
     </div>
@@ -340,16 +332,19 @@ const OrganizationsPage = () => {
 
 const OrganizationCard = ({ organization, userId, toggleSubscription }) => {
     const isSubscribed = organization.followers.includes(userId);
+    const navigate = useNavigate();
+
+    const selectGroup = (groupId) => {
+        navigate(`?id=${groupId}`, { replace: true });
+    };
 
     return (
-        <div className={styles.organizationCard}>
+        <div className={styles.organizationCard} onClick={() => selectGroup(organization.groupname)} >
             <div className={styles.avatar}>
                 <img src={organization.avatar_url} alt={organization.name} />
             </div>
             <div className={styles.info}>
-                <Link to={`/org/${organization.name}`}>
-                    <h4>{organization.name}</h4>
-                </Link>
+                <h4>{organization.name}</h4>
                 <p>{organization.topic}</p>
                 <p>{organization.followers.length} подписчиков</p>
             </div>

@@ -82,9 +82,9 @@ const SettingsModal = ({ closeSettings }) => {
           <FontAwesomeIcon icon={faTimes} onClick={closeSettings} className={styles.closeIcon} />
         </div>
         <div className={styles.modalContent}>
-          <h2>Настройки</h2>
+          <h2 className={styles.title2}>Настройки</h2>
 
-          <h3>Персонализация</h3>
+          <h3 className={styles.title3}>Персонализация</h3>
 
           <div className={styles.settingItem}>
             <label>Цвет сообщений:</label>

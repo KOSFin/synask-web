@@ -19,6 +19,7 @@ const InputArea = () => {
   const [showLinkPopup, setShowLinkPopup] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
   const textareaRef = useRef(null);
+  const isMobile = window.innerWidth <= 768;
 
   const lighterColor = chroma(colorMessage).luminance() < 0.05 ? '#a0a0a0' : chroma(colorMessage).brighten(1).hex();
 
@@ -163,9 +164,9 @@ const InputArea = () => {
         >
           <FontAwesomeIcon style={{ color: lighterColor }} icon={faSmile} />
         </div>
-        {showEmojiPicker && (
+        {showEmojiPicker && !isMobile && (
           <div className={styles.fullEmojiPicker}>
-            <Picker onEmojiClick={handleEmojiClick} theme="dark" />
+            <Picker autoFocusSearch={false} onEmojiClick={handleEmojiClick} theme="dark" native />
           </div>
         )}
       </div>
@@ -175,6 +176,11 @@ const InputArea = () => {
       </div>
       )}
     </div>
+    {showEmojiPicker && isMobile && (
+      <div className={styles.fullEmojiPicker} style={{ position: 'initial', display: 'block'}}>
+        <Picker autoFocusSearch={false} width="100%" onEmojiClick={handleEmojiClick} theme="dark" previewConfig={{ showPreview: false }} native />
+      </div>
+    )}
   </>
   );
 };

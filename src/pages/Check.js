@@ -76,12 +76,13 @@ const AccountSetupPage = () => {
             last_name: formData.lastName || user.user_metadata.lastName || '',
             gender: genderValue,
             created_at: user.created_at,
+            birtday: user.user_metadata.birtday || '2000-01-01',
           };
 
           const updatesPv = {
             auth_id: user.id,
             email: user.email,
-            phone: user.phone || '',
+            phone: user.user_metadata.phone || '',
           };
 
           if (Object.values(updates).some(value => value === '')) {
@@ -171,8 +172,8 @@ const AccountSetupPage = () => {
 
   return (
     <div className={styles.accountSetupPage}>
-      <h1>Завершение Создания Аккаунта</h1>
-      <p>Эта страница завершает создание аккаунта и дает вам публичную ссылку.</p>
+      <h1 className={styles.title}>Завершение Создания Аккаунта</h1>
+      <p className={styles.text}>Эта страница завершает создание аккаунта и дает вам публичную ссылку.</p>
       {error ? (
         <div className={styles.error}>{error}</div>
       ) : (

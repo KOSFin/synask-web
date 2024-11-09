@@ -1,5 +1,6 @@
 .mobileSidebarContainer {
   position: relative;
+  font-family: 'Roboto', sans-serif;
 }
 
 .overlay {
@@ -8,10 +9,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  z-index: 999;
 }
 
 .overlay.active {
@@ -25,11 +27,12 @@
   left: 0;
   right: 0;
   height: 60px;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   color: white;
   display: flex;
   justify-content: space-around;
-
+  align-items: center;
+  padding: 10px 0;
   z-index: 1000;
 }
 
@@ -38,26 +41,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
-  color: #444;
+  padding: 10px;
+  width: 70px;
+  height: 60px;
+  color: #ccc;
   text-decoration: none;
-  transition: color 0.3s;
+  border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .navItem:hover {
-  color: #656565;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .active {
   color: var(--accent-color);
+  background-color: rgba(0, 0, 0, 0.59);
+  box-shadow: 0 0 10px var(--accent-color);
 }
 
 .icon {
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .label {
-  font-size: 12px;
+  font-size: 14px;
+  margin-top: 5px;
 }
 
 .additionalMenu {
@@ -66,7 +77,7 @@
   left: 0;
   right: 0;
   background-color: black;
-  transition: max-height 0.3s;
+  transition: max-height 0.3s ease-in-out;
   max-height: 0;
   overflow: hidden;
   display: flex;
@@ -75,7 +86,7 @@
 }
 
 .additionalMenu.open {
-  max-height: 240px; /* Достаточная высота для размещения всех пунктов меню */
+  max-height: 240px;
 }
 
 .additionalItem {
@@ -93,4 +104,50 @@
 
 .additionalItem .icon {
   margin-right: 10px;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 25%;
+  border: 1px solid;
+  margin-left: 20px;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+}
+
+.profileLabel {
+  margin-left: 10px;
+  font-size: 14px;
+  color: white;
+  text-decoration: none;
+}
+
+.statusIndicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border: 3px solid black;
+  border-radius: 50%;
+}
+
+.customStatusIndicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 15px;
+  text-shadow: 1px 1px 2px black;
+  z-index: 2;
 }

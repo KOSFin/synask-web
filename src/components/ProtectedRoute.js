@@ -2,47 +2,55 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserContext from './UserContext';
 import getSupabaseClient from '../pages/config/SupabaseClient';
-import load from '../pages/Loader.module.css';
+import load from '../pages/LoaderProtect.module.css';
 import RedirectToLogin from './RedirectToLogin';
 import NetworkStatusHandler from './NetworkStatusHandler';
 import MessageHandler from './MessageHandler'; // Импортируем компонент мессенджера
-import { checkSession, fetchInitialData, subscribeToUserDataChanges } from './utils';
+import { checkSession, fetchInitialData, subscribeToUserDataChanges, getSession, useMonitorUserStatus } from './utils';
 
 const supabase = getSupabaseClient();
 
 const ProtectedRoute = ({ children }) => {
-  const [loading, setLoading] = useState(true);
+  const [loadingUserData, setLoadingUserData] = useState(true); // Состояние для загрузки данных пользователя
   const navigate = useNavigate();
-  const { userData, setUserData, setFriends, userId, setUserId, isAuthenticated, setIsAuthenticated } = useContext(UserContext);
+  const { userData, setUserData, setFriends, friends, userId, setUserId, isAuthenticated, setIsAuthenticated, statusUsers, setStatusUsers } = useContext(UserContext);
 
   const messengerInitialized = useRef(false); // Флаг для отслеживания инициализации мессенджера
 
   useEffect(() => {
-    // Проверка сессии пользователя
+    const initializeLocalSession = async () => {
+      // Используем getSession для быстрой локальной проверки
+      const session = await getSession();
+      if (session?.session?.user?.id) {
+        setUserId(session.session.user.id);
+        setIsAuthenticated(true);
+      }
+      // Проверка сессии пользователя через сервер
+      initializeSession();
+    };
+
     const initializeSession = async () => {
       const { authenticated, userId } = await checkSession(supabase, navigate);
       if (authenticated) {
-          console.log('User is authenticated');
-          setIsAuthenticated(authenticated);
-          setUserId(userId);
+        setIsAuthenticated(true);
+        setUserId(userId);
       } else {
-          console.log('User is not authenticated');
-          setIsAuthenticated(false);
-          window.location.href = "/login.html";
+        setIsAuthenticated(false);
+        window.location.href = '/login';
       }
     };
 
-    initializeSession();
-  }, []); // Данный эффект должен запускаться один раз при монтировании компонента
+    initializeLocalSession();
+  }, [navigate, setIsAuthenticated, setUserId]);
 
   useEffect(() => {
     if (!userId) return;
 
     // Загрузка данных пользователя и подписка на обновления
     const initializeUserData = async () => {
-      const userChannel = await fetchInitialData(supabase, userId, setUserData, setFriends);
-      const unsubscribe = subscribeToUserDataChanges(supabase, userId, setUserData, setFriends);
-      setLoading(false);
+      const userChannel = await fetchInitialData(supabase, userId, setUserData, setFriends, friends, statusUsers, setStatusUsers);
+      const unsubscribe = subscribeToUserDataChanges(supabase, userId, setUserData, setFriends, friends, statusUsers, setStatusUsers);
+      setLoadingUserData(false); // Сбрасываем состояние загрузки данных
 
       return () => {
         if (userChannel) {
@@ -67,34 +75,33 @@ const ProtectedRoute = ({ children }) => {
   // Эффект для инициализации компонента мессенджера
   useEffect(() => {
     if (isAuthenticated && !messengerInitialized.current) {
-      // Проверяем, прошел ли пользователь аутентификацию и не был ли мессенджер уже инициализирован
       messengerInitialized.current = true; // Помечаем, что мессенджер инициализирован
     }
   }, [isAuthenticated]);
 
-  if (loading) return <LoadingSpinner />;
-
+  // Рендерим дочерние компоненты сразу после изменения isAuthenticated
   return (
     <>
-      <NetworkStatusHandler />
-      {isAuthenticated ? (
+      {loadingUserData && (
+          <div className={load.spinner}>
+            <div className={load.letter}>s</div>
+            <div className={load.letter}>Y</div>
+            <div className={load.letter}>n</div>
+            <div className={load.letter}>a</div>
+            <div className={load.letter}>s</div>
+            <div className={load.letter}>k</div>
+          </div>
+      )}
+      {!loadingUserData && (
         <>
-          {messengerInitialized.current && <MessageHandler />} {/* Инициализируем мессенджер, если пользователь аутентифицирован */}
+          <NetworkStatusHandler />
+          {messengerInitialized.current && <MessageHandler />}
           {children}
         </>
-      ) : (
-        <RedirectToLogin />
       )}
     </>
   );
 };
 
-const LoadingSpinner = () => (
-  <div className={load.spinner}>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-);
 
 export default ProtectedRoute;

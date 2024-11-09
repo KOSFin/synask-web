@@ -11,7 +11,7 @@ import VersionContext from '../../../components/contexts/VersionContext';
 import load from '../../Loader.module.css';
 
 const ChatHeader = () => {
-  const { setSelectedChatId, selectedChatId, selectedChat, isLoadingMessages, isLoadingUser } = useContext(ChatContext);
+  const { setSelectedChatId, selectedChatId, selectedChat, isLoadingMessages, isLoadingUser, messages } = useContext(ChatContext);
   const { userId } = useContext(UserContext);
   const navigate = useNavigate();
   const isMobile = window.innerWidth <= 768;
@@ -174,7 +174,7 @@ const ChatHeader = () => {
           />
           <div className={styles.info}>
             <div className={styles.name}>{name}</div>
-            {!isLoadingUser ? (
+            {!isLoadingUser && !isLoadingMessages && selectedChat && messages ? (
               <div className={styles.status}>{subText}</div>
             ) : (
               <div className={styles.status}>

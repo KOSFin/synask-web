@@ -2,8 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHome, faComment, faUsers, faUserFriends, faCog, faSignInAlt, faUserPlus,
-  faInfoCircle, faBuilding, faArrowCircleUp, faBell, faMusic, faEllipsisH
+  faHome, faComment, faUsers, faUserFriends, faCog, faMusic, faEllipsisH, faArrowCircleUp
 } from '@fortawesome/free-solid-svg-icons';
 import styles from './Sidebar.module.css';
 import AccentColorContext from '../../pages/settings/AccentColorContext';
@@ -27,11 +26,9 @@ const MobileSidebar = () => {
   ];
 
   const additionalItems = [
-    { path: `/p/${userData.username}`, icon: faUserFriends, label: 'Профиль' },
-    { path: '/notifications', icon: faBell, label: 'Уведомления' },
     { path: '/p/music', icon: faMusic, label: 'Музыка' },
     { path: '/p/options', icon: faCog, label: 'Настройки' },
-    { path: '/p/info', icon: faArrowCircleUp, label: 'O сайте' },
+    { path: '/p/info', icon: faArrowCircleUp, label: 'О сайте' },
   ];
 
   const handleItemClick = (item) => {
@@ -46,19 +43,36 @@ const MobileSidebar = () => {
     <div className={styles.mobileSidebarContainer}>
       <div className={`${styles.overlay} ${isMenuOpen ? styles.active : ''}`} onClick={closeMenu}></div>
       <div className={styles.navBar}>
-        {primaryItems.map(item => (
-          <Link
-            key={item.path}
-            to={item.path}
-            onClick={() => handleItemClick(item)}
-            className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
-          >
-            <FontAwesomeIcon icon={item.icon} className={styles.icon} />
-            {isMenuOpen && item.label !== 'Еще' && <span className={styles.label}>{item.label}</span>}
-          </Link>
-        ))}
+          {primaryItems.map(item => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => handleItemClick(item)}
+              className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
+              style={location.pathname === item.path ? { color: accentColor } : {}}
+            >
+              <FontAwesomeIcon icon={item.icon} className={styles.icon} />
+              <span className={styles.label}>{item.label}</span>
+            </Link>
+          ))}
       </div>
-      <div className={`${styles.additionalMenu} ${isMenuOpen ? styles.open : ''}`} style={{ color: accentColor }}>
+      <div className={`${styles.additionalMenu} ${isMenuOpen ? styles.open : ''}`}>
+        <Link
+            key={`/${userData.username}`}
+            to={`/p/${userData.username}`}
+            className={`${location.pathname === `/p/${userData.username}` ? styles.active : ''}`}
+            style={{ borderColor: accentColor }}
+        >
+          <div className={styles.profileContainer}>
+            <img
+              className={styles.avatar}
+              src={userData.avatar_url}
+              alt="User Avatar"
+              style={{ borderColor: accentColor }}
+            />
+            <span className={styles.profileLabel}>{userData.first_name} {userData.last_name}</span>
+          </div>
+        </Link>
         {additionalItems.map(item => (
           <Link
             key={item.path}

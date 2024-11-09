@@ -26,6 +26,9 @@ const MessageList = () => {
   const containerRef = useRef(null);
   const isAutoScroll = useRef(true);
 
+  // Реверсируем список сообщений
+  const reversedMessages = messages.slice().reverse();
+
   // Функция форматирования даты
   const formatDate = (date) => {
     if (isToday(date)) return 'Сегодня';
@@ -161,65 +164,67 @@ const MessageList = () => {
 
   return (
     <div
-      className={styles.messages}
-      ref={containerRef}
-      onScroll={handleScroll}
-      style={{
-        backgroundImage: backgroundChat.type === 'color'
-          ? `linear-gradient(${backgroundChat.colors.length > 1 ? backgroundChat.colors.join(', ') : `${backgroundChat.colors[0]}, ${backgroundChat.colors[0]}`})`
-          : `url(${backgroundChat.imageURL})`,
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed', // чтобы изображение не двигалось при прокрутке
-        backgroundPosition: 'center', // центрируем изображение
-        backgroundBlendMode: backgroundChat.type === 'image' ? 'overlay' : 'normal', // для затемнения изображения
-        backgroundColor: backgroundChat.type === 'image' ? `rgba(0, 0, 0, ${backgroundChat.imageOpacity})` : 'transparent' // затемнение изображения
-      }}
+        className={styles.messages}
+        ref={containerRef}
+        onScroll={handleScroll}
+        style={{
+            backgroundImage: backgroundChat.type === 'color'
+                ? `linear-gradient(${backgroundChat.colors.length > 1 ? backgroundChat.colors.join(', ') : `${backgroundChat.colors[0]}, ${backgroundChat.colors[0]}`})`
+                : `url(${backgroundChat.imageURL})`,
+            backgroundSize: 'cover',
+            backgroundAttachment: 'fixed',
+            backgroundPosition: 'center',
+            backgroundBlendMode: backgroundChat.type === 'image' ? 'overlay' : 'normal',
+            backgroundColor: backgroundChat.type === 'image' ? `rgba(0, 0, 0, ${backgroundChat.imageOpacity})` : 'transparent'
+        }}
     >
-      {Object.keys(groupedMessages).map((date) => (
-        <div key={date}>
-          <div className={styles.dateSeparator} onClick={() => handleDateClick(parseISO(date))}>{formatDate(parseISO(date))}</div>
-          {groupedMessages[date].map((message) => {
-            const userInfo = selectedChat.membersInfo.find(member => member.auth_id === message.user_id);
-            if (!userInfo) return null;
+        {Object.keys(groupedMessages).reverse().map((date) => (
+            <div key={date}>
+                {/* Рендерим сепаратор с датой */}
+                <div className={styles.dateSeparator} onClick={() => handleDateClick(parseISO(date))}>
+                    {formatDate(parseISO(date))}
+                </div>
+                {groupedMessages[date].slice().reverse().map((message) => { // Реверсируем сообщения в каждой группе
+                    const userInfo = selectedChat.membersInfo.find(member => member.auth_id === message.user_id);
+                    if (!userInfo) return null;
 
-            return (
-              <div key={message.id} className={styles.messageContainer} onContextMenu={(e) => handleMessageClick(e, message)} >
+                    return (
+                        <div key={message.id} className={styles.messageContainer} onContextMenu={(e) => handleMessageClick(e, message)}>
+                            <Message
+                                message={{
+                                    id: message.id,
+                                    user: `${userInfo.first_name} ${userInfo.last_name}`,
+                                    text: message.content,
+                                    time: new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                                    isUser: message.user_id === userId,
+                                    avatar: userInfo.avatar_url,
+                                    replyTo: message.reply_to,
+                                }}
+                                status={renderMessageStatus(message.id)}
+                                replyMessages={messages}
+                            />
+                        </div>
+                    );
+                })}
+            </div>
+        ))}
+
+        {/* Рендер сообщений из очереди */}
+        {pendingQueue.map((message) => (
+            <div key={message.id} className={styles.messageContainer}>
                 <Message
-                  message={{
-                    id: message.id,
-                    user: `${userInfo.first_name} ${userInfo.last_name}`,
-                    text: message.content,
-                    time: new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    isUser: message.user_id === userId,
-                    avatar: userInfo.avatar_url,
-                    replyTo: message.reply_to,
-                  }}
-                  status={renderMessageStatus(message.id)}
-                  replyMessages={messages}
+                    message={{
+                        id: message.id,
+                        user: 'Вы',
+                        text: message.content,
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        isUser: 'yes',
+                        avatar: 'gf',
+                        status: renderMessageStatus(message.id),
+                    }}
                 />
-                {message.user_id === selectedChat.currentUserId && renderMessageStatus(message.id)}
-              </div>
-            );
-          })}
-        </div>
-      ))}
-
-      {/* Рендер сообщений из очереди */}
-      {pendingQueue.map((message) => (
-        <div key={message.id} className={styles.messageContainer}>
-          <Message
-            message={{
-              id: message.id,
-              user: 'Вы',
-              text: message.content,
-              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-              isUser: 'yes',
-              avatar: 'gf',
-              status: renderMessageStatus(message.id),
-            }}
-          />
-        </div>
-      ))}
+            </div>
+        ))}
 
       {activeMessage && (
         <MessageMenu

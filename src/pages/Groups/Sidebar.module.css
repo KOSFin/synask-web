@@ -1,0 +1,80 @@
+/* Sidebar.module.css */
+.sidebar {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 10px;
+}
+
+.navButton {
+    display: block;
+    margin: 5px 0;
+    padding: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.showMore {
+    display: block;
+    margin: 5px 0;
+    cursor: pointer;
+    background-color: #e0e0e0;
+    padding: 10px;
+}
+
+.section {
+    margin: 15px 0;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.groupItem {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.groupAvatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.groupDetails h3 {
+    margin: 0;
+}
+
+/* MainContent.module.css */
+.mainContent {
+    flex: 1;
+    padding: 20px;
+}
+
+.search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.groupGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.selectedGroup {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}

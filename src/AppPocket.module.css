@@ -15,8 +15,7 @@
 
 .contentArea {
   flex: 1;
-  margin-top: 60px;
-  margin-bottom: 60px;
-  padding: 5px;
+  margin-bottom: 50px;
+  padding: 1px;
   overflow-y: auto;
 }

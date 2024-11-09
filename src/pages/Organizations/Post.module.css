@@ -1,0 +1,369 @@
+/* Post.module.css */
+
+/* Основной контейнер поста */
+.post {
+  font-size: 13px; /* Устанавливает базовый размер текста */
+  padding: 0px;
+}
+
+.post h1 {
+  font-size: 17px; /* Устанавливает базовый размер текста */
+}
+
+.post h2 {
+  font-size: 15px; /* Устанавливает базовый размер текста */
+}
+
+.postContainer {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 10px;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+    width: fit-content;
+    max-width: 550px;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Шапка поста */
+.postHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.orgInfo {
+    display: flex;
+    align-items: center;
+}
+
+.orgAvatar {
+    width: 30px;
+    height: auto;
+    border-radius: 35%;
+    margin-right: 12px;
+    object-fit: cover;
+}
+
+.orgName {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.postDate {
+    font-size: 10px;
+    color: #b3b3b3;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.postDate:hover {
+    color: #ffffff;
+}
+
+.datePopup {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    background: #2b2b2b;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+    font-size: 10px;
+    z-index: 10;
+}
+
+/* Список авторов */
+.authorsList {
+    display: flex;
+    align-items: center;
+}
+
+.authorAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #1e1e1e;
+    margin-left: -8px;
+    position: relative;
+    z-index: 1;
+}
+
+.additionalAuthors {
+    background-color: #333333;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    border: 2px solid #1e1e1e;
+    margin-left: -8px;
+    z-index: 0;
+}
+
+/* Теги */
+.tagsContainer {
+    display: flex;
+    overflow-x: auto;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    gap: 3px;
+}
+
+.tag {
+    padding: 3px 3px;
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border-radius: 16px;
+    font-size: 10px;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.tag:hover {
+    background-color: #565656;
+}
+
+/* Разделитель */
+.divider {
+    border-bottom: 1px solid #444444;
+    margin: 12px 0;
+}
+
+/* Медиа-контейнер */
+.mediaContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.mediaImage, .mediaVideo {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.mediaVideo {
+    background: #000000;
+}
+
+/* Контент поста */
+.postContent {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 10px;
+    color: #d1d1d1;
+}
+
+/* Подвал поста */
+.postFooter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+/* Реакции */
+.reactionsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.reaction {
+    display: flex;
+    align-items: center;
+    background-color: #333333;
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 16px;
+    font-size: 15px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.reaction:hover {
+    transform: scale(1.05);
+}
+
+.reactionEmoji {
+    margin-right: 4px;
+}
+
+/* Кнопка комментариев */
+.commentButton {
+    background-color: #292929;
+    color: #ffffff;
+    border: none;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.commentButton:hover {
+    background-color: 3A3A3A;
+}
+
+.commentButton:active {
+    transform: translateY(0);
+}
+
+.dateInfoPopup {
+  position: fixed;
+  top: 24px;
+  left: 0;
+  background: #2b2b2b;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+  font-size: 10px;
+  z-index: 10;
+}
+
+.authorsList {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.authorAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+/* Стили для реакций */
+.reactionsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.reaction {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #333;
+  border-radius: 16px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.activeReaction {
+  background-color: #555;
+}
+
+.addReaction {
+  background-color: #333;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  color: white;
+}
+
+.emojiPicker {
+  position: inherit;
+  z-index: 20;
+  margin-top: 8px;
+}
+
+.mediaContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.mediaItem {
+  cursor: pointer;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.mediaModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.menuButtonContainer {
+  position: relative;
+}
+
+.menuButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  margin-left: 15px;
+}
+
+.actionMenu {
+  top: 30px;
+  right: 0;
+  background-color: #333;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  z-index: 100;
+}
+
+.actionMenu button {
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 5px 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.actionMenu button:hover {
+  background-color: #444;
+}

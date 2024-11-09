@@ -1,49 +1,101 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import SimplePeer from 'simple-peer';
 
-const NfcComponent = () => {
-  const [logs, setLogs] = useState([]);
+const VoiceChat = ({ signalingServerUrl }) => {
+  const [peer, setPeer] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [isCalling, setIsCalling] = useState(false);
+  const localStreamRef = useRef(null);
+  const remoteStreamRef = useRef(null);
+  const signalingSocketRef = useRef(null);
 
   useEffect(() => {
-    if ('NDEFReader' in window) {
-      const ndef = new window.NDEFReader();
+    // Получаем доступ к микрофону
+    const initMedia = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        localStreamRef.current.srcObject = stream;
 
-      const scanNFC = async () => {
-        try {
-          await ndef.scan();
-          addLog("NFC сканирование началось успешно.");
+        // Настраиваем сокет для сигнального сервера
+        const socket = new WebSocket(signalingServerUrl);
+        signalingSocketRef.current = socket;
 
-          ndef.addEventListener("reading", event => {
-            const decoder = new TextDecoder();
-            for (const record of event.message.records) {
-              const logMessage = `Тип записи: ${record.recordType}, MIME тип: ${record.mediaType}, Данные: ${decoder.decode(record.data)}`;
-              addLog(logMessage);
-            }
-          });
-        } catch (error) {
-          addLog(`Ошибка: ${error}`);
-        }
-      };
+        socket.onmessage = (message) => {
+          const data = JSON.parse(message.data);
+          if (data.signal && peer) {
+            peer.signal(data.signal);
+          }
+        };
 
-      scanNFC();
-    } else {
-      addLog("Web NFC не поддерживается.");
+        // Создаем WebRTC соединение при звонке
+        const p = new SimplePeer({
+          initiator: isCalling,
+          trickle: false,
+          stream: stream
+        });
+
+        p.on('signal', signal => {
+          socket.send(JSON.stringify({ signal }));
+        });
+
+        p.on('stream', remoteStream => {
+          remoteStreamRef.current.srcObject = remoteStream;
+        });
+
+        p.on('connect', () => {
+          setIsConnected(true);
+        });
+
+        p.on('close', () => {
+          setIsConnected(false);
+          cleanupPeer();
+        });
+
+        setPeer(p);
+      } catch (err) {
+        console.error("Error accessing media devices.", err);
+      }
+    };
+
+    initMedia();
+
+    return () => {
+      cleanupPeer();
+      if (signalingSocketRef.current) signalingSocketRef.current.close();
+    };
+  }, [isCalling]);
+
+  const cleanupPeer = () => {
+    if (peer) {
+      peer.destroy();
+      setPeer(null);
     }
-  }, []);
+  };
 
-  const addLog = (message) => {
-    setLogs(prevLogs => [...prevLogs, message]);
+  const startCall = () => {
+    setIsCalling(true);
+  };
+
+  const stopCall = () => {
+    cleanupPeer();
+    setIsCalling(false);
+    setIsConnected(false);
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Tap NFC Tag</h1>
-      <div style={{ fontFamily: 'monospace', whiteSpace: 'pre-wrap', color: 'white'}}>
-        {logs.map((log, index) => (
-          <div key={index}>{log}</div>
-        ))}
+    <div>
+      <h2>Voice Chat</h2>
+      <div>
+        <audio ref={localStreamRef} autoPlay muted />
+        <audio ref={remoteStreamRef} autoPlay />
       </div>
+      {!isConnected ? (
+        <button onClick={startCall}>Start Call</button>
+      ) : (
+        <button onClick={stopCall}>End Call</button>
+      )}
     </div>
   );
 };
 
-export default NfcComponent;
+export default VoiceChat;

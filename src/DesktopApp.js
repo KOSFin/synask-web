@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, Navigate} from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/desktop/Sidebar';
 import Header from './components/desktop/Header';
@@ -10,7 +10,7 @@ import Music from './pages/music/App';
 import Search from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
 import Org from './pages/Organizations/Groups';
-import OrgView from './pages/Organizations/OrganizationView/OrganizationView';
+import OrgView from './pages/Organizations/MainGroupComponent';
 import Settings from './pages/settings/Settings';
 import BackgroundContext from './pages/settings/BackgroundContext';
 import Info from './pages/info/AboutPage';
@@ -47,8 +47,7 @@ const DesktopApp = () => {
                 <Route path="/people" element={<Search />} />
                 <Route path="/people/:username" element={<UserProfilePage />} />
                 <Route path="/:username" element={<UserProfilePage />} />
-                <Route path="/org" element={<Org />} />
-                <Route path="/org/:OrgName" element={<OrgView />} />
+                <Route path="/org" element={<OrgView />} />
                 <Route path="/options" element={<Settings />} />
                 <Route path="/info" element={<Info />} />
               </Routes>

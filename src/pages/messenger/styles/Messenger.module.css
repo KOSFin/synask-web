@@ -59,15 +59,14 @@
 
 .closeButton {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border: none;
   background: rgba(67, 0, 0, 0.47);
   color: #ffffff;
   cursor: pointer;
 }
 
-.chatListContainer {
-  transition: width 0.2s ease; /* Добавляем плавный переход */
+.chatListContainer { /* Добавляем плавный переход */
   width: 30%;
   resize: horizontal;
   overflow: auto;
