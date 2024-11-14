@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+		<!--	created with www.mysitemapgenerator.com	-->
+		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+	<loc>https://me.synask.ru/</loc>
+	<lastmod>2024-11-14T14:32:48+01:00</lastmod>
+	<priority>0.6</priority>
+</url>
+<url>
+	<loc>https://me.synask.ru/login</loc>
+	<lastmod>2024-11-14T14:32:48+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://me.synask.ru/registration</loc>
+	<lastmod>2024-11-14T14:32:48+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://me.synask.ru/main</loc>
+	<lastmod>2024-11-14T14:32:48+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://me.synask.ru/reset-password.html</loc>
+	<lastmod>2024-11-14T14:32:51+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://me.synask.ru/reset-password</loc>
+	<lastmod>2024-11-14T14:32:55+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+</urlset>
