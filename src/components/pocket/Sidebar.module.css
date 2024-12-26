@@ -1,3 +1,4 @@
+/* Sidebar Styles */
 .mobileSidebarContainer {
   position: relative;
   font-family: 'Roboto', sans-serif;
@@ -34,6 +35,7 @@
   align-items: center;
   padding: 10px 0;
   z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .navItem {
@@ -53,7 +55,10 @@
 .navItem:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.navItem:focus {
+  outline: none;
 }
 
 .active {
@@ -67,7 +72,7 @@
 }
 
 .label {
-  font-size: 14px;
+  font-size: 12px;
   margin-top: 5px;
 }
 
@@ -150,4 +155,42 @@
   font-size: 15px;
   text-shadow: 1px 1px 2px black;
   z-index: 2;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loadingBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  font-size: 14px;
+  position: fixed;
+  width: 100%;
+  bottom: 65px;
+  z-index: 999;
+}
+
+.loadingText {
+  flex: 1;
+  text-align: left;
+  color: #ccc;
+}
+
+.navItem:focus {
+  outline: none;
+}
+
+.navItem:active {
+  transform: scale(0.95);
+  transition: transform 0.2s;
 }

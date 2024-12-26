@@ -10,17 +10,17 @@
 .profileBlock {
     width: 100%;
     max-width: 1000px;
-    background-color: #2c2f36;
-    border-radius: 10px;
+    background-color: #0000007a;
     overflow: visible;
     display: flex;
     flex-direction: column;
-    border: 2px solid;
+    border-radius: 3%;
 }
 
 .profileHeader {
     position: relative;
-    height: 250px;
+    display: flex;
+    flex-direction: column;
 }
 
 .profileCover {
@@ -40,15 +40,26 @@
 }
 
 .profileAvatar {
-    position: absolute;
-    bottom: -75px;
-    left: 20px;
-    width: 200px;
-    height: 200px;
+    position: relative;
+    width: 150px;
+    height: 150px;
     border-radius: 26%;
     border: 5px solid #2c2f36;
     overflow: visible;
     z-index: 1;
+    margin-left: 10px;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    margin-left: 10px;
+}
+
+.profileCoverInfo {
+    display: flex;
+    flex-direction: row;
 }
 
 .profileAvatar img {
@@ -86,7 +97,6 @@
     display: block;
 }
 
-
 .customStatusIndicator {
     position: absolute;
     bottom: 0px; /* Располагаем ниже границ аватара */
@@ -122,46 +132,27 @@
     display: block;
 }
 
-.profileTags {
-    position: absolute;
-    bottom: 20px;
-    left: 240px;
-    z-index: 1;
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .tag {
     background-color: #444;
     color: white;
-    padding: 5px 10px;
+    padding: 2px 2px;
     margin: 2px;
     border-radius: 5px;
-    font-size: 12px;
-}
-
-.profileInfo {
-    padding: 5px;
-    border-top: 2px solid;
+    font-size: 11px;
 }
 
 .profileNames {
     font-size: 30px;
     color: white;
     margin: 0;
-    margin-left: 240px;
+    z-index: 5;
+    margin-left: 10px;
 }
 
 .profileUsername {
     font-size: 18px;
     color: #888;
     margin-top: 1px;
-    margin-left: 240px;
-}
-
-.userAchievements {
-    margin-top: 10px;
-    margin-left: 90px;
 }
 
 .profileActions {
@@ -174,10 +165,8 @@
 }
 
 .contactInfo {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: #1e1f23;
+    padding: 10px;
+    background-color: #1a1a1ab5;
     border-top: 1px solid #444;
 }
 
@@ -228,11 +217,13 @@
 }
 
 .profileMenu {
-    display: flex;
     margin: auto;
-    gap: 10px;
     padding: 10px 20px;
-    background-color: #2c2f36;
+    border-bottom: 2px solid #c485c9;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
 }
 
 .menuItems {
@@ -279,17 +270,13 @@
 .ActionsButtons {
     display: flex;
     flex-direction: reverse;
-    margin-top: 10px;
 }
 
 .userActionsBar {
-    background-color: #1c1f26;
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 15px 25px;
-    border-bottom: 1px solid #444;
     position: inherit;
+    margin: 15px;
+    margin-left: 10px;
 }
 
 .userActionsBar::before {
@@ -304,7 +291,7 @@
 }
 
 .userActionsBtn {
-    padding: 10px 15px;
+    padding: 5px 10px;
     margin-right: 10px;
     background-color: rgba(255, 255, 255, 0.2);
     color: #fff;
@@ -473,39 +460,40 @@
 
 @media (max-width: 800px) {
     .container {
-        padding: 5px;
+        padding: 0px;
     }
 
     .profileAvatar {
         position: relative;
         bottom: 0;
         left: 50%;
-        transform: translateX(-50%);
         width: 150px;
         height: 150px;
+        min-width: 150px;
+        margin: 5px;
+        left: 0px;
     }
 
     .profileTags {
         position: relative;
-        top: 10px;
+        margin-top: 5px;
         left: 0;
         display: flex;
-        justify-content: center;
         flex-wrap: wrap;
+        height: fit-content;
     }
 
-    .profileNames,
-    .profileUsername {
+    .profileNames {
         text-align: center;
         margin: 0;
-        margin-top: 10px;
+        margin-bottom: 5px;
+        font-size: 30px;
     }
 
     .userAchievements {
         display: flex;
-        justify-content: center;
-        margin-top: 10px;
         margin-left: 0px;
+        margin-top: 5px;
     }
 
     .contactInfo {
@@ -513,13 +501,8 @@
         text-align: center;
     }
 
-    .contactItem {
-        justify-content: center;
-    }
-
     .userStats {
         flex-direction: column;
-        align-items: center;
     }
 
     .statItem {
@@ -528,26 +511,22 @@
 
     .userActionsBar {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
+        justify-content: center;
+        margin-top: 10px;
     }
 
     .ActionsButtons {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .userActionsBtn {
-        width: 100%;
         text-align: center;
-        margin-top: 5px;
-    }
-
-    .profileMenu {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 5px;
+        margin: 3px;
+        flex-direction: row;
     }
 
     .menuItems {
@@ -557,6 +536,15 @@
 
     .profileContent {
         padding: 10px;
+    }
+
+    .profileCoverInfo {
+        margin-left: 0px;
+    }
+
+    .profileBlock {
+        border-radius: 0px;
+        border: none !important;
     }
 }
 

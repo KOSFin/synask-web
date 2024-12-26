@@ -4,10 +4,10 @@ import moment from 'moment-timezone';
 import Picker from 'emoji-picker-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV, faTrashAlt, faEdit, faFlag, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
-import styles from './Post.module.css';
-import EditPostContext from '../../components/contexts/EditPostContext';
-import UserContext from '../../components/UserContext';
-import getSupabaseClient from '../config/SupabaseClient';
+import styles from '../styles/Post.module.css';
+import EditPostContext from '../../../components/contexts/EditPostContext';
+import UserContext from '../../../components/UserContext';
+import getSupabaseClient from '../../config/SupabaseClient';
 
 const supabase = getSupabaseClient();
 

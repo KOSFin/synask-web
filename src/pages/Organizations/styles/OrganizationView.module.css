@@ -150,11 +150,6 @@
   overflow-x: auto;
 }
 
-video, img {
-  max-height: 200px;
-  border-radius: 8px;
-}
-
 @media (max-width: 768px) {
   .container {
     flex-direction: column;

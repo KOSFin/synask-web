@@ -23,6 +23,7 @@ import { BackgroundProvider } from './pages/settings/BackgroundContext';
 import { TrackProvider } from './pages/music/TrackContext';
 import { MessengerSettingsProvider } from './components/contexts/MessengerSettingsContext';
 import { VersionProvider } from './components/contexts/VersionContext';
+import { TechInfProvider } from './components/contexts/TechInfContext';
 import { EditPostProvider } from './components/contexts/EditPostContext';
 import Test from './pages/garbage/test_notif';
 
@@ -76,37 +77,39 @@ const App = () => {
   return (
     <Router>
       <UserProvider>
-        <ChatProvider>
-          <NotificationProvider>
-            <AccentColorProvider>
-              <BackgroundProvider>
-                <TrackProvider>
-                  <MessengerSettingsProvider>
-                    <VersionProvider>
-                      <GroupProvider>
-                        <EditPostProvider>
-                          <Routes>
-                            <Route path="/main" element={<MainPage />} />
-                            {/*<Route path="/auth" element={<Auth />} />*/}
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/registration" element={<Registration />} />
-                            <Route path="/swap" element={<Swap />} />
-                            <Route path="/check" element={<Checker />} />
-                            <Route path="/ai" element={<AImodele />} />
-                            <Route path="/info" element={<Info />} />
-                            <Route path="/test" element={<Test />} />
-                            <Route path="/*" element={<VersionRouter />} />
-                            <Route path="*" element={<Navigate to="/main" />} />
-                          </Routes>
-                        </EditPostProvider>
-                      </GroupProvider>
-                    </VersionProvider>
-                  </MessengerSettingsProvider>
-                </TrackProvider>
-              </BackgroundProvider>
-            </AccentColorProvider>
-          </NotificationProvider>
-        </ChatProvider>
+        <TechInfProvider>
+            <ChatProvider>
+              <NotificationProvider>
+                <AccentColorProvider>
+                  <BackgroundProvider>
+                    <TrackProvider>
+                      <MessengerSettingsProvider>
+                        <VersionProvider>
+                          <GroupProvider>
+                            <EditPostProvider>
+                              <Routes>
+                                <Route path="/main" element={<MainPage />} />
+                                {/*<Route path="/auth" element={<Auth />} />*/}
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/registration" element={<Registration />} />
+                                <Route path="/swap" element={<Swap />} />
+                                <Route path="/check" element={<Checker />} />
+                                <Route path="/ai" element={<AImodele />} />
+                                <Route path="/info" element={<Info />} />
+                                <Route path="/test" element={<Test />} />
+                                <Route path="/*" element={<VersionRouter />} />
+                                <Route path="*" element={<Navigate to="/main" />} />
+                              </Routes>
+                            </EditPostProvider>
+                          </GroupProvider>
+                        </VersionProvider>
+                      </MessengerSettingsProvider>
+                    </TrackProvider>
+                  </BackgroundProvider>
+                </AccentColorProvider>
+              </NotificationProvider>
+            </ChatProvider>
+        </TechInfProvider>
       </UserProvider>
     </Router>
   );

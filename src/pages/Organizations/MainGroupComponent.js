@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { GroupContext } from './GroupContext';
-import GroupList from './GroupList';
-import GroupView from './GroupView';
-import Groups from './Groups';
-import GroupHomePlaceholder from './GroupHomePlaceholder';
+import GroupList from './components/GroupList';
+import GroupView from './components/GroupView';
+import Groups from './components/Groups';
 import getSupabaseClient from '../config/SupabaseClient';
 import { useParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import styles from './MainGroupComponent.module.css';
+import styles from './styles/MainGroupComponent.module.css';
 
 const supabase = getSupabaseClient();
 

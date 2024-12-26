@@ -20,7 +20,7 @@ export const MessageHandler = () => {
         messageStatus, setMessageStatus,
         pendingQueue, setPendingQueue
     } = useContext(ChatContext);
-    const { isAuthenticated, userId, usersCache, setUsersCache } = useContext(UserContext);
+    const { isAuthenticated, userId, usersCache, setUsersCache, dataUpdate, setDataUpdate } = useContext(UserContext);
 
     const [messagesCache, setMessagesCache] = useState({});
     const [chatsCache, setChatsCache] = useState([]);
@@ -30,6 +30,7 @@ export const MessageHandler = () => {
 
         setIsLoadingChats(true);
         setIsLoadingUser(true);
+        //setDataUpdate('updating');
 
         const initializeChats = async () => {
             if (chatsCache.length > 0) {
@@ -55,6 +56,7 @@ export const MessageHandler = () => {
             setChatList(enrichedChats);
             setIsLoadingChats(false);
             // setIsLoadingUser(false);
+            // setDataUpdate('');
             setChatsCache(enrichedChats);
             saveChatsToCache(enrichedChats);
 
@@ -203,6 +205,7 @@ export const MessageHandler = () => {
               ...prevCache,
               [selectedChat.id]: fetchedMessages
             }));
+            console.log(messagesCache);
             saveMessagesToCache(selectedChat.id, fetchedMessages);
         }
         setIsLoadingMessages(false);
@@ -219,6 +222,7 @@ export const MessageHandler = () => {
 
     const getCachedMessages = (selectedChatId) => {
         const cachedMessages = localStorage.getItem(`${CACHE_PREFIX}-messages-${selectedChatId}`);
+        console.log(JSON.parse(cachedMessages));
         return cachedMessages ? JSON.parse(cachedMessages) : [];
     };
 
@@ -305,13 +309,13 @@ export const MessageHandler = () => {
                 .from('messages')
                 .select('*')
                 .eq('chat_id', chatId)
-                .order('created_at', { ascending: true });
+                .order('created_at', { ascending: false }) // Сортировка по убыванию даты
 
             if (error) {
                 return { data, error };
                 throw error;
             }
-
+            console.log(data);
             return Array.isArray(data) ? data : [];
         } catch (error) {
             console.error('Ошибка при загрузке сообщений:', error);
@@ -397,10 +401,11 @@ export const MessageHandler = () => {
     };
 
     const handleMessageInsert = (newMessage) => {
-        // Добавляем новое сообщение в список сообщений
+        console.log('newMessage', newMessage);
+        // Добавляем новое сообщение в начало списка сообщений
         setMessagesCache(prevCache => {
             const chatMessages = prevCache[newMessage.chat_id] || [];
-            const updatedMessages = [...chatMessages, newMessage]; // Добавляем новое сообщение
+            const updatedMessages = [newMessage, ...chatMessages]; // Добавляем новое сообщение в начало
             saveMessagesToCache(newMessage.chat_id, updatedMessages); // Обновляем кеш
             return {
                 ...prevCache,
@@ -426,6 +431,7 @@ export const MessageHandler = () => {
     };
 
     const handleMessageUpdate = (updatedMessage) => {
+        console.log('updatedMessage', updatedMessage);
         setChatList(prevChats => {
             const updatedChats = prevChats.map(chat => {
                 if (chat.id === updatedMessage.chat_id) {
@@ -447,8 +453,8 @@ export const MessageHandler = () => {
                 msg.id === updatedMessage.id ? updatedMessage : msg
             );
 
-            // Сортируем только в случае необходимости
-            const sortedMessages = updatedMessages.slice().sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            // Сортируем и добавляем в начало
+            const sortedMessages = updatedMessages.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
             // Обновляем кэш
             setMessagesCache(prevCache => ({
@@ -464,57 +470,69 @@ export const MessageHandler = () => {
         console.log('Обновление сообщения:', updatedMessage);
     };
 
-
     const handleMessageDelete = async (deletedMessage) => {
-        // Удаляем сообщение из кэша
-        setMessagesCache(prevCache => {
-            const chatMessages = prevCache[deletedMessage.chat_id] || [];
-            const updatedMessages = chatMessages.filter(msg => msg.id !== deletedMessage.id);
-            saveMessagesToCache(deletedMessage.chat_id, updatedMessages);
+        console.log('Удаление сообщения:', deletedMessage);
+        console.log('Кэш сообщений:', messagesCache);
+        const messageId = deletedMessage.id;
+        let chatId = null;
 
-            return {
-                ...prevCache,
-                [deletedMessage.chat_id]: updatedMessages
-            };
-        });
+        for (let chat_id in messagesCache) {
+            const messages = messagesCache[chat_id];
+            console.log(chat_id, messages);
+            const message = messages.find(msg => msg.id === messageId);
 
-        // Удаляем сообщение из UI
+            if (message) {
+              chatId = chat_id;
+            }
+        }
+
+        if (!chatId) {
+            console.warn(`Сообщение с id ${messageId} не найдено в кэше.`);
+            return; // Если chatId не найден, выходим из функции
+        }
+
+        // Удаляем сообщение из UI и кэша
         setMessages(prevMessages => {
-            const updatedMessages = prevMessages.filter(msg => msg.id !== deletedMessage.id);
+            const updatedMessages = prevMessages.filter(msg => msg.id !== messageId);
 
-            // Обновляем кэш с учетом удаления сообщения
+            // Обновляем кэш
+            saveMessagesToCache(chatId, updatedMessages);
             setMessagesCache(prevCache => ({
                 ...prevCache,
-                [deletedMessage.chat_id]: updatedMessages
+                [chatId]: updatedMessages
             }));
-
-            saveMessagesToCache(deletedMessage.chat_id, updatedMessages);
 
             return updatedMessages;
         });
 
-        // Обновляем поле last_message в списке чатов
+        // Получаем обновленные сообщения из кэша
+        const cachedMessages = getCachedMessages(chatId);
+
+        // Если сообщения в чате остались, обновляем последнее сообщение
         setChatList(prevChats => {
             const updatedChatList = prevChats.map(chat => {
-                if (chat.id === deletedMessage.chat_id) {
-                    // Если в чате остались сообщения, обновляем last_message
-                    const chatMessages = updatedChatList.find(c => c.id === chat.id)?.messages || [];
-                    if (chatMessages.length > 0) {
-                        return { ...chat, last_message: chatMessages[chatMessages.length - 1] };
+                if (chat.id === chatId) {
+                    if (cachedMessages.length > 0) {
+                        const lastMessage = cachedMessages[cachedMessages.length - 1];
+                        return { ...chat, last_message: lastMessage };
                     }
-                    // Если сообщений больше нет, сбрасываем last_message
                     return { ...chat, last_message: null };
                 }
                 return chat;
             });
 
-            // Сохраняем обновленный список чатов в кэш
             saveChatsToCache(updatedChatList);
-
             return updatedChatList;
         });
-    };
 
+        // Обновляем локальное хранилище после удаления
+        const updatedMessagesCache = getCachedMessages(chatId);
+        if (updatedMessagesCache.length === 0) {
+            localStorage.removeItem(`${CACHE_PREFIX}-messages-${chatId}`);
+        } else {
+            saveMessagesToCache(chatId, updatedMessagesCache);
+        }
+    };
 
     const playNotificationSound = () => {
         console.log('Отправка звука');
@@ -540,13 +558,20 @@ export const MessageHandler = () => {
 
             const message = pendingQueue[0]; // Берем первое сообщение в очереди
 
+            // Проверяем, если сообщение было удалено
+            if (messageStatus[message.id] === 'deleted') {
+                console.log('Сообщение удалено, удаляем из очереди:', message.id);
+                setPendingQueue((prevQueue) => prevQueue.slice(1));
+                return;
+            }
+
             if (messageStatus[message.id] === 'pending') {
                 try {
                     console.log('Отправка сообщения', message);
 
                     const { dataIn, errorIn } = await supabase
                         .from('messages')
-                        .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id, reply_to: message.reply_to}]);
+                        .insert([{ chat_id: message.chat_id, content: message.content, user_id: message.user_id, reply_to: message.reply_to }]);
 
                     if (errorIn) {
                         // Обновляем статус на 'failed'

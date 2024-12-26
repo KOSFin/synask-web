@@ -24,9 +24,6 @@
   max-height: 80px; /* Исходная высота */
   overflow: hidden;
   user-select: none;
-  opacity: 0; /* Начальное состояние прозрачности */
-  animation: fadeInUp 0.5s ease forwards; /* Анимация появления */
-  animation-delay: calc(var(--chat-index) * 0.1s); /* Задержка для плавного последовательного появления */
 }
 
 .chat:hover {

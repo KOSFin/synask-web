@@ -108,18 +108,14 @@
 }
 
 .profileCard {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px;
-    border-bottom: 1px solid #333;
-    transition: all 0.3s ease;
-    margin-bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
     border-radius: 5px;
     cursor: pointer;
-    position: relative;
-    background-size: cover;
-    background-position: center;
+    display: flex;
+    margin-top: 5px;
+    padding: 5px;
+    transition: background-color .3s;
+    background-color: #222;
 }
 
 .profileCard:hover {
@@ -127,20 +123,17 @@
 }
 
 .profileAvatar {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    border-radius: 25%;
-    overflow: visible;
-    margin-right: 20px;
-    z-index: 1;
+    width: 60px;
+    height: 60px;
+    flex: 0 0 60px;
+    margin-right: 15px;
 }
 
 .profileAvatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
+    border-radius: 35%;
+    font-size: 5px;
+    width: 60px;
+    height: 60px;
 }
 
 .statusIndicator {

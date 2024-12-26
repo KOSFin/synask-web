@@ -1,7 +1,7 @@
 {
   "name": "synask-app",
   "version": "0.93.050",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@cloudflare/pages-plugin-turnstile": "^1.0.2",
     "@emoji-mart/react": "^1.1.1",

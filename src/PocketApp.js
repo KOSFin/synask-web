@@ -9,11 +9,11 @@ import Messenger from './pages/messenger/Messenger';
 import Music from './pages/music/App';
 import Search from './pages/SearchPage';
 import UserProfilePage from './pages/UserProfilePage';
-import Groups from './pages/Organizations/Groups';
+import Groups from './pages/Organizations/components/Groups';
 import Settings from './pages/settings/Settings';
 import BackgroundContext from './pages/settings/BackgroundContext';
 import Info from './pages/info/AboutPage';
-import Org from './pages/Organizations/Groups';
+import Org from './pages/Organizations/components/Groups';
 import OrgView from './pages/Organizations/MainGroupComponent';
 
 import styles from './AppPocket.module.css';

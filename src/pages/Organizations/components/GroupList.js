@@ -2,10 +2,10 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEllipsisV, faHome, faUser, faCompass } from '@fortawesome/free-solid-svg-icons';
-import { GroupContext } from './GroupContext';
-import getSupabaseClient from '../config/SupabaseClient';
-import styles from './GroupList.module.css';
-import UserContext from '../../components/UserContext';
+import { GroupContext } from '../GroupContext';
+import getSupabaseClient from '../../config/SupabaseClient';
+import styles from '../styles/GroupList.module.css';
+import UserContext from '../../../components/UserContext';
 
 const supabase = getSupabaseClient();
 

@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
-import styles from './PostEditor.module.css';
-import getSupabaseClient from '../config/SupabaseClient';
+import styles from '../styles/PostEditor.module.css';
+import getSupabaseClient from '../../config/SupabaseClient';
 
 const supabase = getSupabaseClient();
 

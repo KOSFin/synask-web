@@ -3,9 +3,9 @@ import { useSwipeable } from 'react-swipeable'; // Импортируем биб
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCheck, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import styles from './OrganizationsPage.module.css';
-import load from '../../pages/Loader.module.css';
-import getSupabaseClient from '../config/SupabaseClient';
+import styles from '../styles/OrganizationsPage.module.css';
+import load from '../../../pages/Loader.module.css';
+import getSupabaseClient from '../../config/SupabaseClient';
 import ManagedOrganizations from './ManagedOrganizations'; // Импорт нового компонента
 
 const supabase = getSupabaseClient();

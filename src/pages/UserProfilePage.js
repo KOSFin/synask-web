@@ -150,28 +150,28 @@ const UserProfilePage = () => {
 
     return (
         <div className={p.container}>
-            <div className={p.profileBlock} style={{ borderColor: accentColor }}>
+            <div className={p.profileBlock} style={{border:`1px solid ${accentColor}`}}>
                 <div className={p.profileHeader}>
-                    <div className={p.profileCover}>
-                        <img id="profile-cover" src={profile.cover_url} alt="Cover Photo" />
+                    <div className={p.profileCoverInfo}>
+                        <div style={{background: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)), url(${profile.cover_url}) no-repeat center/cover`}} className={p.profileCover}></div>
+                        <div className={p.profileAvatar}>
+                            <img id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
+                            {renderStatus(profile.status)}
+                        </div>
+                        <div className={p.profileInfo}>
+                            <div className={p.profileUsername}>@{profile.username}</div>
+                            <div className={p.userAchievements}>
+                                <FontAwesomeIcon icon={faStar} title="Подтверждённый аккаунт" style={{ color: 'gold' }} />
+                                <FontAwesomeIcon icon={faStar} title="Значок твича" style={{ color: 'purple' }} />
+                                <FontAwesomeIcon icon={faStar} title="Значок тестировщика" style={{ color: 'green' }} />
+                                <FontAwesomeIcon icon={faStar} title="Значок олда" style={{ color: 'blue' }} />
+                            </div>
+                            <div className={p.profileTags}>
+                                {tags.map(tag => <span key={tag} className={p.tag}>{tag}</span>)}
+                            </div>
+                        </div>
                     </div>
-                    <div className={p.profileAvatar}>
-                        <img id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
-                        {renderStatus(profile.status)}
-                    </div>
-                    <div className={p.profileTags}>
-                        {tags.map(tag => <span key={tag} className={p.tag}>{tag}</span>)}
-                    </div>
-                </div>
-                <div className={p.profileInfo} style={{ borderColor: accentColor }}>
                     <h2 className={p.profileNames}>{`${profile.first_name} ${profile.last_name}`}</h2>
-                    <div className={p.profileUsername}>@{profile.username}</div>
-                    <div className={p.userAchievements}>
-                        <FontAwesomeIcon icon={faStar} title="Подтверждённый аккаунт" style={{ color: 'gold' }} />
-                        <FontAwesomeIcon icon={faStar} title="Значок твича" style={{ color: 'purple' }} />
-                        <FontAwesomeIcon icon={faStar} title="Значок тестировщика" style={{ color: 'green' }} />
-                        <FontAwesomeIcon icon={faStar} title="Значок олда" style={{ color: 'blue' }} />
-                    </div>
                 </div>
                 {isOwner ? (
                     <div>
@@ -244,7 +244,7 @@ const UserProfilePage = () => {
                         )}
                     </div>
                 </div>
-                <div className={p.profileMenu}>
+                <div className={p.profileMenu} style={{borderBottom: `1px solid ${accentColor}`}}>
                     <div className={`${p.menuItems} ${activeSection === 'description' ? p.active : ''}`} onClick={() => setActiveSection('description')}>
                         <FontAwesomeIcon icon={faInfoCircle} /> Описание
                     </div>

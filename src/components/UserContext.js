@@ -18,6 +18,10 @@ export const UserProvider = ({ children }) => {
         }
     }, [userId]);
 
+    useEffect(() => {
+        console.log('======', usersCache);
+    }, [usersCache]);
+
     return (
         <UserContext.Provider value={{ userData, setUserData, friends, setFriends, userId, setUserId, isAuthenticated, setIsAuthenticated, usersCache, setUsersCache, user, setUser, statusUsers, setStatusUsers }}>
             {children}

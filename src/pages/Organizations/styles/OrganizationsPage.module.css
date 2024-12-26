@@ -122,14 +122,14 @@
 }
 
 .organizationCard {
-    display: flex;
     align-items: center;
     background-color: #222;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    transition: background-color 0.3s;
+    border-radius: 5px;
     cursor: pointer;
+    display: flex;
+    margin-top: 5px;
+    padding: 5px;
+    transition: background-color .3s;
 }
 
 .organizationCard:hover {
@@ -142,10 +142,10 @@
 }
 
 .organizationCard .avatar img {
-    width: 100%;
-    max-width: 65px;
-    border-radius: 25%;
+    border-radius: 35%;
     font-size: 5px;
+    max-width: 65px;
+    width: 100%;
 }
 
 .organizationCard .info {

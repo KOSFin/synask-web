@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimes, faEllipsisV, faPlus, faLink, faUser, faCommentDots, faCog, faSave } from '@fortawesome/free-solid-svg-icons';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import styles from './OrganizationView/OrganizationView.module.css';
-import UserContext from '../../components/UserContext';
-import getSupabaseClient from '../config/SupabaseClient';
+import styles from '../styles/OrganizationView.module.css';
+import UserContext from '../../../components/UserContext';
+import getSupabaseClient from '../../config/SupabaseClient';
 import PostEditor from './PostEditor';
 import Post from './Post';
-import load from '../../pages/Loader.module.css';
+import load from '../../../pages/Loader.module.css';
 import QRCode from 'qrcode.react';
 import Picker from 'emoji-picker-react';
 

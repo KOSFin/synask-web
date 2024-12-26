@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import styles from './CreateGroup.module.css';
-import getSupabaseClient from '../config/SupabaseClient';
+import styles from '../styles/CreateGroup.module.css';
+import getSupabaseClient from '../../config/SupabaseClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import UserContext from '../../components/UserContext';
+import UserContext from '../../../components/UserContext';
 
 const supabase = getSupabaseClient();
 

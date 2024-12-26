@@ -1,47 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import styles from './NetworkStatusHandler.module.css';
+import React, { useEffect, useContext } from 'react';
+import TechInfContext from './contexts/TechInfContext';
 
 // Функция для проверки статуса сети
 export const checkNetworkStatus = () => {
     return navigator.onLine;
 };
 
-// Компонент для отображения статуса сети
+// Компонент для обновления статуса сети в контексте
 const NetworkStatusHandler = () => {
-    const [isOnline, setIsOnline] = useState(checkNetworkStatus());
+    const { setIsNetworkConnected, isNetworkConnected } = useContext(TechInfContext);
 
     useEffect(() => {
-        const updateOnlineStatus = () => {
-            setIsOnline(checkNetworkStatus());
+        const updateNetworkStatus = () => {
+            const networkStatus = checkNetworkStatus()
+            setIsNetworkConnected(networkStatus);
         };
 
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
+        // Инициализация статуса при монтировании компонента
+        updateNetworkStatus();
+
+        // Слушаем события онлайн/офлайн
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
 
         return () => {
-            window.removeEventListener('online', updateOnlineStatus);
-            window.removeEventListener('offline', updateOnlineStatus);
+            window.removeEventListener('online', updateNetworkStatus);
+            window.removeEventListener('offline', updateNetworkStatus);
         };
-    }, []);
+    }, [setIsNetworkConnected]);
 
-    // Рендер компонента в зависимости от статуса сети
-    if (!isOnline) {
-        return (
-            <div className={styles.overlay}>
-                <div className={styles.messageContainer}>
-                    <div className={styles.messageTitle}>Нет подключения к интернету</div>
-                    <div className={styles.messageBody}>
-                        Соединение с интернетом потеряно. Пожалуйста, подождите...
-                    </div>
-                    <div className={styles.autoReconnect}>
-                        Подключение восстановится автоматически при появлении сети.
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    // Если интернет есть, компонент ничего не рендерит
+    // Компонент ничего не рендерит
     return null;
 };
 
