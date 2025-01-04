@@ -86,16 +86,17 @@ export const MessageHandler = () => {
     }, [isAuthenticated]);
 
     const enrichMemberData = async (memberIds) => {
-        // Проверка в кэше
+        // Фильтруем только те ID, которых нет в кеше
         const missingMemberIds = memberIds.filter(id => !usersCache[id]);
         if (missingMemberIds.length === 0) {
+            // Если все данные уже есть в кеше, возвращаем их
             return memberIds.map(id => usersCache[id]);
         }
 
-        // Получение недостающих пользователей из базы данных
+        // Выполняем запрос только для отсутствующих данных
         const { data: newMembers, error: memberError } = await supabase
             .from('users_public_information')
-            .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id')
+            .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id, last_online')
             .in('auth_id', missingMemberIds);
 
         if (memberError) {
@@ -103,14 +104,17 @@ export const MessageHandler = () => {
             return [];
         }
 
-        // Обновление кэша
-        const updatedCache = { ...usersCache };
-        newMembers.forEach(user => {
-            updatedCache[user.auth_id] = user;
+        // Обновляем кеш новыми данными
+        setUsersCache(prevCache => {
+            const updatedCache = { ...prevCache };
+            newMembers.forEach(user => {
+                updatedCache[user.auth_id] = user;
+            });
+            return updatedCache;
         });
-        setUsersCache(updatedCache);
 
-        return memberIds.map(id => updatedCache[id]);
+        // Возвращаем объединенные данные из кеша и новых данных
+        return memberIds.map(id => usersCache[id] || newMembers.find(user => user.auth_id === id));
     };
 
     useEffect(() => {
@@ -340,16 +344,7 @@ export const MessageHandler = () => {
         // Fetch members' information
         if (!newChat.is_group) {
             const memberIds = newChat.members;
-            const { data: memberData, error: memberError } = await supabase
-                .from('users_public_information')
-                .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id')
-                .in('auth_id', memberIds);
-
-            if (memberError) {
-                console.error(memberError);
-            } else {
-                newChat.membersInfo = memberData;
-            }
+            newChat.membersInfo = await enrichMemberData(memberIds);
         }
 
         // Fetch the last message for the new chat
@@ -369,16 +364,7 @@ export const MessageHandler = () => {
         // Fetch members' information again if it's not a group chat
         if (!updatedChat.is_group) {
             const memberIds = updatedChat.members;
-            const { data: memberData, error: memberError } = await supabase
-                .from('users_public_information')
-                .select('username, first_name, last_name, avatar_url, cover_url, status, auth_id')
-                .in('auth_id', memberIds);
-
-            if (memberError) {
-                console.error(memberError);
-            } else {
-                updatedChat.membersInfo = memberData;
-            }
+            updatedChat.membersInfo = await enrichMemberData(memberIds);
         }
 
         setChatList((prevChats) => {

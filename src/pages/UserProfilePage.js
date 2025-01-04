@@ -11,6 +11,7 @@ import UserContext from '../components/UserContext';
 import DOMPurify from 'dompurify';
 import 'react-quill/dist/quill.snow.css';
 import VersionContext from '../components/contexts/VersionContext';
+import { format, formatDistanceToNow, parseISO, isToday, isYesterday } from 'date-fns';
 
 const supabase = getSupabaseClient();
 
@@ -23,23 +24,40 @@ const UserProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const { accentColor } = useContext(AccentColorContext);
     const [activeSection, setActiveSection] = useState('description');
-    const { userData } = useContext(UserContext);
-    const [contacts, setContacts] = useState([]);
+    const { userData, usersCache, setUsersCache, statusUsers, friends, setFriends } = useContext(UserContext);
     const { version } = useContext(VersionContext);
+    const [onlineDuration, setOnlineDuration] = useState(null);
+    const [lastOfflineDuration, setLastOfflineDuration] = useState(null);
 
     useEffect(() => {
         if (userData) {
-            console.log('значение записано');
             setCurrentUser(userData);
-        } else {
-            console.log('no');
         }
     }, [userData]);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
-            console.log(userData);
-            setCurrentUser(userData);
+            if (!username) return;
+
+            if (profile && profile.username === username && !loading) {
+                // Если профиль уже загружен и соответствует текущему пользователю, не загружаем его снова
+                return;
+            }
+
+            if (username === userData.username) {
+                setProfile(userData);
+                console.log('================================================ttt');
+                setLoading(false);
+                return;
+            }
+
+            // Перебираем кеш, чтобы найти пользователя по username
+            const cachedProfile = Object.values(usersCache).find(user => user.username === username);
+            if (cachedProfile) {
+                setProfile(cachedProfile);
+                setTags(JSON.parse(cachedProfile.tags || '[]'));
+                setLoading(false);
+            }
 
             const { data, error } = await supabase
                 .from('users_public_information')
@@ -49,31 +67,54 @@ const UserProfilePage = () => {
 
             if (error) {
                 console.error('Error fetching user information:', error.message);
+                setLoading(false);
             } else {
                 setTags(JSON.parse(data.tags || '[]'));
                 setProfile(data);
-                console.log(userData);
-                setContacts(userData.contacts || []);
+                setUsersCache(prevCache => ({
+                    ...prevCache,
+                    [data.auth_id]: data
+                }));
+                setLoading(false);
             }
-
-            setLoading(false);
         };
 
         fetchUserProfile();
-    }, [username, userData]);
+    }, [username, usersCache, profile]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (currentUser && profile) {
+                const userStatus = statusUsers[profile.auth_id];
+                if (userStatus && userStatus.online) {
+                    const now = new Date();
+                    const lastOnline = new Date(userStatus.timestamp);
+                    const duration = Math.floor((now - lastOnline) / 1000);
+                    const hours = Math.floor(duration / 3600);
+                    const minutes = Math.floor((duration % 3600) / 60);
+                    const seconds = duration % 60;
+                    setOnlineDuration(`${hours}:${minutes}:${seconds}`);
+                } else {
+                    setLastOfflineDuration(`???`);
+                }
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [currentUser, profile, statusUsers]);
 
     let isOwner = currentUser && profile && currentUser.auth_id === profile.auth_id;
-    let isInContacts = contacts.includes(profile?.auth_id);
+    let isInContacts = friends.includes(profile?.auth_id);
 
     const handleAddContact = async () => {
         let updatedContacts;
         if (isInContacts) {
-            updatedContacts = contacts.filter(id => id !== profile.auth_id);
+            updatedContacts = friends.filter(id => id !== profile.auth_id);
         } else {
-            updatedContacts = [...contacts, profile.auth_id];
+            updatedContacts = [...friends, profile.auth_id];
         }
 
-        setContacts(updatedContacts);
+        setFriends(updatedContacts);
 
         // Обновление контактов на сервере
         const { error } = await supabase
@@ -88,28 +129,55 @@ const UserProfilePage = () => {
         }
     };
 
-    const renderStatus = (status) => {
-        if (status === 'online') {
-            return <div className={p.statusIndicator} data-status={status} style={{ backgroundColor: 'green' }} />;
-        } else if (status === 'offline') {
-            return <div className={p.statusIndicator} data-status={status} style={{ backgroundColor: 'gray' }} />;
-        } else if (status) {
-            const [symbol, userStatus] = status.split(':');
-            if (userStatus && symbol.length < 4) {
-                return (
-                    <div className={p.customStatusIndicator} data-status={userStatus}>
-                        {symbol}
-                    </div>
-                );
-            }
-            return (
-                <div className={p.customStatusIndicator} data-status={status}>
-                    💬
-                </div>
-            );
-        } else {
-            return;
+    const renderStatus = (authId) => {
+        const userStatus = statusUsers[authId];
+        const lastOnline = userStatus ? userStatus.timestamp : null;
+        const isOnline = userStatus ? userStatus.online : false;
+
+        return (
+            <div className={p.statusIndicator} data-status={isOnline ? 'online' : 'offline'} style={{ backgroundColor: isOnline ? 'green' : 'gray' }}></div>
+        );
+    };
+
+    const renderLastOnlineStatus = (authId) => {
+        const userStatus = statusUsers[authId];
+        const lastOnline = userStatus ? userStatus.timestamp : null;
+
+        if (!lastOnline) {
+            return <div><span className={p.statusTime}>Нет данных о последней активности</span></div>;
         }
+
+        const lastOnlineDate = parseISO(lastOnline);
+        const isOnline = userStatus ? userStatus.online : false;
+
+        return (
+            <div>
+                {isOnline ? (
+                    <span className={p.statusTime}>
+                        {`В сети уже ${onlineDuration}`}
+                    </span>
+                ) : (
+                    <span className={p.statusTime}>
+                        {isToday(lastOnlineDate) ? 
+                            `Был в сети сегодня в ${format(lastOnlineDate, 'HH:mm')}` :
+                            isYesterday(lastOnlineDate) ? 
+                            `Был в сети вчера в ${format(lastOnlineDate, 'HH:mm')}` :
+                            `Был в сети ${format(lastOnlineDate, 'd MMMM в HH:mm')}`
+                        }
+                    </span>
+                )}
+            </div>
+        );
+    };
+
+    const renderCustomStatus = (status) => {
+        const [emoji, text] = status.includes(':') ? status.split(':') : ['💬', status];
+        return (
+            <div className={p.customStatus}>
+                <span className={p.status}>{emoji}</span>
+                <span className={p.status}>{text || 'Нет статуса'}</span>
+            </div>
+        );
     };
 
     const ProfileDescription = ({ description }) => {
@@ -156,7 +224,7 @@ const UserProfilePage = () => {
                         <div style={{background: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)), url(${profile.cover_url}) no-repeat center/cover`}} className={p.profileCover}></div>
                         <div className={p.profileAvatar}>
                             <img id="profile-avatar" src={profile.avatar_url} alt="User Photo" />
-                            {renderStatus(profile.status)}
+                            {renderStatus(profile.auth_id)}
                         </div>
                         <div className={p.profileInfo}>
                             <div className={p.profileUsername}>@{profile.username}</div>
@@ -169,6 +237,8 @@ const UserProfilePage = () => {
                             <div className={p.profileTags}>
                                 {tags.map(tag => <span key={tag} className={p.tag}>{tag}</span>)}
                             </div>
+                            {renderCustomStatus(profile.status)}
+                            {renderLastOnlineStatus(profile.auth_id)}
                         </div>
                     </div>
                     <h2 className={p.profileNames}>{`${profile.first_name} ${profile.last_name}`}</h2>
@@ -216,7 +286,7 @@ const UserProfilePage = () => {
                         </div>
                     ) : (
                         <div className={p.guestView}>
-                            <p>Вы не вошли в систему. Страница открыта в Гостевом режиме.</p>
+                            <p>Вы не вошли в сисстему. Страница открыта в Гостевом режиме.</p>
                         </div>
                     )
                 )}

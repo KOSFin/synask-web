@@ -32,6 +32,7 @@
   position: absolute;
   width: 100%;
   z-index: 1;
+  cursor: pointer;
 }
 
 .avatarBlock {
@@ -180,6 +181,7 @@
       height: 100%;
       position: absolute;
       z-index: 2;
+      max-width: none;
     }
 }
 
@@ -215,7 +217,8 @@
 .coverImage {
   position: relative;
   width: 100%;
-  height: 250px;
+  height: auto;
+  min-height: 250px;
   background-size: cover;
   background-position: center;
   border-radius: 10px;
@@ -233,13 +236,10 @@
 
 .avatarContainer {
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
   position: absolute;
   bottom: 20px;
-  left: 0;
-  right: 0;
+  left: 20px;
 }
 
 .avatarInDescription {
@@ -251,15 +251,17 @@
 }
 
 .groupInfo {
-  text-align: center;
-  margin-top: 10px;
+  margin-left: 20px;
 }
 
 .groupInfo h1 {
-  font-size: 26px;
+  font-size: clamp(16px, 2.5vw, 26px);
   font-weight: bold;
   color: #ffffff;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .groupInfo p {
@@ -324,20 +326,7 @@
   color: #ff9800;
 }
 
-input[type="text"] {
-  background-color: #333333;
-  color: #ffffff;
-  border: 1px solid #444444;
-  border-radius: 8px;
-  padding: 10px;
-  width: 100%;
-  margin-top: 10px;
-}
 
-input[type="text"]:focus {
-  outline: none;
-  border-color: #ff9800;
-}
 
 .qrCodeContainer {
   margin-top: 20px;
@@ -345,35 +334,20 @@ input[type="text"]:focus {
 
 /* Information sections */
 .infoSection {
-  display: block;
-  align-items: center;
-  padding: 10px;
   margin-top: 15px;
+  padding: 10px;
   background-color: #2a2a2a;
   border-radius: 8px;
 }
 
 .section {
   display: flex;
+  align-items: center;
 }
 
 .sectionIcon {
-  color: #ff9800;
-  font-size: 22px;
+  font-size: 13px;
   margin-right: 5px;
-}
-
-.infoSection h4 {
-  font-size: 20px;
-  font-weight: bold;
-  color: #ffffff;
-  margin: 0;
-}
-
-.infoSection p {
-  font-size: 16px;
-  color: #cccccc;
-  margin-top: 5px;
 }
 
 .subscriptionBlock {
@@ -383,20 +357,26 @@ input[type="text"]:focus {
 }
 
 .subscribeButton, .unsubscribeButton {
-  padding: 12px 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
   border-radius: 20px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 10px;
+  border: 2px solid;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .subscribeButton {
-  background-color: #ff9800;
+  border-color: orange !important;
   color: #ffffff;
 }
 
 .unsubscribeButton {
-  background-color: #757575;
   color: #ffffff;
 }
 
@@ -406,16 +386,17 @@ input[type="text"]:focus {
 
 /* Admin button */
 .adminButton {
-  background: transparent;
-  border: none;
-  color: #ff9800;
-  font-size: 18px;
-  padding: 10px;
-  cursor: pointer;
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: transform 0.3s ease;
+  justify-content: center;
+  padding: 12px 0;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #ff9800;
+  margin-top: 10px;
 }
 
 .adminButton:hover {
@@ -440,12 +421,25 @@ input[type="text"]:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
 }
 
 .overlayHeader h3 {
   font-size: 22px;
   font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.backIcon {
+  font-size: 22px;
+  cursor: pointer;
+  color: #ffffff;
 }
 
 .closeIcon {
@@ -519,4 +513,41 @@ input[type="text"]:focus {
 
 .saveButton button:hover {
   background-color: #ff8c00;
+}
+
+.description {
+  display: block;
+  margin-top: 5px;
+  font-size: 16px;
+  text-decoration: none;
+  color: white;
+}
+
+.descriptionHead {
+  font-size: 13px;
+}
+
+.qrButton {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.qrButton:hover {
+  transform: scale(1.1);
+}
+
+.qrIcon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #ffffff;
+  margin-left: 10px;
+}
+
+.qrIcon:hover {
+  color: #ff9800;
 }

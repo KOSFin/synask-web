@@ -6,7 +6,7 @@ import UserContext from '../../../components/UserContext';
 import ChatItem from './ChatItem';  // Импортируем компонент ChatItem
 
 const ChatList = ({ searchTerm }) => {
-  const { chatList, newMessagesCount } = useContext(ChatContext);
+  const { chatList, newMessagesCount, setSelectedChatId } = useContext(ChatContext);
   const { userId } = useContext(UserContext);  // Получаем userId из контекста пользователя
   const navigate = useNavigate();  // Используем navigate для изменения URL
 
@@ -29,9 +29,7 @@ const ChatList = ({ searchTerm }) => {
 
   const selectChat = (chatId) => {
     console.log('Selected Chat Id:', chatId);
-
-    // Меняем параметр id в URL на айди выбранного чата
-    navigate(`?id=${chatId}`, { replace: true });
+    setSelectedChatId(chatId); // Устанавливаем selectedChatId в контексте
   };
 
   return (

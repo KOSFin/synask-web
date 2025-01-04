@@ -1,104 +1,67 @@
 .container {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  height: 100%;
-}
-
-.groupView {
-  padding: 16px;
-  border-radius: 8px;
-  background-color: gray;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.groupHeader {
+  margin: 0 auto;
   display: flex;
-  align-items: center;
-  cursor: pointer;
+  flex-direction: row;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
 }
 
-.groupHeaderInfo {
-  flex: 1;
-  margin-left: 12px;
+.sidebar {
+  background-color: rgba(110, 110, 110, 0.4);
+  backdrop-filter: blur(5px);
+  padding: 5px;
+  border-radius: 12px;
+  gap: 20px;
+  display: flex;
+  margin-bottom: 10px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  width: 45px;
+  height: auto;
+  border-radius: 35%;
 }
 
-.subscribeButton,
-.unsubscribeButton {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 0;
 }
 
-.subscribeButton {
-  background-color: #4caf50;
+.subtitle {
+  font-size: 15px;
+  margin-bottom: 0;
 }
 
-.unsubscribeButton {
-  background-color: #f44336;
-}
-
-.groupDetails {
-  padding: 12px;
-  background-color: #ececec;
-  border-radius: 4px;
-  animation: expand 0.3s ease-in-out;
-}
-
-@keyframes expand {
-  from {
-    opacity: 0;
-    transform: scaleY(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scaleY(1);
-  }
-}
-
-.postList {
-  margin-top: 16px;
-}
-
-.postItem {
+.header {
   display: flex;
-  align-items: flex-start;
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
 }
 
-.randomComment {
-  color: #777;
-  font-size: 0.9rem;
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: scroll;
+  height: 100%;
+  padding-top: 65px;
 }
 
-.options {
-  cursor: pointer;
-  font-size: 1.5rem;
-  margin-left: 8px;
-}
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 3px;
+  }
 
-.closeButton {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  color: #888;
-}
-
-.descriptionOverlay {
-  padding: 20px;
-  border-left: 1px solid #2b2b2b;
+  .header {
+    justify-content: center;
+  }
 }

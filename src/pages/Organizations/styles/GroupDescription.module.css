@@ -1,0 +1,236 @@
+/* Overlay for the description */
+.descriptionOverlay {
+padding: 10px;
+background-color: rgba(28, 28, 28, 0.95); /* Darker and more transparent */
+border-radius: 12px;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Soft shadow for depth */
+color: #ffffff;
+overflow-y: auto;
+width: 100%;
+max-width: 400px;
+animation: slideIn 0.5s forwards; /* Появление */
+}
+
+.descriptionOverlay.hide {
+  animation: slideOut 0.5s forwards; /* Исчезновение */
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .descriptionOverlay,
+    .settingsOverlay {
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    max-width: none;
+    }
+}
+
+.coverImage {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 250px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.darkOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.avatarContainer {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.avatarInDescription {
+  width: 100px;
+  height: 100px;
+  border-radius: 35%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.groupInfo {
+  margin-left: 20px;
+}
+
+.groupInfo h1 {
+  font-size: clamp(16px, 2.5vw, 26px);
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groupInfo p {
+  font-size: 16px;
+  color: #d3d3d3;
+  margin-top: 5px;
+}
+
+.infoSection {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+}
+
+.sectionIcon {
+  font-size: 13px;
+  margin-right: 5px;
+}
+
+.subscribeButton, .unsubscribeButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  border: 2px solid;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.subscribeButton {
+  border-color: orange !important;
+  color: #ffffff;
+}
+
+.unsubscribeButton {
+  color: #ffffff;
+}
+
+.subscribeButton:hover, .unsubscribeButton:hover {
+  opacity: 0.8;
+}
+
+.adminButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #ff9800;
+  margin-top: 10px;
+}
+
+.adminButton:hover {
+  transform: scale(1.1);
+}
+
+.modalOverlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  background-color: #2e2e2e;
+  padding: 10px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+
+.closeIcon {
+  font-size: 22px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.closeIcon:hover {
+  color: #ff9800;
+}
+
+.qrIcon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #ffffff;
+  margin-left: 10px;
+}
+
+.qrIcon:hover {
+  color: #ff9800;
+}
+
+.overlayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.overlayHeader h3 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.backIcon {
+  font-size: 22px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+/* Добавляем анимации для появления и исчезновения */
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+} 

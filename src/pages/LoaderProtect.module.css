@@ -90,3 +90,40 @@
   margin: 0 10px;
   animation: bounce 1.2s infinite ease-in-out both;
 }
+
+.offlineOverlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 100000000000000000000;
+  background: rgba(0, 0, 0, 0.9); /* Полупрозрачный черный фон */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.offlineOverlay .logo {
+  font-size: 30px;
+  font-weight: bold;
+  color: #ff7f00;
+  margin-bottom: 10px;
+}
+
+.offlineOverlay .message {
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+.offlineOverlay .hint {
+  font-size: 18px;
+  color: #cccccc;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

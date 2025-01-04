@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import styles from '../styles/ChatHeader.module.css';
 import ChatContext from '../../../components/ChatContext';
 import UserContext from '../../../components/UserContext';
-import DropdownMenu from './DropdownMenu'; // Импортируйте новый компонент
+import DropdownMenu from './DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { deleteChatById } from '../../../components/utils'; // Импортируйте функцию удаления
+import { deleteChatById } from '../../../components/utils';
 import VersionContext from '../../../components/contexts/VersionContext';
 import load from '../../Loader.module.css';
+import { format, formatDistanceToNow, parseISO, isToday, isYesterday } from 'date-fns';
 
 const ChatHeader = () => {
   const { setSelectedChatId, selectedChatId, selectedChat, isLoadingMessages, isLoadingUser, messages } = useContext(ChatContext);
-  const { userId } = useContext(UserContext);
+  const { userId, statusUsers } = useContext(UserContext);
   const navigate = useNavigate();
   const isMobile = window.innerWidth <= 768;
   const [showDropdown, setShowDropdown] = useState(false);
@@ -24,10 +25,6 @@ const ChatHeader = () => {
   const [username, setUsername] = useState(null);
   const [confirmChecked, setConfirmChecked] = useState(false);
   const { version } = useContext(VersionContext);
-
-  useEffect(() => {
-    console.log(isLoadingMessages);
-  }, [isLoadingMessages]);
 
   useEffect(() => {
     if (!selectedChat) {
@@ -59,19 +56,34 @@ const ChatHeader = () => {
         setCoverUrl(otherUserInfo.cover_url);
         setUsername(otherUserInfo.username);
 
-        const status = otherUserInfo.status;
-        if (status === 'online') {
-          setSubText(<span style={{ color: 'green' }}>Онлайн</span>);
-        } else if (status === 'offline') {
-          setSubText(<span style={{ color: 'gray' }}>Оффлайн</span>);
-        } else if (status) {
-          setSubText(<span style={{ color: 'white' }}>{status}</span>);
+        const userStatus = statusUsers[otherUserId];
+        const lastOnline = userStatus ? userStatus.timestamp : null;
+        const isOnline = userStatus ? userStatus.online : false;
+
+        if (isOnline) {
+          const now = new Date();
+          const lastOnlineDate = new Date(lastOnline);
+          const duration = Math.floor((now - lastOnlineDate) / 1000);
+          const hours = Math.floor(duration / 3600);
+          const minutes = Math.floor((duration % 3600) / 60);
+          setSubText(<span style={{ color: 'green' }}>{`В сети уже ${hours}ч ${minutes}м`}</span>);
+        } else if (lastOnline) {
+          const lastOnlineDate = parseISO(lastOnline);
+          setSubText(
+            <span style={{ color: 'gray' }}>
+              {isToday(lastOnlineDate)
+                ? `Был в сети сегодня в ${format(lastOnlineDate, 'HH:mm')}`
+                : isYesterday(lastOnlineDate)
+                ? `Был в сети вчера в ${format(lastOnlineDate, 'HH:mm')}`
+                : `Был в сети ${format(lastOnlineDate, 'd MMMM в HH:mm')}`}
+            </span>
+          );
         } else {
           setSubText(null);
         }
       }
     }
-  }, [selectedChat, userId]);
+  }, [selectedChat, userId, statusUsers]);
 
   const handleProfileClick = () => {
     if (selectedChat && !selectedChat.is_group) {
@@ -80,7 +92,6 @@ const ChatHeader = () => {
   };
 
   const handleCloseChat = () => {
-    navigate({ search: '' });
     setSelectedChatId(null);
   };
 
@@ -133,7 +144,7 @@ const ChatHeader = () => {
       {selectedChat ? (
         <>
           <DropdownMenu
-            onDeleteChat={() => setShowConfirmation(true)} // Показать окно подтверждения
+            onDeleteChat={() => setShowConfirmation(true)}
             onProfileClick={handleProfileClick}
             onCopyLink={handleCopyLink}
             show={showDropdown}
@@ -171,7 +182,14 @@ const ChatHeader = () => {
           <div
             className={styles.avatar}
             style={{ backgroundImage: avatar ? `url(${avatar})` : undefined }}
-          />
+          >
+            <div
+              className={styles.statusIndicator}
+              style={{
+                backgroundColor: statusUsers[selectedChat.members.find(id => id !== userId)]?.online ? 'green' : 'gray'
+              }}
+            ></div>
+          </div>
           <div className={styles.info}>
             <div className={styles.name}>{name}</div>
             {!isLoadingUser && !isLoadingMessages && selectedChat && messages ? (

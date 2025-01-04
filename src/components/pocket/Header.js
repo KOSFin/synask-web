@@ -13,7 +13,7 @@ const Header = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [touchStartY, setTouchStartY] = useState(0);
     const [touchMoveY, setTouchMoveY] = useState(0);
-    const { friends } = useContext(UserContext);
+    const { friends, usersCache, statusUsers } = useContext(UserContext);
     const { accentColor } = useContext(AccentColorContext);
     const { track, setTrack } = useTrack(); // Получаем текущий трек
     const [isPlaying, setIsPlaying] = useState(false);
@@ -107,7 +107,6 @@ const Header = () => {
 
             <div
                 className={styles.headerContainer}
-                style={{ borderColor: accentColor }}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
             >
@@ -115,7 +114,7 @@ const Header = () => {
                     <div className={styles.headerContent}>
                         <div style={{ display: 'flex' }}>
                             {/* Левая часть - функциональный бар */}
-                            <FriendsCount friends={friends} />
+                            <FriendsCount friends={friends} statusUsers={statusUsers} />
 
                             {/* Правая часть - мини-иконки активных виджетов */}
                             <div className={styles.widgets}>
@@ -139,7 +138,7 @@ const Header = () => {
                     {/* Анимированная шторка */}
                     <div className={`${styles.dropdown} ${isExpanded ? styles.expanded : ''}`}>
                         {/* Список друзей */}
-                        <FriendsList friends={friends} />
+                        <FriendsList friends={friends} usersCache={usersCache} statusUsers={statusUsers} />
 
                         {/* Виджет музыки */}
                         <div className={styles.activeWidgets}>

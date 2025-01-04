@@ -1,10 +1,9 @@
 /* Основной контейнер */
 .widgetContainer {
   position: relative;
-  width: 90%;
-  max-width: 600px;
+  width: 100%;
   margin: 20px auto;
-  padding: 20px;
+  padding: 10px;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);

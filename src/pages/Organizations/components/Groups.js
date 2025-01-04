@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useSwipeable } from 'react-swipeable'; // Импортируем библиотеку свайпов
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,12 +6,15 @@ import { faPlus, faCheck, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/OrganizationsPage.module.css';
 import load from '../../../pages/Loader.module.css';
 import getSupabaseClient from '../../config/SupabaseClient';
-import ManagedOrganizations from './ManagedOrganizations'; // Импорт нового компонента
+import ManagedOrganizations from './ManagedOrganizations';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import AccentColorContext from '../../settings/AccentColorContext';
 
 const supabase = getSupabaseClient();
 
 const OrganizationsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { accentColor } = useContext(AccentColorContext);
   const [topOrganizations, setTopOrganizations] = useState([]);
   const [randomOrganizations, setRandomOrganizations] = useState([]);
   const [subscribedOrganizations, setSubscribedOrganizations] = useState([]);
@@ -25,10 +28,10 @@ const OrganizationsPage = () => {
   const [loadingUserData, setLoadingUserData] = useState(true);
   const [loadingTopOrganizations, setLoadingTopOrganizations] = useState(true);
   const [loadingRandomOrganizations, setLoadingRandomOrganizations] = useState(true);
-  const [loadingSearchResults, setLoadingSearchResults] = useState(false); // Для поиска
-
+  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
   let activeTab = new URLSearchParams(location.search).get('page') || 'rec';
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -144,16 +147,21 @@ const OrganizationsPage = () => {
     fetchManagedOrganizations();
   }, [fetchManagedOrganizations]);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchTerm) return;
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+        handleSearch(e);
+    }
+  };
 
+  const handleSearch = async () => {
+    if (loading) return;
+    setLoading(true);
+    const queryLower = searchQuery.toLowerCase();
     try {
-      setLoadingSearchResults(true);
       const { data, error } = await supabase
         .from('organizations')
         .select('*')
-        .ilike('name', `%${searchTerm}%`);
+        .ilike('name', `%${queryLower}%`);
 
       if (error) throw error;
 
@@ -161,7 +169,7 @@ const OrganizationsPage = () => {
     } catch (error) {
       console.error('Ошибка при поиске организаций:', error.message);
     } finally {
-      setLoadingSearchResults(false);
+      setLoading(false);
     }
   };
 
@@ -227,19 +235,21 @@ const OrganizationsPage = () => {
       ) : (
         <>
           <div className={styles.mainPane}>
-            <form onSubmit={handleSearch} className={styles.searchBar}>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Поиск организаций..."
-              />
-              <button type="submit">🔍</button>
-            </form>
+            <div className={styles.searchBar} style={{ borderColor: accentColor }}>
+                <input
+                    type="text"
+                    placeholder={"Поиск по организациям..."}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    style={{ paddingRight: '50px' }}
+                />
+                <FontAwesomeIcon icon={faSearch} style={{ color: accentColor, marginRight: '15px' }} onClick={handleSearch} />
+            </div>
 
             {searchTerm && (
                 <div className={styles.searchResults}>
-                    {loadingSearchResults ? (
+                    {loading ? (
                         <div className={load.spinner}>
                             <div></div>
                             <div></div>

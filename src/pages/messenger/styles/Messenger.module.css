@@ -26,6 +26,7 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .noChatSelected {
@@ -72,6 +73,36 @@
   overflow: auto;
 }
 
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.chatActive {
+  animation: slideIn 0.5s forwards;
+}
+
+.main:not(.chatActive) {
+  animation: slideOut 0.5s forwards;
+}
+
 @media (max-width: 768px) {
   .main {
     position: fixed;
@@ -81,7 +112,6 @@
     bottom: 0;
     background-color: rgba(41, 41, 41);
     z-index: 1000;
-    transition: transform 0.5s ease; /* Обновлено для плавности */
     height: 100%;
   }
 

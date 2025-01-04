@@ -4,12 +4,9 @@ import { faChevronDown, faTimes, faUser } from '@fortawesome/free-solid-svg-icon
 import QuickProfileView from './QuickProfileView';
 import styles from './FunctionalBar.module.css';
 
-export const FriendsCount = ({ friends }) => {
-    const onlineFriends = friends.filter((friend) => friend.status === 'online');
-    const offlineFriends = friends.filter((friend) => friend.status === 'offline');
-    const customStatusFriends = friends.filter(
-        (friend) => friend.status !== 'online' && friend.status !== 'offline' && friend.status
-    );
+export const FriendsCount = ({ friends, statusUsers }) => {
+    const onlineFriends = friends.filter((auth_id) => statusUsers[auth_id]?.online);
+    const offlineFriends = friends.filter((auth_id) => !statusUsers[auth_id]?.online);
 
     return (
         <div className={styles.toggleButton}>
@@ -23,110 +20,88 @@ export const FriendsCount = ({ friends }) => {
               <div className={styles.offlineIndicator} />
               <span className={styles.friendCount}>{offlineFriends.length}</span>
             </div>
-            <div className={styles.statusIcon}>
-              <FontAwesomeIcon icon={faUser} />
-              <div className={styles.customIndicator} />
-              <span className={styles.friendCount}>{customStatusFriends.length}</span>
-            </div>
         </div>
     );
 };
 
-export const FriendsList = ({ friends }) => {
+export const FriendsList = ({ friends, usersCache, statusUsers }) => {
     const [selectedProfile, setSelectedProfile] = useState(null);
     const [profilePosition, setProfilePosition] = useState({ top: 0, left: 0 });
 
-    const onlineFriends = friends.filter((friend) => friend.status === 'online');
-    const offlineFriends = friends.filter((friend) => friend.status === 'offline');
-    const customStatusFriends = friends.filter(
-        (friend) => friend.status !== 'online' && friend.status !== 'offline'
-    );
+    const onlineFriends = friends.filter((auth_id) => statusUsers[auth_id]?.online);
+    const offlineFriends = friends.filter((auth_id) => !statusUsers[auth_id]?.online);
 
-    const handleProfileClick = (friend, event) => {
+    const handleProfileClick = (auth_id, event) => {
         const buttonRect = event.currentTarget.getBoundingClientRect();
         setProfilePosition({ top: buttonRect.top, left: buttonRect.left });
-        setSelectedProfile(friend);
+        setSelectedProfile(usersCache[auth_id]);
     };
 
-    const renderStatus = (status) => {
-        if (status === 'online') {
-            return <div className={styles.statusIndicator} data-status={status} style={{ backgroundColor: 'green' }} />;
-        } else if (status === 'offline') {
-            return <div className={styles.statusIndicator} data-status={status} style={{ backgroundColor: 'gray' }} />;
-        } else if (status) {
-            const [symbol, userStatus] = status.split(':');
-            if (userStatus && symbol.length < 4) {
-                return (
-                    <div className={styles.customStatusIndicator} data-status={userStatus}>
-                        {symbol}
-                    </div>
-                );
-            }
-            return (
-                <div className={styles.customStatusIndicator} data-status={status}>
-                    💬
-                </div>
-            );
-        } else {
-            return null;
-        }
+    const renderStatus = (auth_id) => {
+        const status = statusUsers[auth_id];
+        if (!status) return null;
+
+        const timeAgo = new Date(status.timestamp).toLocaleTimeString();
+
+        return (
+            <div
+                className={styles.statusIndicator}
+                data-status={status.online ? 'online' : 'offline'}
+                style={{ backgroundColor: status.online ? 'green' : 'gray' }}
+                title={`Last active: ${timeAgo}`}
+            />
+        );
     };
 
     return (
       <>
         <div className={styles.friendsList}>
-          {onlineFriends.map((friend) => (
+          {onlineFriends.map((auth_id) => (
             <div
-              key={friend.username}
+              key={auth_id}
               className={styles.friendItem}
-              onClick={(event) => handleProfileClick(friend, event)}
+              onClick={(event) => handleProfileClick(auth_id, event)}
             >
-              <img
-                src={friend.avatar_url}
-                alt={`${friend.first_name} ${friend.last_name}`}
-                className={styles.avatar}
-              />
-              <div className={styles.friendInfo}>
-                <div className={styles.name}>{friend.first_name}</div>
-                <div className={styles.name}>{friend.last_name}</div>
-              </div>
-              {renderStatus(friend.status)}
+              {usersCache[auth_id] ? (
+                <>
+                  <img
+                    src={usersCache[auth_id].avatar_url}
+                    alt={`${usersCache[auth_id].first_name} ${usersCache[auth_id].last_name}`}
+                    className={styles.avatar}
+                  />
+                  <div className={styles.friendInfo}>
+                    <div className={styles.name}>{usersCache[auth_id].first_name}</div>
+                    <div className={styles.name}>{usersCache[auth_id].last_name}</div>
+                  </div>
+                  {renderStatus(auth_id)}
+                </>
+              ) : (
+                <div className={styles.error}>Ошибка: данные отсутствуют</div>
+              )}
             </div>
           ))}
-          {customStatusFriends.map((friend) => (
+          {offlineFriends.map((auth_id) => (
             <div
-              key={friend.username}
-              className={styles.friendItem}
-              onClick={(event) => handleProfileClick(friend, event)}
-            >
-              <img
-                src={friend.avatar_url}
-                alt={`${friend.first_name} ${friend.last_name}`}
-                className={styles.avatar}
-              />
-              <div className={styles.friendInfo}>
-                <div className={styles.name}>{friend.first_name}</div>
-                <div className={styles.name}>{friend.last_name}</div>
-              </div>
-              {renderStatus(friend.status)}
-            </div>
-          ))}
-          {offlineFriends.map((friend) => (
-            <div
-              key={friend.username}
+              key={auth_id}
               className={`${styles.friendItem} ${styles.offline}`}
-              onClick={(event) => handleProfileClick(friend, event)}
+              onClick={(event) => handleProfileClick(auth_id, event)}
             >
-              <img
-                src={friend.avatar_url}
-                alt={`${friend.first_name} ${friend.last_name}`}
-                className={styles.avatar}
-              />
-              <div className={styles.friendInfo}>
-                <div className={styles.name}>{friend.first_name}</div>
-                <div className={styles.name}>{friend.last_name}</div>
-              </div>
-              {renderStatus(friend.status)}
+              {usersCache[auth_id] ? (
+                <>
+                  <img
+                    src={usersCache[auth_id].avatar_url}
+                    alt={`${usersCache[auth_id].first_name} ${usersCache[auth_id].last_name}`}
+                    className={styles.avatar}
+                  />
+                  <div className={styles.friendInfo}>
+                    <div className={styles.name}>{usersCache[auth_id].first_name}</div>
+                    <div className={styles.name}>{usersCache[auth_id].last_name}</div>
+                  </div>
+                  {renderStatus(auth_id)}
+                </>
+              ) : (
+                <div className={styles.error}>Ошибка: данные отсутствуют</div>
+              )}
             </div>
           ))}
         </div>

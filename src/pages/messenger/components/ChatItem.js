@@ -4,7 +4,7 @@ import UserContext from '../../../components/UserContext';
 import ChatContext from '../../../components/ChatContext';
 
 const ChatItem = memo(({ chat, selectChat, newMessagesCount }) => {
-  const { userId } = useContext(UserContext);  // Получаем userId из контекста
+  const { userId, statusUsers } = useContext(UserContext);  // Получаем userId и statusUsers из контекста
   const { selectedChatId } = useContext(ChatContext);
 
   // Определяем собеседника, исключая текущего пользователя
@@ -31,6 +31,10 @@ const ChatItem = memo(({ chat, selectChat, newMessagesCount }) => {
   const lastMessageText = lastMessage ? lastMessage.content : 'Нет сообщений';
   const unreadCount = newMessagesCount[chat.id] || 0;
 
+  // Определяем статус пользователя
+  const isOnline = otherUser && statusUsers[otherUser.auth_id]?.online;
+  const borderColor = otherUser ? (isOnline ? 'green' : 'gray') : 'transparent';
+
   // Следим за изменениями чата (при необходимости)
   useEffect(() => {
     console.log(`Chat ${chat.id} updated`);
@@ -38,16 +42,27 @@ const ChatItem = memo(({ chat, selectChat, newMessagesCount }) => {
 
   return (
     <div
-    className={styles.chat}
-    style={
+      className={styles.chat}
+      style={
         selectedChatId === chat.id
-        ? { backgroundColor: 'rgba(63, 63, 63, 0.86)' }
-        : {}
-    }
-    key={chat.id}
-    onClick={() => selectChat(chat.id)}
+          ? { backgroundColor: 'rgba(63, 63, 63, 0.86)' }
+          : {}
+      }
+      key={chat.id}
+      onClick={() => selectChat(chat.id)}
     >
-      <div className={styles.avatar} style={{ backgroundImage: `url(${chatAvatar})` }}></div>
+      <div
+        className={styles.avatar}
+        style={{
+          backgroundImage: `url(${chatAvatar})`
+        }}
+      >
+        <div
+          className={`${styles.statusIndicator} ${
+            otherUser ? (isOnline ? styles.online : '') : styles.loading
+          }`}
+        ></div>
+      </div>
       <div className={styles.details}>
         <div className={styles.name}>{chatName}</div>
         <div className={styles.lastMessage}>{lastMessageText}</div>

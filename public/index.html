@@ -29,21 +29,7 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="%PUBLIC_URL%/ms-icon-144x144.png">
     <meta name="theme-color" content="#000000">
-    <!--
-      Manifest.json предоставляет метаданные, используемые при установке вашего веб-приложения на
-      мобильное устройство или компьютер пользователя. См. https://developers.google.com/web/fundamentals/web-app-manifest/.
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-
-    <!--
-      Обратите внимание на использование %PUBLIC_URL% в тегах выше.
-      Во время сборки он будет заменен URL-адресом общедоступной папки.
-      Из HTML можно ссылаться только на файлы внутри папки public.
-
-      В отличие от «/favicon.ico» или «favicon.ico», «%PUBLIC_URL%/favicon.ico» будет
-      корректно работать как с маршрутизацией на стороне клиента, так и с общедоступным URL-адресом, не являющимся корневым.
-      Узнайте, как настроить общедоступный URL-адрес без полномочий root, запустив npm run build.
-    -->
     <title>sYnask</title>
     <style>
       body {
@@ -53,16 +39,6 @@
   </head>
   <body>
     <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      // This script checks to see if a redirect is present in the query string,
-      // converts it back into the correct url and adds it to the
-      // browser's history using window.history.replaceState(...),
-      // which won't cause the browser to attempt to load the new url.
-      // When the single page app is loaded further down in this file,
-      // the correct url will be waiting in the browser's history for
-      // the single page app to route accordingly.
       (function(l) {
         if (l.search[1] === '/' ) {
           var decoded = l.search.slice(1).split('&').map(function(s) {
@@ -74,18 +50,6 @@
         }
       }(window.location))
     </script>
-
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      Этот HTML-файл является шаблоном.
-      Если вы откроете его прямо в браузере, вы увидите пустую страницу.
-
-      В этот файл вы можете добавить веб-шрифты, метатеги или аналитику.
-      На этапе сборки связанные сценарии будут помещены в тег <body>.
-
-      Чтобы начать разработку, запустите npm start или Yarn start.
-      Чтобы создать производственный пакет, используйте npm run build или Yarn build.
-    -->
   </body>
 </html>

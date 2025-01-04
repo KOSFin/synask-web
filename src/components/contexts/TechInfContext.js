@@ -8,10 +8,6 @@ export const TechInfProvider = ({ children }) => {
     const [widgetData, setWidgetData] = useState(null);
     const [isNetworkConnected, setIsNetworkConnected] = useState(true);
 
-    useEffect(() => {
-        console.log('useEffect');
-    }, [isNetworkConnected]);
-
     return (
         <TechInfContext.Provider value={{ dataUpdate, setDataUpdate, widgetData, setWidgetData, isNetworkConnected, setIsNetworkConnected }}>
             {children}

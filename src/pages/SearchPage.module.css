@@ -7,6 +7,7 @@
     border-radius: 12px;
     color: white;
     padding: 15px;
+    height: 100%;
 }
 
 @media (max-width: 1199px) {
@@ -16,106 +17,16 @@
     }
 }
 
-.searchBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.searchBar input {
-    width: 70%;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-.searchBar input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.searchBar button {
-    margin-left: 10px;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff7f00;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.searchBar button:hover {
-    background-color: #e67300;
-}
-
-.filterButton {
-    background-color: #4caf50;
-}
-
-.filters {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.filter {
-    flex: 1;
-    margin-right: 10px;
-}
-
-.filter:last-child {
-    margin-right: 0;
-}
-
-.filter label {
-    display: block;
-    margin-bottom: 5px;
-    color: #fff;
-}
-
-.filter select,
-.filter input {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-.filter select:focus,
-.filter input:focus {
-    outline: none;
-    box-shadow: 0 0 5px #ff7f00;
-}
-
-.searchSummary {
-    margin-bottom: 20px;
-    color: #ff7f00;
-    font-weight: bold;
-}
-
-.results {
-    display: flex;
-    flex-direction: column;
-}
 
 .profileCard {
     align-items: center;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
     display: flex;
     margin-top: 5px;
     padding: 5px;
     transition: background-color .3s;
-    background-color: #222;
+    background: #1b1b1b;
 }
 
 .profileCard:hover {
@@ -195,4 +106,48 @@
     font-size: 12px;
     color: white;
     opacity: 0.8;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 15px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    background: #1b1b1b;
+}
+
+.searchBar input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.tabButtons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.tabButtons button {
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    background: #1b1b1b;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+    border: none;
+}
+
+.tabButtons .activeTab {
+    border-bottom: 1px solid;
+}
+
+.results {
+    margin-top: 10px;
 }

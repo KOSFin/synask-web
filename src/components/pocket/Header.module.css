@@ -2,7 +2,6 @@
 .headerContainer {
     position: relative;
     z-index: 999;
-    border-bottom: 1px solid violet;
     transition: all 0.5s ease;
 }
 

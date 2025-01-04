@@ -20,7 +20,7 @@ const Header = () => {
     const [volume, setVolume] = useState(50);
     const [isLoading, setIsLoading] = useState(false);
     const contactsRef = useRef([]); // Use useRef instead of useState for mutable values
-    const { friends } = useContext(UserContext);
+    const { friends, usersCache, statusUsers } = useContext(UserContext);
 
     useEffect(() => {
         contactsRef.current = friends;
@@ -141,7 +141,7 @@ const Header = () => {
 
     return (
         <>
-            <FunctionalBar friends={contactsRef.current} />
+            <FunctionalBar friends={friends} usersCache={usersCache} statusUsers={statusUsers} />
             <div className={styles.header} style={{ borderColor: accentColor }}>
                 <div className={styles.headerContent}>
                     <div className={`${styles['music-player-header']}`}>

@@ -548,3 +548,18 @@
     }
 }
 
+.statusTime {
+    position: relative;
+    color: white;
+    font-size: 12px;
+    color: white;
+    z-index: 5;
+}
+
+.status {
+    position: relative;
+    color: white;
+    font-size: 15px;
+    color: white;
+    z-index: 5;
+}

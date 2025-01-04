@@ -8,19 +8,20 @@ export const UserProvider = ({ children }) => {
     const [friends, setFriends] = useState([]);
     const [userId, setUserId] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(null);
-    const [usersCache, setUsersCache] = useState([]);
     const [user, setUser] = useState(null);
+    const [usersCache, setUsersCache] = useState([]);
     const [statusUsers, setStatusUsers] = useState([]);
 
-    useEffect(() => {
-        if (userId) {
-            console.log('User ID:', userId);
-        }
-    }, [userId]);
+    // useEffect(() => {
+    //     if (userId) {
+    //         console.log('User ID:', userId);
+    //     }
+    // }, [userId]);
 
-    useEffect(() => {
-        console.log('======', usersCache);
-    }, [usersCache]);
+    // useEffect(() => {
+    //     console.log('======', usersCache);
+    // }, [usersCache]);
+
 
     return (
         <UserContext.Provider value={{ userData, setUserData, friends, setFriends, userId, setUserId, isAuthenticated, setIsAuthenticated, usersCache, setUsersCache, user, setUser, statusUsers, setStatusUsers }}>

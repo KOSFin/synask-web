@@ -6,18 +6,23 @@
 
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 50%;
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
+  z-index: 999;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-  z-index: 999;
 }
 
 .overlay.active {
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
   opacity: 1;
   visibility: visible;
 }
@@ -28,14 +33,14 @@
   left: 0;
   right: 0;
   height: 60px;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.95);
   color: white;
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 10px 0;
   z-index: 1000;
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 .navItem {
@@ -49,12 +54,13 @@
   color: #ccc;
   text-decoration: none;
   border-radius: 10px;
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 
 .navItem:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.2);
   color: #fff;
+  transform: scale(1.05);
 }
 
 .navItem:focus {
@@ -81,8 +87,8 @@
   bottom: 60px;
   left: 0;
   right: 0;
-  background-color: black;
-  transition: max-height 0.3s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.95);
+  transition: max-height 0.5s ease-in-out;
   max-height: 0;
   overflow: hidden;
   display: flex;
@@ -100,11 +106,12 @@
   padding: 10px 20px;
   color: white;
   text-decoration: none;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .additionalItem:hover {
   background-color: #2e2e2e;
+  transform: scale(1.05);
 }
 
 .additionalItem .icon {

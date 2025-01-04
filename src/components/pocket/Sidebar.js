@@ -71,8 +71,9 @@ const MobileSidebar = () => {
     { path: '/p/info', icon: faArrowCircleUp, label: 'О сайте' },
   ];
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (item, event) => {
     if (item.onClick) {
+      event.preventDefault(); // Предотвращаем перезагрузку страницы
       item.onClick();
     } else {
       closeMenu();
@@ -97,7 +98,7 @@ const MobileSidebar = () => {
           <Link
             key={item.path}
             to={item.path}
-            onClick={() => handleItemClick(item)}
+            onClick={(event) => handleItemClick(item, event)}
             className={`${styles.navItem} ${location.pathname === item.path ? styles.active : ''}`}
             style={location.pathname === item.path ? { color: accentColor } : {}}
           >

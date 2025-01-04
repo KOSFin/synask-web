@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faTimes, faEllipsisV, faPlus, faLink, faUser, faCommentDots, faCog, faSave } from '@fortawesome/free-solid-svg-icons';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import styles from '../styles/OrganizationView.module.css';
 import UserContext from '../../../components/UserContext';
 import getSupabaseClient from '../../config/SupabaseClient';
+import Header from './Header';
+import PostList from './PostList';
+import GroupSettings from './GroupSettings';
+import GroupDescription from './GroupDescription';
 import PostEditor from './PostEditor';
-import Post from './Post';
 import load from '../../../pages/Loader.module.css';
-import QRCode from 'qrcode.react';
-import Picker from 'emoji-picker-react';
+
 
 const supabase = getSupabaseClient();
 
@@ -349,7 +347,7 @@ const OrganizationView = () => {
         <div className={styles.content}>
           <aside className={styles.sidebar}>
             <img src={organization?.avatar_url} alt="Organization Avatar" className={styles.avatar} />
-            <div style={{ display: 'block', marginLeft: '-10px' }}>
+            <div style={{ display: 'block', marginLeft: '-10px' }} onClick={() => setIsOpenDescription(!isOpenDescription)}>
               <div style={{ display: 'flex' }}>
                 <h3 className={styles.title}>{organization?.name}</h3>
               </div>
@@ -357,30 +355,39 @@ const OrganizationView = () => {
                 {organization?.followers?.length} подписчиков
               </h4>
             </div>
-            <div className={styles.header}>
-              {searchVisible ? (
-                <div className={styles.searchContainer}>
-                  <input type="text" className={styles.searchInput} placeholder="Поиск..." />
-                  <FontAwesomeIcon icon={faTimes} className={styles.searchIcon} onClick={toggleSearch} />
-                </div>
-              ) : (
-                <FontAwesomeIcon icon={faSearch} className={styles.icon} onClick={toggleSearch} />
-              )}
-              <FontAwesomeIcon icon={faEllipsisV} className={styles.icon} onClick={() => setIsOpenDescription(!isOpenDescription)} />
-              {isAdmin && (
-                <div className={styles.newPostIcon} onClick={toggleEditor}>
-                  <FontAwesomeIcon icon={faPlus} className={styles.icon} style={{ color: 'orange' }} />
-                </div>
-              )}
-            </div>
+            <Header
+              searchVisible={searchVisible}
+              toggleSearch={toggleSearch}
+              isAdmin={isAdmin}
+              toggleEditor={toggleEditor}
+              setIsOpenDescription={setIsOpenDescription}
+              isOpenDescription={isOpenDescription}
+            />
           </aside>
 
-          <div className={styles.posts}>
-            {posts.map((post) => (
-              <Post key={post.id} post={post} organization={organization} organizationSettings={organization.settings} authors={staff.filter((member) => post.members.includes(member.auth_id))} isAdmin={isAdmin} posts={posts} setPosts={setPosts} />
-            ))}
-          </div>
+          <PostList
+            posts={posts}
+            organization={organization}
+            staff={staff}
+            isAdmin={isAdmin}
+            setPosts={setPosts}
+          />
+
         </div>
+      )}
+
+      {isOpenDescription && (
+        <GroupDescription
+          organization={organization}
+          isOpenDescription={isOpenDescription}
+          setIsOpenDescription={setIsOpenDescription}
+          showLinkModal={showLinkModal}
+          setShowLinkModal={setShowLinkModal}
+          isSubscribed={isSubscribed}
+          toggleSubscription={toggleSubscription}
+          isAdmin={isAdmin}
+          setIsSettingsOpen={setIsSettingsOpen}
+        />
       )}
 
       {isEditorOpen && (
@@ -391,208 +398,34 @@ const OrganizationView = () => {
         />
       )}
 
-      {isOpenDescription && (
-          <div className={styles.descriptionOverlay}>
-            <div className={styles.overlayHeader}>
-                <h3>Информация</h3>
-                <FontAwesomeIcon icon={faTimes} className={styles.closeIcon} onClick={() => setIsOpenDescription(false)} />
-            </div>
-
-            <div className={styles.coverImage} style={{ backgroundImage: `url(${organization?.cover_url})` }}>
-              <div className={styles.darkOverlay} />
-              <div className={styles.avatarContainer}>
-                <img src={organization?.avatar_url} alt="Avatar" className={styles.avatarInDescription} />
-                <div className={styles.groupInfo}>
-                  <h1>{organization?.name}</h1>
-                  <p>{organization?.groupname}</p>
-                  <button onClick={() => setShowLinkModal(true)} className={styles.linkButton}>
-                    <FontAwesomeIcon icon={faLink} />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Modal for group link and QR code */}
-            {showLinkModal && (
-              <div className={styles.modalOverlay}>
-                <div className={styles.modal}>
-                  <button className={styles.closeButton} onClick={() => setShowLinkModal(false)}>
-                    <FontAwesomeIcon icon={faTimes} />
-                  </button>
-                  <p>Поделиться</p>
-                  <input type="text" value={`me.synask.ru/org?id=${organization?.groupname}`} readOnly />
-                  <QRCode value={`https://me.synask.ru/org?id=${organization?.groupname}`} />
-                </div>
-              </div>
-            )}
-
-            {/* Subsections */}
-            <div className={styles.infoSection}>
-              <div className={styles.section}>
-                  <FontAwesomeIcon icon={faUser} className={styles.sectionIcon} />
-                  <h4>Тематика</h4>
-              </div>
-              <p>{organization?.topic}</p>
-            </div>
-
-            <div className={styles.infoSection}>
-                <div className={styles.section}>
-                  <FontAwesomeIcon icon={faCommentDots} className={styles.sectionIcon} />
-                  <h4>Описание</h4>
-                </div>
-              <p>{organization?.description}</p>
-            </div>
-
-            <div className={styles.infoSection}>
-              <div className={styles.section}>
-                  <FontAwesomeIcon icon={faUser} className={styles.sectionIcon} />
-                  <h4>Подписчики</h4>
-              </div>
-              <p>{organization?.followers?.length} подписчиков</p>
-              <div className={styles.subscriptionBlock}>
-                  <button
-                    className={isSubscribed ? styles.unsubscribeButton : styles.subscribeButton}
-                    onClick={() => toggleSubscription(organization.id, isSubscribed)}
-                  >
-                    {isSubscribed ? 'Отписаться' : 'Подписаться'}
-                  </button>
-              </div>
-            </div>
-
-            {isAdmin && (
-              <button className={styles.adminButton} onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
-                <FontAwesomeIcon icon={faCog} />
-                Настройки группы
-              </button>
-            )}
-          </div>
-      )}
-
       {isSettingsOpen && (
-        <div className={styles.settingsOverlay}>
-          <div className={styles.overlayHeader}>
-            <h3>Настройки</h3>
-            <FontAwesomeIcon icon={faTimes} className={styles.closeIcon} onClick={() => setIsSettingsOpen(false)} />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="name">Group Name:</label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="groupname">GroupId:</label>
-            <input
-              id="name"
-              type="text"
-              value={groupname}
-              onChange={(e) => setGroupname(e.target.value)}
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="avatar">Avatar URL:</label>
-            <input
-              id="avatar"
-              type="text"
-              value={avatarUrl}
-              onChange={(e) => setAvatarUrl(e.target.value)}
-            />
-            <img src={avatarUrl} alt="Avatar preview" className={styles.imagePreview} />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="cover">Cover URL:</label>
-            <input
-              id="cover"
-              type="text"
-              value={coverUrl}
-              onChange={(e) => setCoverUrl(e.target.value)}
-            />
-            <img src={coverUrl} alt="Cover preview" className={styles.imagePreview} />
-          </div>
-
-          // Display user list with roles and demotion option
-            <div className={styles.inputGroup}>
-              <label>Admin List:</label>
-              <div className={styles.staffList}>
-                {Object.keys(roles).map((userId) => {
-                  const user = staff.find((user) => user.auth_id === userId);
-                  return (
-                    <div key={userId} className={styles.staffItem}>
-                      <img src={user.avatar_url} alt={`${user.first_name} ${user.last_name}`} className={styles.avatar} />
-                      <span>{`${user.first_name} ${user.last_name}`}</span>
-                      <span>@{user.username}</span>
-                      <select
-                        value={roles[userId]}
-                        onChange={(e) => handleRoleChange(userId, e.target.value)}
-                      >
-                        <option value="admin">Admin</option>
-                        <option value="owner">Owner</option>
-                      </select>
-                      <button onClick={() => handleDemoteAdmin(userId)}>Remove Admin</button>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className={styles.inputGroup}>
-                  <label htmlFor="newUsername">Add Admin by Username:</label>
-                  <input
-                    type="text"
-                    id="newUsername"
-                    placeholder="Enter Username"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
-                  />
-                  <button onClick={handleAddAdminByUsername}>Add as Admin</button>
-              </div>
-            </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="comments">Enable Comments:</label>
-            <input
-              type="checkbox"
-              id="comments"
-              checked={commentsEnabled}
-              onChange={() => setCommentsEnabled(!commentsEnabled)}
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="reactions">Enable Reactions:</label>
-            <input
-              type="checkbox"
-              id="reactions"
-              checked={reactionsEnabled}
-              onChange={() => setReactionsEnabled(!reactionsEnabled)}
-            />
-            {reactionsEnabled && (
-              <div>
-                <label htmlFor="likeEmoji">Reaction Emoji:</label>
-                <input
-                  type="text"
-                  id="likeEmoji"
-                  value={likeEmoji}
-                  onChange={(e) => setLikeEmoji(e.target.value)}
-                />
-              </div>
-            )}
-            <Picker autoFocusSearch={false} onEmojiClick={handleEmojiClick} theme="dark" previewConfig={{ showPreview: false }} native />
-          </div>
-
-          {error && <div className={styles.error}>{error}</div>}
-
-          <div className={styles.saveButton}>
-            <button onClick={handleSaveChanges}>
-              <FontAwesomeIcon icon={faSave} /> Save Changes
-            </button>
-          </div>
-        </div>
+        <GroupSettings
+          name={name}
+          setName={setName}
+          groupname={groupname}
+          setGroupname={setGroupname}
+          avatarUrl={avatarUrl}
+          setAvatarUrl={setAvatarUrl}
+          coverUrl={coverUrl}
+          setCoverUrl={setCoverUrl}
+          roles={roles}
+          staff={staff}
+          handleRoleChange={handleRoleChange}
+          handleDemoteAdmin={handleDemoteAdmin}
+          newUsername={newUsername}
+          setNewUsername={setNewUsername}
+          handleAddAdminByUsername={handleAddAdminByUsername}
+          commentsEnabled={commentsEnabled}
+          setCommentsEnabled={setCommentsEnabled}
+          reactionsEnabled={reactionsEnabled}
+          setReactionsEnabled={setReactionsEnabled}
+          likeEmoji={likeEmoji}
+          setLikeEmoji={setLikeEmoji}
+          handleEmojiClick={handleEmojiClick}
+          error={error}
+          handleSaveChanges={handleSaveChanges}
+          setIsSettingsOpen={setIsSettingsOpen}
+        />
       )}
     </div>
   );

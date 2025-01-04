@@ -41,7 +41,20 @@ const Messenger = () => {
     if (chatIdFromUrl && chatIdFromUrl !== selectedChatId) {
       setSelectedChatId(chatIdFromUrl);
     }
-  }, [location.search, selectedChatId, setSelectedChatId]);
+  }, []); // Устанавливаем selectedChatId из URL только при первой загрузке
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const chatIdFromUrl = queryParams.get('id');
+
+    if (selectedChatId !== chatIdFromUrl) {
+      if (selectedChatId) {
+        navigate(`?id=${selectedChatId}`, { replace: true });
+      } else {
+        navigate({ search: '' });
+      }
+    }
+  }, [selectedChatId, location.search]); // Синхронизируем selectedChatId с URL
 
   const handleCloseChat = () => {
     navigate({ search: '' });
