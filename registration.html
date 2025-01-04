@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/all-config-icons/favicon.ico" type="image/x-icon" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
@@ -131,49 +129,32 @@
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 10px;
+            border: 2px solid orange;
             border-radius: 5px;
-            background-color: rgba(0,0,0,0);;
-            color: #f100ff;
-            font-size: 20px;
-            outline: none;
-            border: none; outline: 2px solid transparent;
-            background-image:
-            linear-gradient(to bottom, orange 1px, transparent 1px),
-            linear-gradient(to bottom, orange 1px, transparent 1px),
-            linear-gradient(to right, orange 1px, transparent 1px, transparent calc(100% - 1px), orange calc(100% - 1px)),
-            linear-gradient(to top, orange 1px, transparent 1px);
-            background-position: -100% 0%, 200% 0%, 0% 100%, 0% 100%;
-            background-size: 50% 100%, 50% 100%, 100% 1px, 100% 100%;
-            background-repeat: no-repeat;
-            transition: background-size .4s ease-out .6s, background-position .6s ease-in;
-            border-bottom: 2px solid #f100ff;
+            background-color: #283040;
+            color: white;
+            font-size: 16px;
+            max-width: 400px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            border-bottom: none;
-            background-position: 0% 0%, 100% 0%, 0% 100%, 0% 100%;
-            background-size: 51% 100%, 51% 100%, 100% 100%, 100% 100%;
-            transition: background-size .4s ease-in, background-position .6s ease-out .4s;
-        }
 
         .login-form button[type="button"] {
             padding: 10px 20px;
-            background: linear-gradient(#f100ff, orange);
+            background-color: orange;
             border: none;
             border-radius: 5px;
-            color: black;
-            font-weight: 400;
+            color: white;
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-right: 10px;
         }
 
         .login-form button[type="button"]:hover {
             background-color: #ff8b3d;
         }
-
 
         .forgot-password {
             color: orange;
@@ -865,6 +846,25 @@
             }
         }
 
+        async function checkUsernameAvailability(username) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('users_public_information')
+                    .select('username')
+                    .eq('username', username);
+
+                if (error) {
+                    console.error('Ошибка при проверке уникальности ника:', error.message);
+                    return false;
+                }
+
+                return !data.length; // Возвращаем true, если ник уникален
+            } catch (error) {
+                console.error('Ошибка при выполнении запроса:', error.message);
+                return false;
+            }
+        }
+
         function replaceFormFields() {
             showLoader();
             // Изменение заголовка формы
@@ -890,6 +890,13 @@
                     </div>
 
                     <div class="input-container full-width">
+                        <div class="nickname-container">
+                            <input type="text" id="nickname" name="nickname" placeholder="Ник" onkeyup="this.value = this.value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '')" required>
+                            <span class="help-icon" onclick="showNicknameHelp()">?</span>
+                        </div>
+                    </div>
+
+                    <div class="input-container full-width">
                         <div class="help-icon img_v"></div>
                         <select id="gender" name="gender" required>
                             <option value="0" disabled selected>Пол: Не указан</option>
@@ -907,7 +914,43 @@
             `;
 
             renderCaptcha();
+
             hideLoader();
+
+            // Функция для отображения помощи по нику
+
+            window.showNicknameHelp = function() {
+                alert('Ник - это ваш уникальный идентификатор в системе. Он будет использоваться для входа в систему, а также будет отображаться другим пользователям.');
+            };
+
+            // Слушатель событий на форму
+
+            form.addEventListener('input', function(event) {
+                if (event.target.id === 'nickname') { // Проверяем, изменилось ли поле с id "nickname"
+                    clearTimeout(typingTimer); // Сбрасываем предыдущий таймер
+
+                    const username = event.target.value.trim(); // Получаем значение поля
+
+                    // Проверяем, что введён хотя бы один символ
+                    if (username.length > 0) {
+                        const inputField = document.getElementById('nickname');
+                        inputField.style.backgroundColor = '#283040';
+                        typingTimer = setTimeout(async function() {
+                            const isAvailable = await checkUsernameAvailability(username); // Проверяем уникальность ника
+
+                            // Подсвечиваем поле в зависимости от результата проверки
+                            if (isAvailable) {
+                                inputField.style.backgroundColor = 'lightgreen'; // Зелёный цвет для доступного ника
+                            } else {
+                                inputField.style.backgroundColor = 'lightcoral'; // Красный цвет для занятого ника
+                            }
+                        }, 2000); // Задержка в 3 секунды перед отправкой запроса
+                    } else {
+                        // Если поле ника пустое, сбрасываем стили
+                        event.target.style.backgroundColor = '';
+                    }
+                }
+            });
         }
 
         let widgetId;
@@ -974,11 +1017,11 @@
             const lastName = document.getElementById('lastName').value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '');
             const birthdate = document.getElementById('birthdate').value;
             const gender = document.getElementById('gender').value;
-
+            const nickname = document.getElementById('nickname').value.replace(/(^[^a-zA-Z0-9а-яА-Я])|([^a-zA-Z0-9а-яА-Я]$)/g, '').replace(/[^\w.-]/g, '');
             const registerButton = document.getElementById('registerButton');
             onkeyup="this.value = this.value.replace(/[^a-zA-Z0-9а-яА-Я]/g, '')"
 
-            if (!firstName ||!lastName ||!birthdate) {
+            if (!firstName ||!lastName ||!birthdate ||!nickname) {
                 showPopupWithImageAndText('Пожалуйста, заполните все поля.', 'https://imgur.com/aHcCPrp.jpg', 5000);
                 return;
             }
@@ -986,6 +1029,14 @@
             // Показываем уведомление о загрузке и блокируем кнопку сохранения
             showLoader();
             registerButton.disabled = true;
+
+            const isAvailable = await checkUsernameAvailability(nickname); // Проверяем уникальность ника
+
+            // Подсвечиваем поле в зависимости от результата проверки
+            if (!isAvailable) {
+                showPopupWithImageAndText('Пожалуйста, введите уникальный ник. Этот ник уже используется!', 'https://imgur.com/aHcCPrp.jpg', 5000);
+                return;
+            }
 
             try {
                 let emailRedirectTo = 'https://me.synask.ru/check';
@@ -1002,6 +1053,7 @@
                             lastName: lastName,
                             birthday: birthdate,
                             gender: gender,
+                            nickname: nickname
                         }
                     }
                 });

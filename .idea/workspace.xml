@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f4664f8-436f-4103-9baa-a98b6f80ddba" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/MessageHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MessageHandler.js" afterDir="false" />
+    <list default="true" id="5556c22c-e760-4bae-9545-33757dfce2a2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../src/components/MessageHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/components/MessageHandler.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,12 +13,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProjectId" id="2kLnuv9lFS6sqm7iWSNinSFcSPo" />
+  <component name="ProjectId" id="2j5q0aiJSFmO27DqstbUSQUr5CB" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -30,19 +27,14 @@
     "git-widget-placeholder": "dev"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\player\Documents\GitHub\synask-app\src\pages\info" />
-    </key>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8f4664f8-436f-4103-9baa-a98b6f80ddba" name="Changes" comment="" />
-      <created>1723071951311</created>
+      <changelist id="5556c22c-e760-4bae-9545-33757dfce2a2" name="Changes" comment="" />
+      <created>1720687066235</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1723071951311</updated>
+      <updated>1720687066235</updated>
     </task>
     <servers />
   </component>
