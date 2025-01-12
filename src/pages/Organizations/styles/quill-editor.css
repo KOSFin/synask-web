@@ -1,0 +1,40 @@
+.ReactQuill .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 15px;
+  }
+  
+  .ReactQuill .ql-editor.ql-blank::before {
+    color: rgb(142, 142, 142) !important;  /* Белый цвет для placeholder */
+    left: 5px;
+  }
+  
+  .ReactQuill .qlontainer.ql-snow {
+    border: none;
+  }
+  
+  .ReactQuill .ql-toolbar.ql-snow {
+    border: none;
+    padding: 0px;
+  }
+  
+  .ReactQuill .ql-container.ql-snow {
+    border: none;
+  }
+  
+  .ReactQuill .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
+    fill: rgb(142, 142, 142);
+  }
+  
+  .ReactQuill .ql-snow .ql-stroke {
+    stroke: rgb(142, 142, 142);
+  }
+  
+  .ReactQuill .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 0px;
+  }
+  
+  .ReactQuill .ql-editor {
+    padding: 12px 5px;
+    -webkit-user-select: all !important;
+    user-select: all !important;
+    max-height: calc(100vh - 380px);
+  }

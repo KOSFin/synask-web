@@ -1,14 +1,14 @@
 /* Overlay for the description */
 .descriptionOverlay {
-padding: 10px;
-background-color: rgba(28, 28, 28, 0.95); /* Darker and more transparent */
-border-radius: 12px;
-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Soft shadow for depth */
-color: #ffffff;
-overflow-y: auto;
-width: 100%;
-max-width: 400px;
-animation: slideIn 0.5s forwards; /* Появление */
+  padding: 5px;
+  background-color: rgba(28, 28, 28, 0.95); /* Darker and more transparent */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Soft shadow for depth */
+  color: #ffffff;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 400px;
+  animation: slideIn 0.5s forwards; /* Появление */
 }
 
 .descriptionOverlay.hide {
@@ -138,10 +138,6 @@ animation: slideIn 0.5s forwards; /* Появление */
   background-color: transparent;
   color: #ff9800;
   margin-top: 10px;
-}
-
-.adminButton:hover {
-  transform: scale(1.1);
 }
 
 .modalOverlay {

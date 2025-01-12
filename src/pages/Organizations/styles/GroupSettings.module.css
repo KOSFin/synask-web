@@ -1,0 +1,293 @@
+.settingsOverlay {
+    padding: 10px;
+    background-color: rgba(28, 28, 28, 0.98);
+    border-radius: 12px;
+    color: #ffffff;
+    overflow-y: auto;
+    max-width: 400px;
+    animation: slideIn 0.5s forwards;
+    width: 100%;
+    margin-left: -10px;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .settingsOverlay {
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      z-index: 1000;
+      margin-left: 0px;
+      max-width: none;
+    }
+  }
+
+.headerBlock {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.avatarContainer {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.darkOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.avatar {
+    width: 60px;
+    height: auto;
+    border-radius: 35%;
+    margin-right: 10px;
+}
+
+.groupInfo {
+    flex-grow: 1;
+}
+
+.groupNameInput, .groupIdInput {
+    font-size: 1rem;
+    padding: 5px;
+    border: none;
+    border-bottom: 2px solid orange;
+    margin-right: 10px;
+    background-color: transparent;
+    color: #ffffff;
+    width: calc(100% - 10px);
+}
+
+.changeImageButton {
+    background-color: #ff5722;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.changeImageButton:hover {
+    background-color: #e64a19;
+}
+
+.modal {
+    background-color: rgba(28, 28, 28, 0.98);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.imagePreview {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.settingsBlock {
+    margin-top: 20px;
+}
+
+.settingItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.adminBlock {
+    margin-top: 20px;
+}
+
+.adminItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+.adminAvatar {
+    width: 40px;
+    height: auto;
+    border-radius: 35%;
+    margin-right: 10px;
+}
+
+.addAdmin {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.addAdmin input {
+    flex-grow: 1;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.overlayHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+  
+.headerTitle {
+    font-size: 1.5rem;
+    color: #ffffff;
+    font-weight: bold;
+    margin-left: 10px;
+}
+  
+.backIcon {
+    font-size: 1.5rem;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.saveDataButton {
+    background-color: #ff5722;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.publishButton:hover {
+    background-color: #e64a19;
+}
+
+.publishButton:disabled {
+    background-color: #bdbdbd;
+    cursor: not-allowed;
+}
+
+/* Новые стили для кнопки удаления реакции */
+.emojiInput {
+    display: flex;
+    align-items: center;
+}
+
+.selectedEmojisDisplay {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+.emojiWrapper {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .emojiPreview {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    z-index: 10;
+  }
+  
+  .fullEmojiPicker {
+    position: absolute;
+    bottom: 60px; /* Adjust as needed */
+    right: 0;
+    z-index: 10;
+    background-color: #222; /* Темный фон для пикера */
+    transform-origin: bottom; /* Устанавливаем точку изменения размера снизу */
+    animation: resizeEmojiPicker 0.3s ease forwards; /* Анимация изменения размера */
+  }
+
+  .fullEmojiPicker.mobile {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    background-color: #222; /* Темный фон для пикера */
+    animation: slideUp 0.5s ease forwards; /* Добавляем анимацию */
+  }
+
+.toggleSwitch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggleSwitch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}

@@ -9,14 +9,14 @@ import UserContext from '../../../components/UserContext';
 
 const supabase = getSupabaseClient();
 
-const GroupList = () => {
-  const { groupList, setGroupList } = useContext(GroupContext);
+const GroupList = ({ onGroupSelect }) => {
+  const { groupList, setGroupList, setSelectedGroupId } = useContext(GroupContext);
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = useContext(UserContext);
 
   const selectGroup = (groupId) => {
-    navigate(`?id=${groupId}`, { replace: true });
+    onGroupSelect(groupId);
   };
 
   useEffect(() => {
@@ -38,13 +38,25 @@ const GroupList = () => {
         <FontAwesomeIcon style={{ fontSize: '18px', padding: '10px' }} icon={faSearch} className={styles.icon} />
       </div>
       <div className={styles.navButtons}>
-        <button className={styles.navButton} onClick={() => navigate(location.pathname, { replace: true })}>
+        <button className={styles.navButton} onClick={() => onGroupSelect(null)}>
           <FontAwesomeIcon icon={faHome} /> Главная
         </button>
-        <button className={styles.navButton} onClick={() => navigate(`${location.pathname}?page=sub`, { replace: true })}>
+        <button 
+          className={styles.navButton} 
+          onClick={() => {
+            setSelectedGroupId(null);
+            navigate('?page=sub', { replace: true });
+          }}
+        >
           <FontAwesomeIcon icon={faUser} /> Подписки
         </button>
-        <button className={styles.navButton} onClick={() => navigate(`${location.pathname}?page=rec`, { replace: true })}>
+        <button 
+          className={styles.navButton} 
+          onClick={() => {
+            setSelectedGroupId(null);
+            navigate('?page=rec', { replace: true });
+          }}
+        >
           <FontAwesomeIcon icon={faCompass} /> Рекомендации
         </button>
       </div>

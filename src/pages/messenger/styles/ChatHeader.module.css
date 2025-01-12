@@ -4,10 +4,11 @@
   padding: 10px;
   color: #fff;
   background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
   background-size: cover;
   background-position: center;
-  background-blend-mode: darken;
-  border-bottom: 1px solid #7d7d7d;
+  position: relative;
+  z-index: 2;
 }
 
 .backButton {

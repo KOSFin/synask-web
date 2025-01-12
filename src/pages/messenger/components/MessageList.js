@@ -46,6 +46,35 @@ const MessageList = () => {
     return acc;
   }, {});
 
+  // Логика группировки сообщений
+  const renderGroupedMessages = (messages) => {
+    // Сортируем сообщения по дате создания
+    const sortedMessages = messages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    const rendered = [];
+    let lastMessage = null;
+
+    sortedMessages.forEach((message, index) => {
+      const isSameUser = lastMessage && lastMessage.user_id === message.user_id;
+      const timeDifference = lastMessage ? (new Date(message.created_at) - new Date(lastMessage.created_at)) / 60000 : 16; // Время в минутах
+
+      if (!isSameUser || timeDifference > 15) {
+        rendered.push({
+          ...message,
+          showAvatarAndName: true,
+        });
+      } else {
+        rendered.push({
+          ...message,
+          showAvatarAndName: false,
+        });
+      }
+
+      lastMessage = message;
+    });
+
+    return rendered;
+  };
+
   // Открытие/закрытие календаря
   const handleDateClick = (date) => {
     setCalendarDate(date);
@@ -184,7 +213,7 @@ const MessageList = () => {
                 <div className={styles.dateSeparator} onClick={() => handleDateClick(parseISO(date))}>
                     {formatDate(parseISO(date))}
                 </div>
-                {groupedMessages[date].slice().reverse().map((message) => { // Реверсируем сообщения в каждой группе
+                {renderGroupedMessages(groupedMessages[date]).map((message) => {
                     const userInfo = selectedChat.membersInfo.find(member => member.auth_id === message.user_id);
                     if (!userInfo) return null;
 
@@ -202,6 +231,7 @@ const MessageList = () => {
                                 }}
                                 status={renderMessageStatus(message.id)}
                                 replyMessages={messages}
+                                showAvatarAndName={message.showAvatarAndName}
                             />
                         </div>
                     );

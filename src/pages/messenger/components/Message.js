@@ -7,7 +7,7 @@ import MessengerSettingsContext from '../../../components/contexts/MessengerSett
 import ChatContext from '../../../components/ChatContext';
 import chroma from 'chroma-js';
 
-const Message = ({ message, status, isGroupStart, replyMessages }) => {
+const Message = ({ message, status, isGroupStart, replyMessages, showAvatarAndName }) => {
   const { colorMessage } = useContext(MessengerSettingsContext);
   const { selectedChat, replyTo, setReplyTo } = useContext(ChatContext);
   const [swipedDistance, setSwipedDistance] = useState(0);
@@ -65,19 +65,21 @@ const Message = ({ message, status, isGroupStart, replyMessages }) => {
   return (
     <div
       {...(isMobile ? swipeHandlers : {})}
-      className={`${styles.messageGroup} ${isGroupStart ? styles.groupStart : ''}`}
+      className={`${styles.messageGroup} ${isGroupStart ? styles.groupStart : ''} ${showAvatarAndName ? styles.firstMessage : styles.otherMessage}`}
       style={{
         flexDirection: isUser ? (isMobile ? 'row-reverse' : 'row') : 'row',
         transform: `translateX(${swipedDistance}px)`,
         transition: swipedDistance === 0 ? 'transform 0.3s ease' : 'none',
       }}
     >
-      <div className={styles.avatar} style={{ backgroundImage: `url(${message.avatar})` }}></div>
+      {showAvatarAndName && (
+        <div className={styles.avatar} style={{ backgroundImage: `url(${message.avatar})` }}></div>
+      )}
       <div
         className={`${styles.message} ${isUser && isMobile ? styles.user : styles.friend}`}
         style={{ backgroundColor: isUser ? colorMessage : friendColor }}
       >
-        {!isUser && <div className={styles.name} style={{ color: lighterColor }}>{message.user}</div>}
+        {showAvatarAndName && !isUser && <div className={styles.name} style={{ color: lighterColor }}>{message.user}</div>}
 
         {message.replyTo && (
           <div className={styles.replyBox} style={{  borderLeftColor: isUser ? friendColor: colorMessage }}>

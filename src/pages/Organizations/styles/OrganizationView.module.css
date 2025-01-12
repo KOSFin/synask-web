@@ -212,7 +212,6 @@
   background-color: #ff8c00; /* Более яркий оранжевый при наведении */
 }
 
-
 /* Cover image and dark overlay for background */
 .coverImage {
   position: relative;
@@ -325,8 +324,6 @@
 .closeButton:hover {
   color: #ff9800;
 }
-
-
 
 .qrCodeContainer {
   margin-top: 20px;

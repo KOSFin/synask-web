@@ -4,6 +4,7 @@
   padding: 10px;
   background-color: rgba(41, 41, 41, 0.68);
   flex-direction: column-reverse;
+  padding-bottom: 60px;
 }
 
 .dateSeparator {

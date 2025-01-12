@@ -1,12 +1,54 @@
 /* PostEditor.module.css */
-
 .editorContainer {
-  max-width: 700px;
-  margin: 0 auto;
   padding: 10px;
-  background: #1c1c1c;
-  color: #e0e0e0;
-  border-radius: 10px;
+  background-color: rgba(28, 28, 28, 0.98);
+  border-radius: 12px;
+  color: #ffffff;
+  overflow-y: auto;
+  max-width: 400px;
+  animation: slideIn 0.5s forwards;
+  width: 100%;
+  margin-left: -10px;
+}
+
+.editorContainer.hide {
+  animation: slideOut 0.5s forwards; /* Исчезновение */
+}
+
+.etcContainer {
+  position: fixed;
+  top: auto;
+  bottom: 0px;
+  width: -moz-available;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Добавляем анимации для появления и исчезновения */
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+} 
+
+.editorContainer.hide {
+  animation: slideOut 0.5s forwards;
 }
 
 .header {
@@ -20,48 +62,31 @@
   color: #f5a623;
 }
 
-.closeButton {
-  background: transparent;
-  color: #f5a623;
-  font-size: 1.2em;
-  border: none;
-  cursor: pointer;
-}
-
-.reactQuill {
-  margin: 10px 0;
-  background: #2b2b2b;
-  color: #e0e0e0;
-  border-radius: 5px;
-}
-
-.reactQuill .ql-toolbar {
-  border-radius: 5px 5px 0 0;
-  background: #333;
-  border: none;
-}
-
-.reactQuill .ql-container {
-  background: #2b2b2b;
-  border: none;
-  border-radius: 0 0 5px 5px;
-}
-
 .tagInputContainer,
 .authorInputContainer {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .tagInputContainer input,
 .authorInputContainer input {
   padding: 10px;
-  background: #333;
-  border: none;
+  background: transparent;
+  border: 1px solid #f5a623;
   color: #e0e0e0;
   border-radius: 5px;
   outline: none;
+  transition: border-color 0.3s;
+  border: none;
+  border-bottom: 1px solid #f5a623;
+  margin-right: 20px;
+}
+
+.tagInputContainer input:focus,
+.authorInputContainer input:focus {
+  border-color: #ff9800;
 }
 
 .tagList,
@@ -90,56 +115,86 @@
 }
 
 .author {
-  background: #333;
-  color: #e0e0e0;
-  padding: 8px 12px;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-}
-
-.author img.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.author button {
-  background: transparent;
-  border: none;
-  color: #e0e0e0;
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-.mediaUpload input[type="file"] {
-  display: block;
-}
-
-.mediaUpload label {
-  display: inline-block;
-  padding: 10px 15px;
-  background: #f5a623;
-  color: #1c1c1c;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.mediaList {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.mediaItem {
   display: flex;
   align-items: center;
   background: #2b2b2b;
   color: #e0e0e0;
   padding: 5px 10px;
   border-radius: 5px;
+  margin-top: 5px;
+}
+
+.author img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.mediaUpload {
+  margin-top: 20px;
+}
+
+.attachButton {
+  background: #f5a623;
+  color: #1c1c1c;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.mediaUploadMenu {
+  margin-top: 10px;
+  background: rgba(40, 40, 40, 0.9);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.mediaUploadMenu button {
+  background: transparent;
+  color: #f5a623;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.mediaList {
+  display: flex;
+  overflow-x: auto; /* Горизонтальная прокрутка */
+  padding: 10px 0; /* Отступы сверху и снизу */
+}
+
+.mediaItem {
+  position: relative; /* Для позиционирования крестика */
+  margin-right: 10px; /* Отступ между миниатюрами */
+}
+
+.thumbnail {
+  width: 100px; /* Ширина миниатюры */
+  height: 100px; /* Высота миниатюры */
+  border-radius: 5px; /* Закругленные края */
+  transition: opacity 0.3s; /* Плавный переход для затемнения */
+}
+
+.mediaItem:hover .thumbnail {
+  opacity: 0.5; /* Затемнение при наведении */
+}
+
+.deleteIcon {
+  position: absolute; /* Позиционирование по центру */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Центрирование */
+  color: white; /* Цвет крестика */
+  font-size: 24px; /* Размер крестика */
+  display: none; /* Скрыть по умолчанию */
+}
+
+.mediaItem:hover .deleteIcon {
+  display: block; /* Показать крестик при наведении */
 }
 
 .mediaItem img {
@@ -201,21 +256,179 @@
   border-radius: 5px;
 }
 
-.closeIcon {
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+  .editorContainer {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    margin-left: 0px;
+  }
+}
+
+.overlayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.headerTitle {
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.backIcon {
+  font-size: 1.5rem;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.publishButton {
+  background-color: #ff5722;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 5px 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.publishButton:hover {
+  background-color: #e64a19;
+}
+
+.publishButton:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/* Стили для полосы прокрутки */
+.editorContainer::-webkit-scrollbar {
+  width: 6px; /* Тонкая полоса прокрутки */
+}
+
+.editorContainer::-webkit-scrollbar-track {
+  background: transparent; /* Прозрачный трек */
+  margin-top: 65px; /* Сдвигаем трек на высоту верхнего отступа */
+}
+
+.editorContainer::-webkit-scrollbar-thumb {
+  background-color: orange; /* Оранжевый цвет полосы прокрутки */
+  border-radius: 8px; /* Закругленные края */
+}
+
+.editorContainer::-webkit-scrollbar-thumb:hover {
+  background-color: #ff8c00; /* Более яркий оранжевый при наведении */
+}
+
+/* Стили для модального окна */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: #2b2b2b;
+  padding: 20px;
+  border-radius: 10px;
+  color: #ffffff;
+  width: 300px;
+  text-align: center;
+}
+
+.modalStep {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.progress {
+  margin-left: 10px;
+}
+
+.postCreated {
+  margin-top: 20px;
+  color: #f5a623;
+  font-weight: bold;
+}
+
+.closeModal {
   font-size: 22px;
   cursor: pointer;
   color: #ffffff;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
-.closeIcon:hover {
-  color: #ff9800;
+.mediaButton {
+    display: flex;
+    align-items: center;
+    background: #f5a623;
+    color: #1c1c1c;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+    width: 100%;
 }
 
-/* Для мобильных устройств */
-@media (max-width: 768px) {
-    .editorContainer {
-      height: 100%;
-      position: absolute;
-      z-index: 2;
-    }
+.linkInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #f5a623;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.linkUploadButton {
+    background: #f5a623;
+    color: #1c1c1c;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.deviceUpload {
+    border: 2px dashed #f5a623;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: #e0e0e0;
+}
+
+.fileUploadLabel {
+    cursor: pointer;
+}
+
+.fileUploadArea {
+    border: 2px dashed #f5a623;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: #e0e0e0;
+    transition: background-color 0.3s;
+}
+
+.fileUploadArea:hover {
+    background-color: rgba(245, 166, 35, 0.1); /* Подсветка при наведении */
 }

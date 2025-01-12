@@ -10,9 +10,12 @@ import { deleteChatById } from '../../../components/utils';
 import VersionContext from '../../../components/contexts/VersionContext';
 import load from '../../Loader.module.css';
 import { format, formatDistanceToNow, parseISO, isToday, isYesterday } from 'date-fns';
+import MessengerSettingsContext from '../../../components/contexts/MessengerSettingsContext';
+import chroma from 'chroma-js';
 
 const ChatHeader = () => {
   const { setSelectedChatId, selectedChatId, selectedChat, isLoadingMessages, isLoadingUser, messages } = useContext(ChatContext);
+  const { colorMessage } = useContext(MessengerSettingsContext);
   const { userId, statusUsers } = useContext(UserContext);
   const navigate = useNavigate();
   const isMobile = window.innerWidth <= 768;
@@ -25,6 +28,8 @@ const ChatHeader = () => {
   const [username, setUsername] = useState(null);
   const [confirmChecked, setConfirmChecked] = useState(false);
   const { version } = useContext(VersionContext);
+
+  const lighterColor = chroma(colorMessage).luminance() < 0.05 ? '#a0a0a0' : chroma(colorMessage).brighten(1).hex();
 
   useEffect(() => {
     if (!selectedChat) {
@@ -44,7 +49,7 @@ const ChatHeader = () => {
       }
 
       if (selectedChat.members && selectedChat.membersInfo) {
-        const otherUserId = selectedChat?.members.find(id => id !== userId);
+        const otherUserId = selectedChat.members.find(id => id !== userId);
         const otherUserInfo = selectedChat.membersInfo.find(member => member.auth_id === otherUserId);
 
         if (!otherUserInfo) {
@@ -81,6 +86,8 @@ const ChatHeader = () => {
         } else {
           setSubText(null);
         }
+      } else {
+        console.error("Members or membersInfo is undefined");
       }
     }
   }, [selectedChat, userId, statusUsers]);
@@ -138,7 +145,7 @@ const ChatHeader = () => {
     >
       {isMobile && (
         <button className={styles.backButton} onClick={handleCloseChat}>
-          <FontAwesomeIcon icon={faChevronLeft} style={{ color: 'white', backgroundColor: 'black', borderRadius: '5px', marginRight: '10px'}}/>
+          <FontAwesomeIcon icon={faChevronLeft} style={{ color: lighterColor, marginRight: '10px'}}/>
         </button>
       )}
       {selectedChat ? (
@@ -186,12 +193,12 @@ const ChatHeader = () => {
             <div
               className={styles.statusIndicator}
               style={{
-                backgroundColor: statusUsers[selectedChat.members.find(id => id !== userId)]?.online ? 'green' : 'gray'
+                backgroundColor: statusUsers[selectedChat.membersInfo.map(member => member.auth_id)]?.online ? 'green' : 'gray'
               }}
             ></div>
           </div>
           <div className={styles.info}>
-            <div className={styles.name}>{name}</div>
+            <div className={styles.name} style={{color: lighterColor}}>{name}</div>
             {!isLoadingUser && !isLoadingMessages && selectedChat && messages ? (
               <div className={styles.status}>{subText}</div>
             ) : (
@@ -204,7 +211,7 @@ const ChatHeader = () => {
             )}
           </div>
           <button className={styles.backButton} onClick={() => setShowDropdown(!showDropdown)}>
-            <FontAwesomeIcon icon={faEllipsisV} style={{ color: 'white', backgroundColor: 'black', borderRadius: '5px', marginRight: '10px'}}/>
+            <FontAwesomeIcon icon={faEllipsisV} style={{ color: lighterColor, marginRight: '10px'}}/>
           </button>
         </>
       ) : (

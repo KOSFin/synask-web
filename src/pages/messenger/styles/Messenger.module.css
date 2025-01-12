@@ -96,16 +96,22 @@
 }
 
 .chatActive {
+  
   animation: slideIn 0.5s forwards;
 }
 
-.main:not(.chatActive) {
+.chatUnActive {
   animation: slideOut 0.5s forwards;
+}
+
+.main:not(.chatActive) {
+  display: none;
 }
 
 @media (max-width: 768px) {
   .main {
     position: fixed;
+    display: block;
     top: 0;
     left: 0;
     right: 0;
@@ -121,7 +127,7 @@
   }
 
 
-  .main:not(.chatActive) {
+  .chatUnActive {
     transform: translateY(100%); /* Чат скрыт */
   }
 

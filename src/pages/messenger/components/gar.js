@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import styles from '../styles/InputArea.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faSmile, faPaperPlane, faReply, faKeyboard, faQuestionCircle, faArrowCircleDown, faArrowCircleUp  } from '@fortawesome/free-solid-svg-icons';
+import { faPaperclip, faSmile, faPaperPlane, faReply } from '@fortawesome/free-solid-svg-icons';
 import ChatContext from '../../../components/ChatContext';
 import UserContext from '../../../components/UserContext';
 import Picker from 'emoji-picker-react';
@@ -22,9 +22,6 @@ const InputArea = () => {
   const isMobile = window.innerWidth <= 768;
   const [emojiPickerHeight, setEmojiPickerHeight] = useState(0);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [isOpenFullEmoji, setIsOpenFullEmoji] = useState(false);
-  const [initialWindowHeight, setInitialWindowHeight] = useState(window.innerHeight);
 
   const lighterColor = chroma(colorMessage).luminance() < 0.05 ? '#a0a0a0' : chroma(colorMessage).brighten(1).hex();
 
@@ -111,25 +108,19 @@ const InputArea = () => {
   const replyText = replyMessage ? replyMessage.content : '';
 
   const handleKeyboardToggle = () => {
-    setIsKeyboardOpen(true);
-    setEmojiPickerHeight(keyboardHeight);
-    setShowEmojiPicker(true);
+    setIsKeyboardOpen(false);
+    setEmojiPickerHeight(300);
   };
 
   const handleEmojiPickerToggle = () => {
-    setIsKeyboardOpen(false);
-    setShowEmojiPicker(true);
-    setEmojiPickerHeight(keyboardHeight);
-  };
-
-  const handleEmojiPickerFull = () => {
-    if (showEmojiPicker && isOpenFullEmoji) {
-      setIsOpenFullEmoji(false);
-      setEmojiPickerHeight(keyboardHeight);
-    } else {
-      setIsOpenFullEmoji(true);
-      setEmojiPickerHeight(window.innerHeight * 0.8);
-    }
+    setShowEmojiPicker((prev) => {
+      if (!prev) {
+        setEmojiPickerHeight(300);
+      } else {
+        setEmojiPickerHeight(0);
+      }
+      return !prev;
+    });
   };
 
   const handleOutsideClick = (e) => {
@@ -145,7 +136,9 @@ const InputArea = () => {
     ) {
       setIsKeyboardOpen(false);
       setShowEmojiPicker(false);
-      setEmojiPickerHeight(0);
+      if (!isKeyboardOpen && !showEmojiPicker) {
+        //setEmojiPickerHeight(0);
+      }
     }
   };
 
@@ -156,102 +149,26 @@ const InputArea = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Обновляем первоначальную высоту окна
-    const updateInitialHeight = () => {
-      setInitialWindowHeight(window.innerHeight);
-    };
-
-    // Округление до десятков в большую сторону
-    const roundToNextTen = (value) => Math.ceil(value / 10) * 10;
-
-    // Android: обработка через событие resize
-    const handleResize = () => {
-      const currentHeight = window.innerHeight;
-      if (currentHeight < initialWindowHeight) {
-        const keyboardHeightCt = initialWindowHeight - currentHeight;
-        if (keyboardHeightCt >= 150) { // Если высота клавиатуры больше 150px
-          //setKeyboardHeight(roundToNextTen(keyboardHeightCt));
-          setKeyboardHeight(keyboardHeightCt);
-        }
-      } else {
-        // Клавиатура скрыта, не обновляем состояние
-      }
-    };
-
-    // iOS: обработка через VisualViewport
-    const handleVisualViewport = () => {
-      if (window.visualViewport) {
-        const onViewportResize = () => {
-          const viewportHeight = window.visualViewport.height;
-          const keyboardHeightCt = initialWindowHeight - viewportHeight;
-          if (keyboardHeightCt > 150) { // Если высота клавиатуры больше 150px
-            //setKeyboardHeight(roundToNextTen(keyboardHeightCt));
-            setKeyboardHeight(keyboardHeightCt);
-          } else {
-            // Клавиатура скрыта, не обновляем состояние
-          }
-        };
-
-        window.visualViewport.addEventListener('resize', onViewportResize);
-
-        return () => {
-          window.visualViewport.removeEventListener('resize', onViewportResize);
-        };
-      }
-    };
-
-    // Инициализация обработчиков
-    const init = () => {
-      const textarea = textareaRef.current;
-
-      const onFocus = () => {
-        if (window.visualViewport) {
-          handleVisualViewport();
-        } else {
-          window.addEventListener('resize', handleResize);
-        }
-      };
-
-      textarea?.addEventListener('focus', onFocus);
-
-      // Обновляем начальную высоту окна
-      updateInitialHeight();
-      window.addEventListener('resize', updateInitialHeight);
-
-      // Очистка обработчиков при размонтировании
-      return () => {
-        textarea?.removeEventListener('focus', onFocus);
-        window.removeEventListener('resize', updateInitialHeight);
-      };
-    };
-
-    // Запуск
-    init();
-  }, []);
-
-
   return (
   <>
-    {replyTo && replyMessage && (
-      <div className={styles.replyBlock} style={{ marginBottom: isMobile ? emojiPickerHeight : '0' }}>
-        <FontAwesomeIcon style={{ color:'white', marginRight: '10px', height: '30px'}}icon={faReply} />
-        <div className={styles.replyInfo}>
-          <div className={styles.replyUserName} style={{ color: colorMessage }}>В ответ {replyUserName}</div>
-          <div className={styles.replyText}>{replyText}</div>
+      {replyTo && replyMessage && (
+        <div className={styles.replyBlock}>
+          <FontAwesomeIcon style={{ color:'white', marginRight: '10px', height: '30px'}}icon={faReply} />
+          <div className={styles.replyInfo}>
+            <div className={styles.replyUserName} style={{ color: colorMessage }}>В ответ {replyUserName}</div>
+            <div className={styles.replyText}>{replyText}</div>
+          </div>
+          <div className={styles.cancelReply} onClick={handleCancelReply}>
+            &times;
+          </div>
         </div>
-        <div className={styles.cancelReply} onClick={handleCancelReply}>
-          &times;
-        </div>
-      </div>
-    )}
+      )}
     <div className={styles.inputArea} style={{ marginBottom: isMobile ? emojiPickerHeight : 0 }}>
       <div className={styles.icon} onClick={handleLinkPopupToggle}>
         <FontAwesomeIcon style={{ color: lighterColor }}icon={faPaperclip} />
       </div>
       {showLinkPopup && (
         <div className={styles.linkPopup}>
-          <div>{keyboardHeight}</div>
           <input
             type="text"
             value={link}
@@ -279,26 +196,15 @@ const InputArea = () => {
         onInput={handleTextAreaExpand}
         onKeyDown={handleKeyDown}
         maxLength="200"
-        onFocus={() => handleKeyboardToggle()}
+        onFocus={() => handleEmojiPickerToggle()}
       />
       <div className={styles.characterCount}>{characterCount}/200</div>
       <div className={styles.emojiWrapper}>
         <div
           className={styles.icon}
+          onClick={isKeyboardOpen ? handleKeyboardToggle : handleEmojiPickerToggle}
         >
-          {keyboardHeight ? (
-            <FontAwesomeIcon
-              style={{ color: lighterColor }}
-              icon={!isKeyboardOpen && showEmojiPicker ? (isOpenFullEmoji ? faArrowCircleDown : faArrowCircleUp) : faSmile}
-              onClick={!isKeyboardOpen && showEmojiPicker ? handleEmojiPickerFull : handleEmojiPickerToggle}
-            />
-          ) : (
-            <FontAwesomeIcon
-              style={{ color: lighterColor }}
-              icon={faQuestionCircle}
-              onClick={() => alert('Откройте клавиатуру, чтобы начать пользование смайлами в любое время.')}
-            />
-          )}
+          <FontAwesomeIcon style={{ color: lighterColor }} icon={isKeyboardOpen ? faPaperPlane : faSmile} />
         </div>
         {showEmojiPicker && !isMobile && (
           <div className={styles.fullEmojiPicker}>
@@ -314,7 +220,7 @@ const InputArea = () => {
     </div>
     {showEmojiPicker && isMobile && (
       <div className={`${styles.fullEmojiPicker} ${styles.mobile}`} style={{ position: 'initial', display: 'block', height: emojiPickerHeight}}>
-        <Picker autoFocusSearch={false} width="100%" height="100%" onEmojiClick={handleEmojiClick} theme="dark" previewConfig={{ showPreview: false }} native className={styles.emojiPickerComponent} />
+        <Picker autoFocusSearch={false} width="100%" onEmojiClick={handleEmojiClick} theme="dark" previewConfig={{ showPreview: false }} native className={styles.emojiPickerComponent} />
       </div>
     )}
   </>

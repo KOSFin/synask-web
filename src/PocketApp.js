@@ -41,7 +41,7 @@ const PocketApp = () => {
       <Route path="/options" element={<Settings />} />
       <Route path="/info" element={<Info />} />
     </Routes>
-  ), [location.pathname]); // Зависимость только от pathname
+  ), [location]); // Изменено: зависимость от всего объекта location
 
   return (
     <div className={styles.appContainer}>

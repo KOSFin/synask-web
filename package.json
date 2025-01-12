@@ -46,6 +46,7 @@
     "react-youtube": "^10.1.0",
     "simple-peer": "^9.11.1",
     "start": "^5.1.0",
+    "styled-components": "^6.1.14",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -53,10 +54,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "full-deploy": "npm run build && gh-pages -d build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://KOSFin.github.io/synask-web",
+  "homepage": "https://KOSFin.github.io/",
   "eslintConfig": {
     "extends": [
       "react-app",

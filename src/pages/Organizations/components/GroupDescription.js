@@ -80,7 +80,7 @@ const GroupDescription = ({
       </div>
 
       {isAdmin && (
-        <button className={styles.adminButton} onClick={() => setIsSettingsOpen((prev) => !prev)} style={{ color: accentColor, borderColor: accentColor }}>
+        <button className={styles.adminButton} onClick={() => {setIsSettingsOpen((prev) => !prev); setIsOpenDescription((prev) => !prev)}} style={{ color: accentColor, borderColor: accentColor }}>
           <FontAwesomeIcon icon={faCog} />
           Настройки группы
         </button>

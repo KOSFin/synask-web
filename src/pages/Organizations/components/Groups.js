@@ -9,6 +9,8 @@ import getSupabaseClient from '../../config/SupabaseClient';
 import ManagedOrganizations from './ManagedOrganizations';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import AccentColorContext from '../../settings/AccentColorContext';
+import { GroupContext } from '../GroupContext';
+import UserContext from '../../../components/UserContext';
 
 const supabase = getSupabaseClient();
 
@@ -19,10 +21,10 @@ const OrganizationsPage = () => {
   const [randomOrganizations, setRandomOrganizations] = useState([]);
   const [subscribedOrganizations, setSubscribedOrganizations] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [userId, setUserId] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
-  const [showManagedOrganizations, setShowManagedOrganizations] = useState(false); // Новое состояние
-  const [managedOrganizations, setManagedOrganizations] = useState([]); // Данные управляемых организаций
+  const [showManagedOrganizations, setShowManagedOrganizations] = useState(false);
+  const [managedOrganizations, setManagedOrganizations] = useState([]);
+  const { userId } = useContext(UserContext);
 
   // Состояния загрузки
   const [loadingUserData, setLoadingUserData] = useState(true);
@@ -56,28 +58,20 @@ const OrganizationsPage = () => {
   });
 
   const fetchUserData = useCallback(async () => {
+    if (!userId) return;
     try {
-      setLoadingUserData(true);
-      const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError) throw authError;
-
-      const currentUserId = authData.user.id;
-      setUserId(currentUserId);
-
       const { data: subsData, error: subsError } = await supabase
         .from('organizations')
         .select('*')
-        .contains('followers', [currentUserId]);
+        .contains('followers', [userId]);
 
       if (subsError) throw subsError;
 
       setSubscribedOrganizations(subsData || []);
     } catch (error) {
       console.error('Ошибка при получении данных пользователя:', error.message);
-    } finally {
-      setLoadingUserData(false);
     }
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     fetchUserData();
@@ -126,12 +120,13 @@ const OrganizationsPage = () => {
 
   // Новая функция для получения управляемых организаций
   const fetchManagedOrganizations = useCallback(async () => {
+    if (!userId) return;
     try {
       setLoadingUserData(true);
       const { data, error } = await supabase
         .from('organizations')
         .select('*')
-        .contains('roles', [userId]);
+        .filter('roles', 'cs', JSON.stringify({ [userId]: 'owner' }));
 
       if (error) throw error;
 
@@ -141,7 +136,7 @@ const OrganizationsPage = () => {
     } finally {
       setLoadingUserData(false);
     }
-  }, [userId]); // Добавляем зависимость от userId
+  }, [userId]);
 
   useEffect(() => {
     fetchManagedOrganizations();
@@ -154,7 +149,7 @@ const OrganizationsPage = () => {
   };
 
   const handleSearch = async () => {
-    if (loading) return;
+    if (loading || !searchQuery) return;
     setLoading(true);
     const queryLower = searchQuery.toLowerCase();
     try {
@@ -343,9 +338,10 @@ const OrganizationsPage = () => {
 const OrganizationCard = ({ organization, userId, toggleSubscription }) => {
     const isSubscribed = organization.followers.includes(userId);
     const navigate = useNavigate();
+    const { setSelectedGroupId } = useContext(GroupContext);
 
     const selectGroup = (groupId) => {
-        navigate(`?id=${groupId}`, { replace: true });
+        setSelectedGroupId(groupId);
     };
 
     return (

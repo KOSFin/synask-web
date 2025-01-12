@@ -24,8 +24,8 @@ const Post = ({ post, organizationSettings, organization, authors, isAdmin, post
   const { setEditedPost } = useContext(EditPostContext);
   const { userId, userRole } = useContext(UserContext);
   const allowedReactions = organizationSettings?.reactions === true
-  ? null
-  : new Set(organizationSettings.reactions);
+    ? null
+    : new Set(organizationSettings.reactions || []);
   const emojiPickerRef = useRef(null);
 
   // Слушаем изменения в post и organizationSettings и обновляем состояние
@@ -68,32 +68,24 @@ const Post = ({ post, organizationSettings, organization, authors, isAdmin, post
   };
 
   const handleReactionClick = async (emojiId) => {
-    const updatedReactions = { ...reactions };
-
-    // Обновляем реакции в зависимости от их наличия
-    if (updatedReactions[emojiId]?.includes(userId)) {
-      updatedReactions[emojiId] = updatedReactions[emojiId].filter(id => id !== userId);
-      if (updatedReactions[emojiId].length === 0) delete updatedReactions[emojiId];
-    } else {
-      updatedReactions[emojiId] = updatedReactions[emojiId] ? [...updatedReactions[emojiId], userId] : [userId];
-    }
-
-      // Обновление реакции в Supabase
-      try {
-        const { error } = await supabase
-          .from('posts') // замените на свою таблицу
-          .update({ reactions: updatedReactions })
-          .eq('id', post.id); // используйте идентификатор вашего поста
-
-        if (error) {
-          console.error("Ошибка при обновлении реакции:", error);
-        } else {
-          setReactions(updatedReactions);
-        }
-      } catch (err) {
-        console.error("Ошибка при обработке реакции:", err);
+    try {
+      // Вызов хранимой функции handle_reaction
+      const { error } = await supabase.rpc('handle_reaction', {
+        post_id: post.id,   // Идентификатор поста
+        reaction: emojiId,  // Идентификатор выбранной реакции (например, emoji ID)
+        user_id: userId     // Идентификатор пользователя
+      });
+  
+      if (error) {
+        console.error("Ошибка при обработке реакции:", error);
+      } else {
+        console.log(`Реакция '${emojiId}' успешно обработана`);
       }
+    } catch (err) {
+      console.error("Ошибка при вызове функции handle_reaction:", err);
+    }
   };
+  
 
   const openMediaModal = (media) => {
     setCurrentMedia(media);
@@ -208,93 +200,99 @@ const Post = ({ post, organizationSettings, organization, authors, isAdmin, post
 
   return (
     <div className={styles.postContainer}>
-      <div className={styles.postHeader}>
-        <div className={styles.orgInfo}>
-          <img src={organization.avatar_url} alt="Org Avatar" className={styles.orgAvatar} />
-          <div>
-            <h3 className={styles.orgName}>{organization.name}</h3>
-            <span className={styles.postDate} onClick={handleDateClick}>
-              {formatDate(post.created_at)}
-            </span>
-            {showDateInfo && renderDateInfoModal()}
-          </div>
-        </div>
-
-        {/* Кнопка с тремя точками для меню */}
-        <div className={styles.menuButtonContainer}>
-          <button className={styles.menuButton} onClick={handleMenuToggle}>
-            <FontAwesomeIcon icon={faEllipsisV} />
-          </button>
-        </div>
-
-      </div>
-      {/* Контекстное меню */}
-      {showMenu && (
-            <div ref={menuRef} className={styles.actionMenu} style={modalPosition}>
-              <button onClick={handleReport}>
-                <FontAwesomeIcon icon={faFlag} /> Пожаловаться
-              </button>
-              {isAdmin && (
-                <>
-                  <button onClick={handleEdit}>
-                    <FontAwesomeIcon icon={faEdit} /> Редактировать
-                  </button>
-                  <button onClick={handleDelete}>
-                    <FontAwesomeIcon icon={faTrashAlt} /> Удалить
-                  </button>
-                </>
-              )}
-            </div>
-      )}
-
-      <div className={styles.tagsContainer}>
-        {post.tags.map((tag, index) => (
-          <span key={index} className={styles.tag}>
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      <div className={styles.postContent}>
-        {renderMedia(post.media)}
-        <div
-          className={`ql-editor ${styles.post}`}
-          data-gramm="false"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
-        />
-      </div>
-
-      <div className={styles.postFooter}>
-          <div className={styles.reactionsContainer}>
-            {Object.entries(reactions).map(([emojiId, users], index) => (
-              (!allowedReactions || allowedReactions.has(emojiId)) && (
-                <button
-                  key={index}
-                  className={`${styles.reaction} ${users.includes(userId) ? styles.activeReaction : ''}`}
-                  onClick={() => handleReactionClick(emojiId)}
-                >
-                  <span className={styles.reactionEmoji}>
-                    <span role="img" aria-label={emojiId}>
-                      {String.fromCodePoint(...emojiId.split('-').map(el => parseInt(el, 16)))}
-                    </span>
-                  </span>
-                  <span>{users.length}</span>
-                </button>
-              )
-            ))}
-            <button className={styles.addReaction} onClick={() => setShowPicker(!showPicker)}>
-              <FontAwesomeIcon icon={faPlus} />
-            </button>
-            {showPicker && (
-              <div ref={emojiPickerRef} className={styles.emojiPicker}>
-                <Picker {...pickerProps} />
+      {post ? (
+        <>
+          <div className={styles.postHeader}>
+            <div className={styles.orgInfo}>
+              <img src={organization.avatar_url} alt="Org Avatar" className={styles.orgAvatar} />
+              <div>
+                <h3 className={styles.orgName}>{organization.name}</h3>
+                <span className={styles.postDate} onClick={handleDateClick}>
+                  {formatDate(post.created_at)}
+                </span>
+                {showDateInfo && renderDateInfoModal()}
               </div>
-            )}
+            </div>
+
+            {/* Кнопка с тремя точками для меню */}
+            <div className={styles.menuButtonContainer}>
+              <button className={styles.menuButton} onClick={handleMenuToggle}>
+                <FontAwesomeIcon icon={faEllipsisV} />
+              </button>
+            </div>
+
           </div>
-          {organizationSettings.comments && (
-            <button className={styles.commentButton}>Comments</button>
+          {/* Контекстное меню */}
+          {showMenu && (
+                <div ref={menuRef} className={styles.actionMenu} style={modalPosition}>
+                  <button onClick={handleReport}>
+                    <FontAwesomeIcon icon={faFlag} /> Пожаловаться
+                  </button>
+                  {isAdmin && (
+                    <>
+                      <button onClick={handleEdit}>
+                        <FontAwesomeIcon icon={faEdit} /> Редактировать
+                      </button>
+                      <button onClick={handleDelete}>
+                        <FontAwesomeIcon icon={faTrashAlt} /> Удалить
+                      </button>
+                    </>
+                  )}
+                </div>
           )}
-      </div>
+
+          <div className={styles.tagsContainer}>
+            {post.tags.map((tag, index) => (
+              <span key={index} className={styles.tag}>
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className={styles.postContent}>
+            {renderMedia(post.media)}
+            <div
+              className={`ql-editor post-text-content ${styles.post}`}
+              data-gramm="false"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+            />
+          </div>
+
+          <div className={styles.postFooter}>
+              <div className={styles.reactionsContainer}>
+                {Object.entries(reactions).map(([emojiId, users], index) => (
+                  (!allowedReactions || allowedReactions.has(emojiId)) && (
+                    <button
+                      key={index}
+                      className={`${styles.reaction} ${users.includes(userId) ? styles.activeReaction : ''}`}
+                      onClick={() => handleReactionClick(emojiId)}
+                    >
+                      <span className={styles.reactionEmoji}>
+                        <span role="img" aria-label={emojiId}>
+                          {String.fromCodePoint(...emojiId.split('-').map(el => parseInt(el, 16)))}
+                        </span>
+                      </span>
+                      <span>{users.length}</span>
+                    </button>
+                  )
+                ))}
+                <button className={styles.addReaction} onClick={() => setShowPicker(!showPicker)}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+                {showPicker && (
+                  <div ref={emojiPickerRef} className={styles.emojiPicker}>
+                    <Picker {...pickerProps} />
+                  </div>
+                )}
+              </div>
+              {organizationSettings.comments && (
+                <button className={styles.commentButton}>Comments</button>
+              )}
+          </div>
+        </>
+      ) : (
+        <div className={styles.noPostMessage}>Пост не найден</div>
+      )}
 
       {isModalOpen && (
         <div className={styles.mediaModal} onClick={closeModal}>

@@ -20,7 +20,7 @@ export const MessageHandler = () => {
         messageStatus, setMessageStatus,
         pendingQueue, setPendingQueue
     } = useContext(ChatContext);
-    const { isAuthenticated, userId, usersCache, setUsersCache, dataUpdate, setDataUpdate } = useContext(UserContext);
+    const { isAuthenticated, userId, usersCache, setUsersCache } = useContext(UserContext);
 
     const [messagesCache, setMessagesCache] = useState({});
     const [chatsCache, setChatsCache] = useState([]);
@@ -30,7 +30,6 @@ export const MessageHandler = () => {
 
         setIsLoadingChats(true);
         setIsLoadingUser(true);
-        //setDataUpdate('updating');
 
         const initializeChats = async () => {
             if (chatsCache.length > 0) {
@@ -54,7 +53,6 @@ export const MessageHandler = () => {
             }));
 
             setChatList(enrichedChats);
-            setIsLoadingChats(false);
             // setIsLoadingUser(false);
             // setDataUpdate('');
             setChatsCache(enrichedChats);
@@ -78,6 +76,8 @@ export const MessageHandler = () => {
             .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'messages' }, payload => handleMessageUpdate(payload.new))
             .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, payload => handleMessageDelete(payload.old))
             .subscribe();
+
+        setIsLoadingChats(false);
 
         return () => {
             supabase.removeChannel(chatSubscription);
@@ -183,13 +183,14 @@ export const MessageHandler = () => {
       if (!selectedChat || !selectedChat.id || selectedChat.error) return;
 
       setIsLoadingMessages(true);
-
+      setIsLoadingUser(true);
 
       const fetchMessages = async () => {
         // Проверяем кеш сообщений
         if (messagesCache[selectedChat.id]) {
           setMessages(messagesCache[selectedChat.id]);
           setIsLoadingMessages(false);
+          setIsLoadingUser(false);
           return;
         }
 
@@ -211,6 +212,7 @@ export const MessageHandler = () => {
             }));
             console.log(messagesCache);
             saveMessagesToCache(selectedChat.id, fetchedMessages);
+            setIsLoadingUser(false);
         }
         setIsLoadingMessages(false);
       };
@@ -382,6 +384,16 @@ export const MessageHandler = () => {
             const updatedChats = prevChats.filter(chat => chat.id !== deletedChat.id);
             updateNewMessagesCount(updatedChats);
             saveChatsToCache(updatedChats);
+            
+            // Очищаем кеш сообщений в состоянии для удаляемого чата
+            setMessagesCache(prevCache => {
+                const { [deletedChat.id]: _, ...remainingCache } = prevCache; // Удаляем кеш для удаляемого чата
+                return remainingCache;
+            });
+
+            // Очищаем кеш в локальном хранилище для удаляемого чата
+            localStorage.removeItem(`${CACHE_PREFIX}-messages-${deletedChat.id}`);
+
             return updatedChats;
         });
     };

@@ -18,6 +18,7 @@ const Messenger = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [chatListWidth, setChatListWidth] = useState(250);
   const [loading, setLoading] = useState(false); // Состояние загрузки
+  const [isChatActive, setIsChatActive] = useState(false);
 
   const { accentColor } = useContext(AccentColorContext);
   const { setSelectedChatId, selectedChatId, selectedChat } = useContext(ChatContext);
@@ -54,11 +55,17 @@ const Messenger = () => {
         navigate({ search: '' });
       }
     }
-  }, [selectedChatId, location.search]); // Синхронизируем selectedChatId с URL
+
+    // Обновляем состояние isChatActive только при изменении selectedChatId
+    if (isChatActive !== selectedChatId) {
+      setIsChatActive(!!selectedChatId); // Устанавливаем isChatActive в true, если есть выбранный чат
+    }
+  }, [selectedChatId, location.search]);
 
   const handleCloseChat = () => {
     navigate({ search: '' });
     setSelectedChatId(null);
+    setIsChatActive(false); // Сбрасываем состояние активности чата
   };
 
   const createChat = async () => {
@@ -114,7 +121,7 @@ const Messenger = () => {
         </div>
         {!isMobile && <div className={styles.resizer}></div>}
 
-        <div className={`${styles.main} ${selectedChatId ? styles.chatActive : ''}`}>
+        <div className={`${styles.main} ${isChatActive && (selectedChat ? styles.chatActive : styles.chatUnActive)}`}>
           {selectedChatId ? (
             selectedChat?.error ? (
               <>
@@ -140,7 +147,7 @@ const Messenger = () => {
                 >
                   {loading ? (
                     <div className={styles.loading}>
-                      <div className={load.loader}></div> {/* Лоадер */}
+                      <div className={load.loader}></div>
                     </div>
                   ) : (
                     "Создать чат"
