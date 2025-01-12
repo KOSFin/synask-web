@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/synask-web/static/css/main.626b36db.css",
-    "main.js": "/synask-web/static/js/main.df1f34e8.js",
-    "static/js/966.8d243246.chunk.js": "/synask-web/static/js/966.8d243246.chunk.js",
-    "static/js/845.425d986c.chunk.js": "/synask-web/static/js/845.425d986c.chunk.js",
-    "index.html": "/synask-web/index.html",
-    "main.626b36db.css.map": "/synask-web/static/css/main.626b36db.css.map",
-    "main.df1f34e8.js.map": "/synask-web/static/js/main.df1f34e8.js.map",
-    "966.8d243246.chunk.js.map": "/synask-web/static/js/966.8d243246.chunk.js.map",
-    "845.425d986c.chunk.js.map": "/synask-web/static/js/845.425d986c.chunk.js.map"
+    "main.css": "/static/css/main.c763f91b.css",
+    "main.js": "/static/js/main.9527e3fe.js",
+    "static/js/966.8d243246.chunk.js": "/static/js/966.8d243246.chunk.js",
+    "static/js/845.425d986c.chunk.js": "/static/js/845.425d986c.chunk.js",
+    "index.html": "/index.html",
+    "main.c763f91b.css.map": "/static/css/main.c763f91b.css.map",
+    "main.9527e3fe.js.map": "/static/js/main.9527e3fe.js.map",
+    "966.8d243246.chunk.js.map": "/static/js/966.8d243246.chunk.js.map",
+    "845.425d986c.chunk.js.map": "/static/js/845.425d986c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.626b36db.css",
-    "static/js/main.df1f34e8.js"
+    "static/css/main.c763f91b.css",
+    "static/js/main.9527e3fe.js"
   ]
 }
