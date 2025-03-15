@@ -57,7 +57,7 @@
     "full-deploy": "npm run build && gh-pages -d build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://KOSFin.github.io/",
+  "homepage": "https://me.synask.ru/",
   "eslintConfig": {
     "extends": [
       "react-app",
