@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/8.1.2/adapter.min.js"
+    integrity="sha512-l40eBFtXx+ve5RryIELC3y6/OM6Nu89mLGQd7fg1C93tN6XrkC3supb+/YiD/Y+B8P37kdJjtG1MT1kOO2VzxA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <title>Video Call Room</title>
+</head>
+<body>
+  <div class="grid">
+    <h1>Video Call Room</h1>
+    <div>
+      <h2>Local Stream</h2>
+      <video id="local-video" autoplay muted></video>
+    </div>
+    <div>
+      <h2>Remote Stream</h2>
+      <video id="remote-video" autoplay></video>
+    </div>
+    <div>
+      <input type="text" id="room-id" placeholder="Enter Room ID" />
+      <button id="join-room">Join Room</button>
+      <button id="create-room">Create Room</button>
+    </div>
+  </div>
+
+  <script type="module">
+    const appId = 'a24b5a1fc6e3fdb75ee1e81bc3096daa';
+    const appSecret = '019de7148d26f83788db1cfe8e6a827939c9bf44354d81cc11795d3a64439382';
+    let roomId = null; // Store current room ID
+    let isHost = false; // Track if the user is the host
+
+    class CallsApp {
+      constructor(appId, basePath = 'https://rtc.live.cloudflare.com/v1') {
+        this.prefixPath = `${basePath}/apps/${appId}`;
+      }
+
+      async sendRequest(url, body, method = 'POST') {
+        const request = {
+          method: method,
+          mode: 'cors',
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${appSecret}`,
+          },
+          body: JSON.stringify(body),
+        };
+        const response = await fetch(url, request);
+        const result = await response.json();
+        return result;
+      }
+
+      checkErrors(result, tracksCount = 0) {
+        if (result.errorCode) {
+          throw new Error(result.errorDescription);
+        }
+        for (let i = 0; i < tracksCount; i++) {
+          if (result.tracks[i].errorCode) {
+            throw new Error(`tracks[${i}]: ${result.tracks[i].errorDescription}`);
+          }
+        }
+      }
+
+      async newSession(offerSDP) {
+        const url = `${this.prefixPath}/sessions/new`;
+        const body = {
+          sessionDescription: {
+            type: 'offer',
+            sdp: offerSDP,
+          },
+        };
+        const result = await this.sendRequest(url, body);
+        this.checkErrors(result);
+        this.sessionId = result.sessionId;
+        return result;
+      }
+
+      async newTracks(trackObjects, offerSDP = null) {
+        const url = `${this.prefixPath}/sessions/${this.sessionId}/tracks/new`;
+        const body = {
+          sessionDescription: {
+            type: 'offer',
+            sdp: offerSDP,
+          },
+          tracks: trackObjects,
+        };
+        if (!offerSDP) {
+          delete body['sessionDescription'];
+        }
+        const result = await this.sendRequest(url, body);
+        this.checkErrors(result, trackObjects.length);
+        return result;
+      }
+
+      async sendAnswerSDP(answer) {
+        const url = `${this.prefixPath}/sessions/${this.sessionId}/renegotiate`;
+        const body = {
+          sessionDescription: {
+            type: 'answer',
+            sdp: answer,
+          },
+        };
+        const result = await this.sendRequest(url, body, 'PUT');
+        this.checkErrors(result);
+      }
+    }
+
+    let pc = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.cloudflare.com:3478' }],
+      bundlePolicy: 'max-bundle',
+    });
+
+    const localStream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+
+    const localVideoElement = document.getElementById('local-video');
+    localVideoElement.srcObject = localStream;
+
+    // Track to manage transceivers
+    let transceivers = localStream.getTracks().map(track =>
+      pc.addTransceiver(track, {
+        direction: 'sendonly',
+      })
+    );
+
+    const app = new CallsApp(appId);
+
+    // Event listeners for room creation and joining
+    document.getElementById('create-room').addEventListener('click', async () => {
+      roomId = generateRoomId();
+      isHost = true; // This user is the host
+      await startCall();
+      alert(`Room created: ${roomId}`);
+    });
+
+    document.getElementById('join-room').addEventListener('click', async () => {
+      roomId = document.getElementById('room-id').value;
+      isHost = false; // This user is not the host
+      await startCall();
+    });
+
+    async function startCall() {
+        try {
+            // Остановка всех текущих треков
+            const senders = pc.getSenders();
+            senders.forEach(sender => {
+                const track = sender.track;
+                if (track) {
+                    track.stop(); // Останавливаем локальный трек
+                }
+            });
+
+            // Создание нового предложения
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+
+            // Создание новой сессии
+            const newSessionResult = await app.newSession(pc.localDescription.sdp);
+            await pc.setRemoteDescription(new RTCSessionDescription(newSessionResult.sessionDescription));
+
+            // Обработка состояния соединения
+            pc.oniceconnectionstatechange = () => {
+                if (pc.iceConnectionState === 'connected') {
+                    console.log('Connected to peer');
+                }
+            };
+
+            // Подготовка для отправки треков
+            let trackObjects = [];
+            const newSenders = pc.getSenders();
+
+            newSenders.forEach(sender => {
+                const track = sender.track;
+                if (track) {
+                    trackObjects.push({
+                        location: 'local',
+                        mid: sender.track.id, // Обратите внимание на track.id
+                        trackName: track.id,
+                    });
+                }
+            });
+
+            // Отправка новых треков
+            await app.newTracks(trackObjects, pc.localDescription.sdp);
+
+            // Подготовка для получения удаленных треков
+            const remoteTracksPromise = new Promise(resolve => {
+                let tracks = [];
+                pc.ontrack = event => {
+                    tracks.push(event.track);
+                    if (tracks.length >= 2) { // Если требуется больше треков, измените это значение
+                        resolve(tracks);
+                    }
+                };
+            });
+
+            const newRemoteTracksResult = await app.newTracks(trackObjects);
+            if (newRemoteTracksResult.requiresImmediateRenegotiation) {
+                await pc.setRemoteDescription(new RTCSessionDescription(newRemoteTracksResult.sessionDescription));
+                const answer = await pc.createAnswer(); // Создание ответа
+                await pc.setLocalDescription(answer);
+                await app.sendAnswerSDP(pc.localDescription.sdp);
+            }
+
+            // Получение удаленных треков
+            const remoteTracks = await remoteTracksPromise;
+            const remoteVideoElement = document.getElementById('remote-video');
+            const remoteStream = new MediaStream();
+            remoteTracks.forEach(track => remoteStream.addTrack(track)); // Добавляем все удаленные треки
+            remoteVideoElement.srcObject = remoteStream;
+        } catch (error) {
+            console.error('Error in startCall:', error);
+        }
+    }
+
+
+
+    // Function to generate a unique room ID
+    function generateRoomId() {
+      return Math.random().toString(36).substring(2, 10);
+    }
+  </script>
+
+  <style>
+    /* Styles are safe to ignore, just here for demo */
+    html {
+      color-scheme: light dark;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: white;
+      color: black;
+    }
+    body, h1, h2 {
+      margin: 0;
+    }
+    h1, h2 {
+      font-weight: 400;
+    }
+    h1 {
+      font-size: 1.5rem;
+      grid-column: 1 / -1;
+    }
+    h2 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    video {
+      width: 100%;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 500px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</body>
+</html>

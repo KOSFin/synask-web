@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/all-config-icons/favicon.ico" type="image/x-icon" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://synask.syprod.ru" />
+    <meta name="yandex-verification" content="0f1f79c1d6e9f5ce" />
+    <link rel="icon" href="/favicon-graffiti.ico" type="image/x-icon">
+    <title>sYnask - Эволюция в мире социальных сетей</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #000;
+            border-bottom: 1px solid #fff;
+        }
+        .header .logo {
+            display: flex;
+            align-items: center;
+        }
+        .header .logo img {
+            width: 33px;
+            height: 40px;
+        }
+        .header .logo span {
+            font-size: 24px;
+            font-family: 'Roboto', sans-serif;
+        }
+        .header .logo .company-name {
+            color: #6a0dad;
+        }
+        .header .logo .network-name {
+            color: #ff7f00;
+        }
+        .header .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .hero img {
+            width: 250px;
+        }
+        .hero h1 {
+            color: #ff7f00;
+            font-size: 48px;
+            margin: 10px 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        .hero p {
+            font-size: 24px;
+            margin: 20px 0;
+            animation: fadeIn 2s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .email-signup {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .email-signup input {
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            width: 300px;
+        }
+        .email-signup button {
+            background-color: #ff7f00;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .email-signup p {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #bbb;
+        }
+        .features, .news, .beta-release {
+            padding: 50px 20px;
+        }
+        .features h2, .news h2, .beta-release h2 {
+            text-align: center;
+            color: #ff7f00;
+            margin-bottom: 20px;
+        }
+        .features .container, .news .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .feature-item, .news-item {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        .feature-item img, .news-item img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .feature-item h3, .news-item h3 {
+            color: #ff7f00;
+            margin: 15px 0;
+        }
+        .feature-item p, .news-item p {
+            font-size: 14px;
+            color: #ccc;
+        }
+        .news-item .rating {
+            color: #ff7f00;
+        }
+        .news-item .date {
+            color: #bbb;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .footer {
+            background-color: #000;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #fff;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .popup-container {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #222;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            opacity: 0;
+            z-index: 9999;
+        }
+        .popup-content {
+            display: flex;
+            align-items: center;
+        }
+        .popup-image {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .popup-text {
+            font-size: 16px;
+        }
+        .loader-background {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9;
+        }
+        .loader {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+        }
+        .loader .spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #ff7f00;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            text-align: 16px;
+        }
+        .countdown div {
+            background: #333;
+            color: #ff7f00;
+            margin: 0 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .numbers {
+            font-size: 40px;
+        }
+        .telegram-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: url('https://gas-kvas.com/grafic/uploads/posts/2024-01/gas-kvas-com-p-znachok-telegramm-dlya-vizitki-na-prozrach-8.png') no-repeat center center;
+            background-size: contain;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <span class="logo-letter">S</span>
+            <img src="https://imgur.com/BcgjQwJ.png" alt="Y Logo">
+            <span class="network-name">nask</span>
+        </div>
+        <nav class="menu">
+            <a href="#">О компании</a>
+            <a href="#">Продукты</a>
+        </nav>
+    </header>
+    <section class="hero">
+        <img src="https://imgur.com/uXlFWBh.png" alt="sYnask Logo">
+        <h1>sYnask</h1>
+        <p>Эволюция в мире социальных сетей</p>
+        <div class="email-signup">
+            <input id="emailInput" type="email" placeholder="Введите вашу почту">
+            <button id="submitButton" onclick="showPopupWithImageAndText('Первый публичный бета релиз платформы состоится 1 августа 2024 года. Следите за новостями разработки в нашем телеграм канале.', 'https://imgur.com/aHcCPrp.jpg', 5000)">➯</button>
+            <p>Введите вашу почту, и система автоматически переведет вас на страницу входа или регистрации.</p>
+        </div>
+    </section>
+    <section class="beta-release">
+        <div id="countdown" class="countdown">
+            <div>
+                <div class="numbers" id="days"></div>
+                <div>Дней</div>
+            </div>
+            <div>
+                <div class="numbers" id="hours"></div>
+                <div>Часов</div>
+            </div>
+            <div>
+                <div class="numbers" id="minutes"></div>
+                <div>Минут</div>
+            </div>
+            <div>
+                <div class="numbers" id="seconds"></div>
+                <div>Секунд</div>
+            </div>
+        </div>
+        <p style="text-align: center;">Первый публичный бета релиз платформы состоится 1 августа 2024 года. Следите за новостями разработки в нашем <a href="https://t.me/synask"><span class="telegram-icon"></span>телеграм канале</a>.</p>
+    </section>
+    <section class="features">
+        <h2>Возможности, которые есть только у нас</h2>
+        <div class="container">
+            <div class="feature-item">
+                <img src="ai-image.jpg" alt="AI">
+                <h3>Искусственный Интеллект</h3>
+                <p>Наша сеть включает десятки элементов ИИ и сотни нейронных сетей, которые помогают автоматизировать задачи, выступают в роли автоответчика, ставят напоминания и многое другое.</p>
+            </div>
+            <div class="feature-item">
+                <img src="authors-tools.jpg" alt="Authors Tools">
+                <h3>Системы для авторов</h3>
+                <p>Мощные инструменты и нейронные модели для защиты и публикации контента без страха плагиата.</p>
+            </div>
+            <div class="feature-item">
+                <img src="user-interface.jpg" alt="User Interface">
+                <h3>Удобный интерфейс</h3>
+                <p>Персонализируйте интерфейс, создавайте виджеты и перемещайте их по удобному меню, настроенному под ваши нужды.</p>
+            </div>
+            <div class="feature-item">
+                <img src="streamers-bloggers.jpg" alt="Streamers and Bloggers">
+                <h3>Интересные решения для стримеров и блогеров</h3>
+                <p>Удобные интерфейсы для автоматической верификации аккаунтов, системы проверки деятельности и публикации событий.</p>
+            </div>
+            <div class="feature-item">
+                <img src="open-source.jpg" alt="Open Source">
+                <h3>Открытый код</h3>
+                <p>Наш код доступен всем, почти без серверной части! Только клиентская сторона и база данных.</p>
+            </div>
+        </div>
+    </section>
+    <section class="news">
+        <h2>Последние новости</h2>
+        <div class="container">
+            <div class="news-item">
+                <img src="new-feature.jpg" alt="New Feature">
+                <h3>Запуск новой функции</h3>
+                <p>Представляем новую функцию, которая изменит ваш опыт взаимодействия с платформой.</p>
+                <div class="rating">5,0⭐</div>
+                <div class="date">Дата выпуска: 20.05.2024</div>
+            </div>
+            <div class="news-item">
+                <img src="security-update.jpg" alt="Security Update">
+                <h3>Обновление безопасности</h3>
+                <p>Наши последние обновления обеспечат еще большую безопасность ваших данных.</p>
+                <div class="rating">4,7⭐</div>
+                <div class="date">Дата выпуска: 15.05.2024</div>
+            </div>
+            <div class="news-item">
+                <img src="social-events.jpg" alt="Social Events">
+                <h3>Социальные события</h3>
+                <p>Участвуйте в наших социальных событиях и встречах онлайн и офлайн.</p>
+                <div class="rating">4,9⭐</div>
+                <div class="date">Дата выпуска: 10.05.2024</div>
+            </div>
+        </div>
+    </section>
+
+    <div id="loader-background" class="loader-background"></div>
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+        <p>Загрузка...</p>
+    </div>
+
+    <footer class="footer">
+        <nav class="menu">
+            <a style="color: violet;" href="https://syprod.ru/">sYprod company</a>
+            <a href="https://syprod.ru/">О компании</a>
+            <a href="#">Продукты</a>
+            <a style="color: orange;" onclick="showPopupWithImageAndText('Первый публичный бета релиз платформы состоится 1 августа 2024 года. Следите за новостями разработки в нашем телеграм канале.', 'https://imgur.com/aHcCPrp.jpg', 5000)">Вход</a>
+            <a style="color: orange;" onclick="showPopupWithImageAndText('Первый публичный бета релиз платформы состоится 1 августа 2024 года. Следите за новостями разработки в нашем телеграм канале.', 'https://imgur.com/aHcCPrp.jpg', 5000)">Регистрация</a>
+            <a href="#">FAQ</a>
+            <a href="#">Контакты</a>
+        </nav>
+    </footer>
+
+    <script>
+        // ФУНКЦИИ: ВИЗУАЛЬНАЯ СОСТАВЛЯЮЩАЯ
+
+        if (location.hostname.indexOf('synask.syprod.ru') === -1) {
+            location.replace("https://synask.syprod.ru");
+        }
+
+        // ПОКАЗЫВАЕТ УВЕДОМЛЕНИЕ С ТЕКСТОМ И КАРТИНКОЙ
+        let currentPopup = null;
+
+        function showPopupWithImageAndText(message, imagePath, displayTime) {
+            if (currentPopup) {
+                currentPopup.remove(); // Удаляем предыдущее уведомление, если оно есть
+            }
+
+            const popupContainer = document.createElement('div');
+            popupContainer.className = 'popup-container';
+
+            const popupContent = document.createElement('div');
+            popupContent.className = 'popup-content';
+
+            const popupImage = document.createElement('img');
+            popupImage.src = imagePath;
+            popupImage.alt = 'Изображение';
+            popupImage.className = 'popup-image';
+
+            const popupText = document.createElement('span');
+            popupText.className = 'popup-text';
+            popupText.textContent = message;
+
+            popupContent.appendChild(popupImage);
+            popupContent.appendChild(popupText);
+
+            popupContainer.appendChild(popupContent);
+            document.body.appendChild(popupContainer);
+
+            setTimeout(() => {
+                popupContainer.style.top = '50px';
+                popupContainer.style.opacity = '1';
+            }, 500);
+
+            setTimeout(() => {
+                popupContainer.style.top = '-100px';
+                popupContainer.style.opacity = '0';
+            }, displayTime);
+
+            currentPopup = popupContainer; // Сохраняем ссылку на текущее уведомление
+        }
+
+        // ФУНКЦИИ ВИЗУАЛЬНОЙ АНИМАЦИИ ЗАГРУЗКИ
+        function showLoader() {
+            document.getElementById('loader-background').style.display = 'block';
+            document.getElementById('loader').style.display = 'block';
+        }
+
+        function hideLoader() {
+            document.getElementById('loader-background').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        async function checkEmail() {
+            showLoader();
+            var email = document.getElementById('emailInput').value;
+            try {
+                const response = await fetch('https://synask-server.vercel.app/check_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if  (data.email_used) {
+                        window.location.href  =  `https://me.synask.ru/login?email=${email}`;
+                    } else {
+                        window.location.href  =  `https://me.synask.ru/registration?email=${email}`;
+                    }
+                } else {
+                    hideLoader();
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error(error);
+                showPopupWithImageAndText('Произошла ошибка при проверке данных. Пожалуйста, попробуйте еще раз.', 'https://www.freeiconspng.com/uploads/crossed-the-plate-png-transparent-image-error-sign-17.png', 5000);
+                setTimeout(function() {
+                    location.reload();
+                }, 4000);
+            }
+            hideLoader();
+        }
+
+        // ФУНКЦИЯ ОБРАТНОГО ОТСЧЕТА
+        function countdown() {
+            const countDownDate = new Date("Aug 1, 2024 00:00:00").getTime();
+            const countdownElement = document.getElementById("countdown");
+
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.querySelector("#days").innerText = days;
+                countdownElement.querySelector("#hours").innerText = hours;
+                countdownElement.querySelector("#minutes").innerText = minutes;
+                countdownElement.querySelector("#seconds").innerText = seconds;
+
+                if (distance < 0) {
+                    clearInterval(interval);
+                    countdownElement.innerHTML = "Релиз состоялся!";
+                }
+            }, 1000);
+        }
+
+        countdown();
+    </script>
+</body>
+</html>
